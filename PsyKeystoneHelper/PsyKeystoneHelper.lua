@@ -31,13 +31,13 @@ LibAceSerializer = LibStub("AceSerializer-3.0")
 LibOpenRaid = LibStub("LibOpenRaid-1.0")
 AceDB = LibStub("AceDB-3.0")
 AceComm = LibStub("AceComm-3.0")
-keystoneCache = {}
 
 function PsyKeystoneHelper:OnInitialize()
 	--Init db
 	self.db = AceDB:New("PsyKeystoneHelper_Session",{
 		profile = {
 			session = false,
+			keystoneCache = {},
 			minimap = {
 				hide = false,
 			},
@@ -83,6 +83,9 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		elseif arg == "send" then
 			PsyKeystoneHelper:sendScoreInformation()
 			return
+		elseif arg == "cache" then
+			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
+			return
 		elseif arg == "" then
 		else
 			PsyKeystoneHelper:Print("Unknown command")
@@ -93,6 +96,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33session|r ".. "- Toggle the state of the session")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the keystone cache")
 end
 
 function PsyKeystoneHelper:toggleSessionStatus()
@@ -101,7 +105,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
 	LibDBIcon:Hide("PsyKeystoneHelperDBI")
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
 	if not PsyKeystoneHelper:getSessionStatus() then 
-		keystoneCache = {}
+		self.db.profile.keystoneCache = {}
 		return 
 	end
 
@@ -147,7 +151,7 @@ function PsyKeystoneHelper:receiveScoreInformation(playerData)
 
 	--Update the cache
 	--DevTools_Dump(playerData)
-	keystoneCache[playerData.fullName] = playerData
+	self.db.profile.keystoneCache[playerData.fullName] = playerData
 end
 
 function PsyKeystoneHelper:sendScoreInformation()
