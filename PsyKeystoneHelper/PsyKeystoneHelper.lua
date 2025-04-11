@@ -25,12 +25,17 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 	end
 })
 
---Create vars
+--Get Libs
 LibDBIcon = LibStub("LibDBIcon-1.0")
 LibAceSerializer = LibStub("AceSerializer-3.0")
 LibOpenRaid = LibStub("LibOpenRaid-1.0")
 AceDB = LibStub("AceDB-3.0")
 AceComm = LibStub("AceComm-3.0")
+AceEvent = LibStub("AceEvent-3.0")
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- ADDON EVENTS
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:OnInitialize()
 	--Init db
@@ -52,8 +57,12 @@ function PsyKeystoneHelper:OnInitialize()
 			}
 		}
 	})
+
 	--Register slash command
-	PsyKeystoneHelper:RegisterChatCommand('keyhelper', 'handleChatCommand')
+	PsyKeystoneHelper:RegisterChatCommand("keyhelper", "handleChatCommand")
+
+	--Register events
+	self:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
 
 	--Show minimap icon
 	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, self.db.profile.minimap)
@@ -69,6 +78,10 @@ end
 
 function PsyKeystoneHelper:OnDisable()
 end
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Chat Commands
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:handleChatCommand(input)
 	local args = {strsplit(' ', input)}
@@ -99,17 +112,26 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the keystone cache")
 end
 
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Session Status
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 function PsyKeystoneHelper:toggleSessionStatus()
-	if self.db.global.session then self.db.global.session = false else self.db.global.session = true end
+	if self.db.global.session then 
+		self.db.global.session = false 
+		self.db.profile.keystoneCache = {}
+	else 
+		if not UnitInParty("player") then
+			PsyKeystoneHelper:Print("Cannot start a session when not in a party")
+			return
+		end
+		self.db.global.session = true 
+		PsyKeystoneHelper:requestScoreInformation()
+	end
+
 	PsyKeystoneHelper:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
 	LibDBIcon:Hide("PsyKeystoneHelperDBI")
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
-	if not PsyKeystoneHelper:getSessionStatus() then 
-		self.db.profile.keystoneCache = {}
-		return 
-	end
-
-	PsyKeystoneHelper:requestScoreInformation()
 end
 
 function PsyKeystoneHelper:getSessionStatus()
@@ -123,6 +145,20 @@ function PsyKeystoneHelper:getSessionStatusString()
 		return "\124cFFFF0000Stopped"
 	end
 end
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Event Handling
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+function PsyKeystoneHelper:handleGroupLeft() 
+	if PsyKeystoneHelper:getSessionStatus() then
+		PsyKeystoneHelper:toggleSessionStatus()
+	end
+end
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Communications
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:requestScoreInformation()
 	PsyKeystoneHelper:Print("Requesting data from party...")
@@ -190,6 +226,10 @@ local function HandleComm(prefix, message, distribution, sender)
 	end
 end
 
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Util
+--------------------------------------------------------------------------------------------------------------------------------------------
+
 dungeonAbbreviations = {
     ["Cinderbrew Meadery"] = "BREW",
     ["Darkflame Cleft"] = "DFC",
@@ -200,5 +240,3 @@ dungeonAbbreviations = {
     ["Theater of Pain"] = "TOP",
     ["Operation: Mechagon - Workshop"] = "WORK",
 }
-
-AceComm:RegisterComm("PsyKeyStone", HandleComm)
