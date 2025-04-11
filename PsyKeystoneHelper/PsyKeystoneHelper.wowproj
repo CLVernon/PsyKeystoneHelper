@@ -10,6 +10,10 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="lib\LibDBIcon-1.0\LibDBIcon-1.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="logo.tga" />
     <Content Include="PsyKeystoneHelper.toc">
       <SubType>TableOfContents</SubType>
     </Content>
@@ -21,209 +25,228 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libs/LibStub/LibStub.lua">
+    <Content Include="lib\LibStub\LibStub.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/CallbackHandler-1.0/CallbackHandler-1.0.lua">
+    <Content Include="lib\CallbackHandler-1.0\CallbackHandler-1.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\CallbackHandler-1.0\CallbackHandler-1.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\CallbackHandler-1.0\CallbackHandler-1.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/CallbackHandler-1.0/CallbackHandler-1.0.xml">
+    <Content Include="lib\AceAddon-3.0\AceAddon-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceAddon-3.0\AceAddon-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceAddon-3.0\AceAddon-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceAddon-3.0/AceAddon-3.0.lua">
+    <Content Include="lib\AceBucket-3.0\AceBucket-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceBucket-3.0\AceBucket-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceBucket-3.0\AceBucket-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceAddon-3.0/AceAddon-3.0.xml">
+    <Content Include="lib\AceComm-3.0\AceComm-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceComm-3.0\AceComm-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceComm-3.0\AceComm-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceBucket-3.0/AceBucket-3.0.lua">
+    <Content Include="lib\AceComm-3.0\ChatThrottleLib.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceBucket-3.0/AceBucket-3.0.xml">
+    <Content Include="lib\AceConfig-3.0\AceConfig-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceConfig-3.0\AceConfig-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceConfig-3.0\AceConfig-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceComm-3.0/AceComm-3.0.lua">
+    <Content Include="lib\AceConfig-3.0\AceConfigCmd-3.0\AceConfigCmd-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceConfig-3.0\AceConfigCmd-3.0\AceConfigCmd-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceConfig-3.0\AceConfigCmd-3.0\AceConfigCmd-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceComm-3.0/AceComm-3.0.xml">
+    <Content Include="lib\AceConfig-3.0\AceConfigDialog-3.0\AceConfigDialog-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceConfig-3.0\AceConfigDialog-3.0\AceConfigDialog-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceConfig-3.0\AceConfigDialog-3.0\AceConfigDialog-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceComm-3.0/ChatThrottleLib.lua">
+    <Content Include="lib\AceConfig-3.0\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceConfig-3.0\AceConfigRegistry-3.0\AceConfigRegistry-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceConfig-3.0\AceConfigRegistry-3.0\AceConfigRegistry-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfig-3.0.lua">
+    <Content Include="lib\AceConsole-3.0\AceConsole-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceConsole-3.0\AceConsole-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceConsole-3.0\AceConsole-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfig-3.0.xml">
+    <Content Include="lib\AceDB-3.0\AceDB-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceDB-3.0\AceDB-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceDB-3.0\AceDB-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.lua">
+    <Content Include="lib\AceDBOptions-3.0\AceDBOptions-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceDBOptions-3.0\AceDBOptions-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceDBOptions-3.0\AceDBOptions-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.xml">
+    <Content Include="lib\AceEvent-3.0\AceEvent-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceEvent-3.0\AceEvent-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceEvent-3.0\AceEvent-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\AceGUI-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceGUI-3.0\AceGUI-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceGUI-3.0\AceGUI-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-BlizOptionsGroup.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-DropDownGroup.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-Frame.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConsole-3.0/AceConsole-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-InlineGroup.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceConsole-3.0/AceConsole-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-ScrollFrame.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceDB-3.0/AceDB-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-SimpleGroup.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceDB-3.0/AceDB-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-TabGroup.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceDBOptions-3.0/AceDBOptions-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-TreeGroup.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceDBOptions-3.0/AceDBOptions-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIContainer-Window.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceEvent-3.0/AceEvent-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-Button.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceEvent-3.0/AceEvent-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-CheckBox.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/AceGUI-3.0.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-ColorPicker.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/AceGUI-3.0.xml">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-DropDown.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-BlizOptionsGroup.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-DropDown-Items.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-DropDownGroup.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-EditBox.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-Frame.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-Heading.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-InlineGroup.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-Icon.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-ScrollFrame.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-InteractiveLabel.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-SimpleGroup.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-Keybinding.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-TabGroup.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-Label.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-TreeGroup.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-MultiLineEditBox.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIContainer-Window.lua">
+    <Content Include="lib\AceGUI-3.0\widgets\AceGUIwidget-Slider.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Button.lua">
+    <Content Include="lib\AceHook-3.0\AceHook-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceHook-3.0\AceHook-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceHook-3.0\AceHook-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-CheckBox.lua">
+    <Content Include="lib\AceLocale-3.0\AceLocale-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceLocale-3.0\AceLocale-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceLocale-3.0\AceLocale-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-ColorPicker.lua">
+    <Content Include="lib\AceTab-3.0\AceTab-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceTab-3.0\AceTab-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceTab-3.0\AceTab-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-DropDown.lua">
+    <Content Include="lib\AceTimer-3.0\AceTimer-3.0.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>lib\AceTimer-3.0\AceTimer-3.0.xml</DependentUpon>
+    </Content>
+    <Content Include="lib\AceTimer-3.0\AceTimer-3.0.xml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-DropDown-Items.lua">
+    <Content Include="lib\AceSerializer-3.0\AceSerializer-3.0.lua">
       <SubType>Code</SubType>
+      <DependentUpon>lib\AceSerializer-3.0\AceSerializer-3.0.xml</DependentUpon>
     </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-EditBox.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Heading.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Icon.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-InteractiveLabel.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Keybinding.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Label.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-MultiLineEditBox.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceGUI-3.0/widgets/AceGUIwidget-Slider.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceHook-3.0/AceHook-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceHook-3.0/AceHook-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceLocale-3.0/AceLocale-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceLocale-3.0/AceLocale-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceTab-3.0/AceTab-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceTab-3.0/AceTab-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceTimer-3.0/AceTimer-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceTimer-3.0/AceTimer-3.0.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceSerializer-3.0/AceSerializer-3.0.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Libs/AceSerializer-3.0/AceSerializer-3.0.xml">
+    <Content Include="lib\AceSerializer-3.0\AceSerializer-3.0.xml">
       <SubType>Code</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libs\" />
-    <Folder Include="Libs\AceAddon-3.0\" />
-    <Folder Include="Libs\AceBucket-3.0\" />
-    <Folder Include="Libs\AceComm-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\AceConfigCmd-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\AceConfigDialog-3.0\" />
-    <Folder Include="Libs\AceConfig-3.0\AceConfigRegistry-3.0\" />
-    <Folder Include="Libs\AceConsole-3.0\" />
-    <Folder Include="Libs\AceDB-3.0\" />
-    <Folder Include="Libs\AceDBOptions-3.0\" />
-    <Folder Include="Libs\AceEvent-3.0\" />
-    <Folder Include="Libs\AceGUI-3.0\" />
-    <Folder Include="Libs\AceGUI-3.0\widgets\" />
-    <Folder Include="Libs\AceHook-3.0\" />
-    <Folder Include="Libs\AceLocale-3.0\" />
-    <Folder Include="Libs\AceSerializer-3.0\" />
-    <Folder Include="Libs\AceTab-3.0\" />
-    <Folder Include="Libs\AceTimer-3.0\" />
-    <Folder Include="Libs\CallbackHandler-1.0\" />
-    <Folder Include="Libs\LibStub\" />
+    <Folder Include="lib" />
+    <Folder Include="lib\AceAddon-3.0" />
+    <Folder Include="lib\AceBucket-3.0" />
+    <Folder Include="lib\AceComm-3.0" />
+    <Folder Include="lib\AceConfig-3.0" />
+    <Folder Include="lib\AceConfig-3.0\AceConfigCmd-3.0" />
+    <Folder Include="lib\AceConfig-3.0\AceConfigDialog-3.0" />
+    <Folder Include="lib\AceConfig-3.0\AceConfigRegistry-3.0" />
+    <Folder Include="lib\AceConsole-3.0" />
+    <Folder Include="lib\AceDB-3.0" />
+    <Folder Include="lib\AceDBOptions-3.0" />
+    <Folder Include="lib\AceEvent-3.0" />
+    <Folder Include="lib\AceGUI-3.0" />
+    <Folder Include="lib\AceGUI-3.0\widgets" />
+    <Folder Include="lib\AceHook-3.0" />
+    <Folder Include="lib\AceLocale-3.0" />
+    <Folder Include="lib\AceSerializer-3.0" />
+    <Folder Include="lib\AceTab-3.0" />
+    <Folder Include="lib\AceTimer-3.0" />
+    <Folder Include="lib\CallbackHandler-1.0" />
+    <Folder Include="lib\LibStub" />
+    <Folder Include="lib\LibDBIcon-1.0" />
   </ItemGroup>
   <Import Project="$(DevEnvDir)\Extensions\Tools\MSBuild\AddonStudio\Wow\3.0\WowAddonStudio.targets" />
   <!--
