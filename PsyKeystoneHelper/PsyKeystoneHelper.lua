@@ -10,7 +10,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 	icon = "Interface\\AddOns\\PsyKeystoneHelper\\logo",
 	OnClick = function(_, buttonPressed)	
 		if buttonPressed == "RightButton" then
-			PsyKeystoneHelper:requestScoreInformation()
+			PsyKeystoneHelper:handleChatCommand("")
 		elseif buttonPressed =="LeftButton" then
 			PsyKeystoneHelper:toggleSessionStatus()
 		end
@@ -21,13 +21,14 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		tt:AddLine("Session Status: " .. PsyKeystoneHelper:getSessionStatusString())
 		tt:AddLine(" ")
 		tt:AddLine("Left Click: Toggle the status of the session")
-		tt:AddLine("Right Click: Request score information from party")
+		tt:AddLine("Right Click: Show commands")
 	end
 })
 
 --Create vars
 LibDBIcon = LibStub("LibDBIcon-1.0")
 LibAceSerializer = LibStub("AceSerializer-3.0")
+LibOpenRaid = LibStub("LibOpenRaid-1.0")
 AceDB = LibStub("AceDB-3.0")
 AceComm = LibStub("AceComm-3.0")
 keystoneCache = {}
@@ -60,7 +61,7 @@ function PsyKeystoneHelper:OnInitialize()
 	LibDBIcon:AddButtonToCompartment("PsyKeystoneHelperDBI")
 
 	--Remind user of session state
-	self:Print("Session is " .. PsyKeystoneHelper:getSessionStatusString())
+	PsyKeystoneHelper:Print("Session is " .. PsyKeystoneHelper:getSessionStatusString())
 end
 
 function PsyKeystoneHelper:OnEnable()
@@ -70,12 +71,33 @@ function PsyKeystoneHelper:OnDisable()
 end
 
 function PsyKeystoneHelper:handleChatCommand(input)
-	PsyKeystoneHelper:toggleSessionStatus()
+	local args = {strsplit(' ', input)}
+
+	for _, arg in ipairs(args) do
+		if arg == "session" then
+			PsyKeystoneHelper:toggleSessionStatus()
+			return
+		elseif arg == "request" then
+			PsyKeystoneHelper:requestScoreInformation()
+			return
+		elseif arg == "send" then
+			PsyKeystoneHelper:sendScoreInformation()
+			return
+		elseif arg == "" then
+		else
+			PsyKeystoneHelper:Print("Unknown command")
+			return
+		end
+	end
+
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33session|r ".. "- Toggle the state of the session")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
 end
 
 function PsyKeystoneHelper:toggleSessionStatus()
 	if self.db.global.session then self.db.global.session = false else self.db.global.session = true end
-	self:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
+	PsyKeystoneHelper:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
 	LibDBIcon:Hide("PsyKeystoneHelperDBI")
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
 	if not PsyKeystoneHelper:getSessionStatus() then 
@@ -107,9 +129,25 @@ function PsyKeystoneHelper:requestScoreInformation()
 end
 
 function PsyKeystoneHelper:receiveScoreInformation(playerData)
+	PsyKeystoneHelper:Print("Received data from " .. playerData.fullName)
+	if not PsyKeystoneHelper:getSessionStatus() then return end
+
+	--Get the party's keystones and assign the keystone to the incoming player
+	local keystones = LibOpenRaid.GetAllKeystonesInfo()
+	for unitName, keystone in pairs(keystones) do
+		if UnitInParty(unitName) and  ({strsplit("-", unitName)})[1] == playerData.name and keystone.level > 0 then
+			local mapName = C_ChallengeMode.GetMapUIInfo(keystone.challengeMapID) or ""
+			local mapAbbreviation = dungeonAbbreviations[mapName] or ""
+			keystone.mapName = mapName
+			keystone.mapAbbreviation = mapAbbreviation
+			playerData.keystone = keystone
+			break
+		end
+	end
+
+	--Update the cache
 	--DevTools_Dump(playerData)
-	PsyKeystoneHelper:Print("Received data from " .. playerData.name .. "-" .. playerData.realm)
-	keystoneCache[playerData.name .. "-" .. playerData.realm] = playerData
+	keystoneCache[playerData.fullName] = playerData
 end
 
 function PsyKeystoneHelper:sendScoreInformation()
@@ -127,7 +165,8 @@ function PsyKeystoneHelper:sendScoreInformation()
 		scoreInfo = scoreInfo,
 		overallScore = C_ChallengeMode.GetOverallDungeonScore(),
 		name = GetUnitName("player"),
-		realm = GetRealmName("player")
+		realm = GetRealmName("player"),
+		fullName = GetUnitName("player") .. "-" .. GetRealmName("player")
 	}
 
 	PsyKeystoneHelper:Print("Sending data to party...")

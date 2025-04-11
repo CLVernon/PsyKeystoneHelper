@@ -18,4 +18,5 @@
 	<Include file="lib\AceComm-3.0\AceComm-3.0.xml" />
 	<!--<Include file="lib\AceTab-3.0\AceTab-3.0.xml" />-->
 	<Include file="lib\AceSerializer-3.0\AceSerializer-3.0.xml" />
+	<Include file="lib\LibOpenRaid\lib.xml" />
 </Ui>
