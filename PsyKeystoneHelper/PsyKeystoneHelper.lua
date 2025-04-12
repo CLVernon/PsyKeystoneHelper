@@ -179,18 +179,8 @@ function PsyKeystoneHelper:receiveScoreInformation(playerData)
 	PsyKeystoneHelper:Print("Received data from " .. playerData.fullName)
 	if not PsyKeystoneHelper:getSessionStatus() then return end
 
-	--Get the party's keystones and assign the keystone to the incoming player
-	local keystones = LibOpenRaid.GetAllKeystonesInfo()
-	for unitName, keystone in pairs(keystones) do
-		if UnitInParty(unitName) and  ({strsplit("-", unitName)})[1] == playerData.name and keystone.level > 0 then
-			local mapName = C_ChallengeMode.GetMapUIInfo(keystone.challengeMapID) or ""
-			local mapAbbreviation = dungeonAbbreviations[mapName] or ""
-			keystone.mapName = mapName
-			keystone.mapAbbreviation = mapAbbreviation
-			playerData.keystone = keystone
-			break
-		end
-	end
+	--Get the party's keystones
+	PsyKeystoneHelper:assignHeldKeystones()
 
 	--Update the cache
 	--DevTools_Dump(playerData)
@@ -224,24 +214,23 @@ function PsyKeystoneHelper:sendScoreInformation()
 end
 
 local function HandleComm(prefix, message, distribution, sender)
-	local success ,messageObj = LibAceSerializer:Deserialize(message)
-	if not success then return end
-	if messageObj.type == "SEND" then
-		PsyKeystoneHelper:receiveScoreInformation(messageObj.obj)
-	elseif messageObj.type =="REQUEST" then
-		PsyKeystoneHelper:sendScoreInformation()
+	if prefix == "LRS" then
+		if PsyKeystoneHelper:getSessionStatus() then
+			PsyKeystoneHelper:assignHeldKeystones()
+		end
+	else
+		local success ,messageObj = LibAceSerializer:Deserialize(message)
+		if not success then return end
+		if messageObj.type == "SEND" then
+			PsyKeystoneHelper:receiveScoreInformation(messageObj.obj)
+		elseif messageObj.type =="REQUEST" then
+			PsyKeystoneHelper:sendScoreInformation()
+		end
 	end
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
--- Frame
---------------------------------------------------------------------------------------------------------------------------------------------
-AceComm:RegisterComm("PsyKeyStone", HandleComm)
-PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BackdropTemplate")
-
-
---------------------------------------------------------------------------------------------------------------------------------------------
--- Util
+-- Dungeon Stuff
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 dungeonAbbreviations = {
@@ -254,3 +243,28 @@ dungeonAbbreviations = {
     ["Theater of Pain"] = "TOP",
     ["Operation: Mechagon - Workshop"] = "WORK",
 }
+
+function PsyKeystoneHelper:assignHeldKeystones()
+	local keystones = LibOpenRaid.GetAllKeystonesInfo()
+
+	for _, player in pairs(self.db.profile.keystoneCache) do
+		for unitName, keystone in pairs(keystones) do
+			if UnitInParty(unitName) and  ({strsplit("-", unitName)})[1] == player.name and keystone.level > 0 then
+				local mapName = C_ChallengeMode.GetMapUIInfo(keystone.challengeMapID) or ""
+				local mapAbbreviation = dungeonAbbreviations[mapName] or ""
+				keystone.mapName = mapName
+				keystone.mapAbbreviation = mapAbbreviation
+				player.keystone = keystone
+				break
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Other Init
+--------------------------------------------------------------------------------------------------------------------------------------------
+AceComm:RegisterComm("PsyKeyStone", HandleComm)
+AceComm:RegisterComm("LRS", HandleComm)
+PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BackdropTemplate")
+
