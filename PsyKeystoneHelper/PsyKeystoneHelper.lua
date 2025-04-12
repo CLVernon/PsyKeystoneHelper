@@ -63,6 +63,7 @@ function PsyKeystoneHelper:OnInitialize()
 
 	--Register events
 	self:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", "handleGroupChange")
 
 	--Show minimap icon
 	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, self.db.profile.minimap)
@@ -156,6 +157,12 @@ function PsyKeystoneHelper:handleGroupLeft()
 	end
 end
 
+function PsyKeystoneHelper:handleGroupChange() 
+	if PsyKeystoneHelper:getSessionStatus() then
+		PsyKeystoneHelper:requestScoreInformation()
+	end
+end
+
 --------------------------------------------------------------------------------------------------------------------------------------------
 -- Communications
 --------------------------------------------------------------------------------------------------------------------------------------------
@@ -225,6 +232,13 @@ local function HandleComm(prefix, message, distribution, sender)
 		PsyKeystoneHelper:sendScoreInformation()
 	end
 end
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- Frame
+--------------------------------------------------------------------------------------------------------------------------------------------
+AceComm:RegisterComm("PsyKeyStone", HandleComm)
+PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BackdropTemplate")
+
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 -- Util
