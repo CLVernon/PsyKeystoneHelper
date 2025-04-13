@@ -32,7 +32,6 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 --Get Libs
 LibDBIcon = LibStub("LibDBIcon-1.0")
 LibAceSerializer = LibStub("AceSerializer-3.0")
-LibOpenRaid = LibStub("LibOpenRaid-1.0")
 AceDB = LibStub("AceDB-3.0")
 AceComm = LibStub("AceComm-3.0")
 AceEvent = LibStub("AceEvent-3.0")
@@ -112,7 +111,6 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		elseif arg == "" then
 		else
 			PsyKeystoneHelper:Print("Unknown command")
-			return
 		end
 	end
 
@@ -198,18 +196,14 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 	PsyKeystoneHelper:DebugPrint("Received data from " .. playerData.fullName)
 	if not PsyKeystoneHelper:getSessionStatus() then return end
 
-	--Get the party's keystones
-	PsyKeystoneHelper:assignHeldKeystones()
-
 	--Update the cache
-	--DevTools_Dump(playerData)
 	PsyKeystoneHelper.db.profile.keystoneCache[playerData.fullName] = playerData
 	--PsyKeystoneHelper:createPlayerFrame(playerData.fullName)
 end
 
 function PsyKeystoneHelper:sendInformation()
+	-- Get M+ score information and add dungeon name and abbreviation
 	local scoreInfo = C_ChallengeMode.GetMapScoreInfo()
-
 	for _, dungeon in pairs(scoreInfo) do
 		local mapName = C_ChallengeMode.GetMapUIInfo(dungeon.mapChallengeModeID) or ""
 		local mapAbbreviation = dungeonAbbreviations[mapName] or ""
@@ -218,12 +212,31 @@ function PsyKeystoneHelper:sendInformation()
 		dungeon.mapAbbreviation = mapAbbreviation
 	end
 
+	-- Get keystone information
+	local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
+	local keystone = nil
+	if ownedChallengeMapId then
+		local mapName = C_ChallengeMode.GetMapUIInfo(ownedChallengeMapId)
+		keystone = {
+			mapChallengeModeID = C_MythicPlus.GetOwnedKeystoneChallengeMapID(),
+			mapID = C_MythicPlus.GetOwnedKeystoneMapID(),
+			level = C_MythicPlus.GetOwnedKeystoneLevel(),
+			itemLink = nil, --todo
+			mapName = mapName,
+			mapAbbreviation = dungeonAbbreviations[mapName] or mapName
+		}
+	end
+
+	-- Create obj to send
 	local playerData = {
-		scoreInfo = scoreInfo,
-		overallScore = C_ChallengeMode.GetOverallDungeonScore(),
 		name = GetUnitName("player"),
 		realm = GetRealmName("player"),
-		fullName = GetUnitName("player") .. "-" .. GetRealmName("player")
+		fullName = GetUnitName("player") .. "-" .. GetRealmName("player"),
+		scoreInfo = scoreInfo,
+		overallScore = C_ChallengeMode.GetOverallDungeonScore(),
+		keystone = keystone,
+		sessionState = PsyKeystoneHelper:getSessionStatus(),
+		version = PsyKeystoneHelper.v
 	}
 
 	PsyKeystoneHelper:DebugPrint("Sending data to party...")
@@ -314,23 +327,6 @@ dungeonAbbreviations = {
     ["Theater of Pain"] = "TOP",
     ["Operation: Mechagon - Workshop"] = "WORK",
 }
-
-function PsyKeystoneHelper:assignHeldKeystones()
-	local keystones = LibOpenRaid.GetAllKeystonesInfo()
-
-	for _, player in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
-		for unitName, keystone in pairs(keystones) do
-			if UnitInParty(unitName) and  ({strsplit("-", unitName)})[1] == player.name and keystone.level > 0 then
-				local mapName = C_ChallengeMode.GetMapUIInfo(keystone.challengeMapID) or ""
-				local mapAbbreviation = dungeonAbbreviations[mapName] or ""
-				keystone.mapName = mapName
-				keystone.mapAbbreviation = mapAbbreviation
-				player.keystone = keystone
-				break
-			end
-		end
-	end
-end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 -- Other Init
