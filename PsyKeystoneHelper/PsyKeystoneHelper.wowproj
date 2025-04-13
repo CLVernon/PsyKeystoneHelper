@@ -10,13 +10,6 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="DataFrame.lua">
-      <SubType>Code</SubType>
-      <DependentUpon>DataFrame.xml</DependentUpon>
-    </Content>
-    <Content Include="DataFrame.xml">
-      <SubType>Frame</SubType>
-    </Content>
     <Content Include="lib\LibDBIcon-1.0\LibDBIcon-1.0.lua">
       <SubType>Code</SubType>
     </Content>
