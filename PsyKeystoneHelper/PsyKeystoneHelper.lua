@@ -46,6 +46,7 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper.db = AceDB:New("PsyKeystoneHelper_Session",{
 		profile = {
 			session = false,
+			debugPrints = false,
 			keystoneCache = {},
 			minimap = {
 				hide = false,
@@ -59,6 +60,7 @@ function PsyKeystoneHelper:OnInitialize()
 	--Register events
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
 	PsyKeystoneHelper:RegisterEvent("GROUP_ROSTER_UPDATE", "handleGroupChange")
+	--CHALLENGE_MODE_COMPLETED
 
 	--Show minimap icon
 	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
@@ -98,6 +100,12 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		elseif arg == "cache" then
 			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
 			return
+		elseif arg == "debug" then
+			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
+			local state = "Disabled"
+			if PsyKeystoneHelper.db.profile.debugPrints then state = "Enabled" end
+			PsyKeystoneHelper:Print("Debug Prints are: " .. state)
+			return
 		elseif arg == "" then
 		else
 			PsyKeystoneHelper:Print("Unknown command")
@@ -110,7 +118,13 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33show|r ".. "- Show the Keystone Helper window")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the keystone cache")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the cache data")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33debug|r ".. "- Toggle debug messages")
+end
+
+function PsyKeystoneHelper:DebugPrint(msg)
+	if PsyKeystoneHelper.db == nil then return end
+	if PsyKeystoneHelper.db.profile.debugPrints then PsyKeystoneHelper:Print(msg) end
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
@@ -170,7 +184,7 @@ end
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:requestScoreInformation()
-	PsyKeystoneHelper:Print("Requesting data from party...")
+	PsyKeystoneHelper:DebugPrint("Requesting data from party...")
 	AceComm:SendCommMessage("PsyKeyStone", LibAceSerializer:Serialize({
 		type="REQUEST",
 		obj={}
@@ -178,7 +192,7 @@ function PsyKeystoneHelper:requestScoreInformation()
 end
 
 function PsyKeystoneHelper:receiveScoreInformation(playerData)
-	PsyKeystoneHelper:Print("Received data from " .. playerData.fullName)
+	PsyKeystoneHelper:DebugPrint("Received data from " .. playerData.fullName)
 	if not PsyKeystoneHelper:getSessionStatus() then return end
 
 	--Get the party's keystones
@@ -209,7 +223,7 @@ function PsyKeystoneHelper:sendScoreInformation()
 		fullName = GetUnitName("player") .. "-" .. GetRealmName("player")
 	}
 
-	PsyKeystoneHelper:Print("Sending data to party...")
+	PsyKeystoneHelper:DebugPrint("Sending data to party...")
 	AceComm:SendCommMessage("PsyKeyStone", LibAceSerializer:Serialize({
 		type="SEND",
 		obj=playerData
