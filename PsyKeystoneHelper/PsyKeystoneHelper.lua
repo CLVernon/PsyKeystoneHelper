@@ -92,10 +92,10 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			PsyKeystoneHelper.mainFrame:Show()
 			return
 		elseif arg == "request" then
-			PsyKeystoneHelper:requestScoreInformation()
+			PsyKeystoneHelper:requestInformation()
 			return
 		elseif arg == "send" then
-			PsyKeystoneHelper:sendScoreInformation()
+			PsyKeystoneHelper:sendInformation()
 			return
 		elseif arg == "cache" then
 			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
@@ -144,7 +144,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
 			return
 		end
 		PsyKeystoneHelper.db.profile.session = true 
-		PsyKeystoneHelper:requestScoreInformation()
+		PsyKeystoneHelper:requestInformation()
 	end
 
 	PsyKeystoneHelper:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
@@ -178,7 +178,7 @@ end
 
 function PsyKeystoneHelper:handleGroupChange() 
 	if PsyKeystoneHelper:getSessionStatus() then
-		PsyKeystoneHelper:requestScoreInformation()
+		PsyKeystoneHelper:requestInformation()
 	end
 end
 
@@ -186,7 +186,7 @@ end
 -- Communications
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-function PsyKeystoneHelper:requestScoreInformation()
+function PsyKeystoneHelper:requestInformation()
 	PsyKeystoneHelper:DebugPrint("Requesting data from party...")
 	AceComm:SendCommMessage("PsyKeyStone", LibAceSerializer:Serialize({
 		type="REQUEST",
@@ -194,7 +194,7 @@ function PsyKeystoneHelper:requestScoreInformation()
 	}), "PARTY", UnitName("player"))
 end
 
-function PsyKeystoneHelper:receiveScoreInformation(playerData)
+function PsyKeystoneHelper:receiveInformation(playerData)
 	PsyKeystoneHelper:DebugPrint("Received data from " .. playerData.fullName)
 	if not PsyKeystoneHelper:getSessionStatus() then return end
 
@@ -207,7 +207,7 @@ function PsyKeystoneHelper:receiveScoreInformation(playerData)
 	--PsyKeystoneHelper:createPlayerFrame(playerData.fullName)
 end
 
-function PsyKeystoneHelper:sendScoreInformation()
+function PsyKeystoneHelper:sendInformation()
 	local scoreInfo = C_ChallengeMode.GetMapScoreInfo()
 
 	for _, dungeon in pairs(scoreInfo) do
@@ -242,9 +242,9 @@ local function HandleComm(prefix, message, distribution, sender)
 		local success ,messageObj = LibAceSerializer:Deserialize(message)
 		if not success then return end
 		if messageObj.type == "SEND" then
-			PsyKeystoneHelper:receiveScoreInformation(messageObj.obj)
+			PsyKeystoneHelper:receiveInformation(messageObj.obj)
 		elseif messageObj.type =="REQUEST" then
-			PsyKeystoneHelper:sendScoreInformation()
+			PsyKeystoneHelper:sendInformation()
 		end
 	end
 end
