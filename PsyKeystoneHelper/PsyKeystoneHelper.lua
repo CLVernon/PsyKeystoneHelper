@@ -43,7 +43,7 @@ AceEvent = LibStub("AceEvent-3.0")
 
 function PsyKeystoneHelper:OnInitialize()
 	--Init db
-	self.db = AceDB:New("PsyKeystoneHelper_Session",{
+	PsyKeystoneHelper.db = AceDB:New("PsyKeystoneHelper_Session",{
 		profile = {
 			session = false,
 			keystoneCache = {},
@@ -57,11 +57,11 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper:RegisterChatCommand("keyhelper", "handleChatCommand")
 
 	--Register events
-	self:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
-	self:RegisterEvent("GROUP_ROSTER_UPDATE", "handleGroupChange")
+	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
+	PsyKeystoneHelper:RegisterEvent("GROUP_ROSTER_UPDATE", "handleGroupChange")
 
 	--Show minimap icon
-	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, self.db.profile.minimap)
+	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
 	LibDBIcon:AddButtonToCompartment("PsyKeystoneHelperDBI")
 
@@ -118,15 +118,15 @@ end
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:toggleSessionStatus()
-	if self.db.global.session then 
-		self.db.global.session = false 
-		self.db.profile.keystoneCache = {}
+	if PsyKeystoneHelper.db.profile.session then 
+		PsyKeystoneHelper.db.profile.session = false 
+		PsyKeystoneHelper.db.profile.keystoneCache = {}
 	else 
 		if not UnitInParty("player") then
 			PsyKeystoneHelper:Print("Cannot start a session when not in a party")
 			return
 		end
-		self.db.global.session = true 
+		PsyKeystoneHelper.db.profile.session = true 
 		PsyKeystoneHelper:requestScoreInformation()
 	end
 
@@ -137,7 +137,8 @@ function PsyKeystoneHelper:toggleSessionStatus()
 end
 
 function PsyKeystoneHelper:getSessionStatus()
-	return PsyKeystoneHelper.db.global.session or false
+	if PsyKeystoneHelper.db == nil then return false end
+	return PsyKeystoneHelper.db.profile.session or false
 end
 
 function PsyKeystoneHelper:getSessionStatusString()
@@ -185,8 +186,8 @@ function PsyKeystoneHelper:receiveScoreInformation(playerData)
 
 	--Update the cache
 	--DevTools_Dump(playerData)
-	self.db.profile.keystoneCache[playerData.fullName] = playerData
-	PsyKeystoneHelper:createPlayerFrame(playerData.fullName)
+	PsyKeystoneHelper.db.profile.keystoneCache[playerData.fullName] = playerData
+	--PsyKeystoneHelper:createPlayerFrame(playerData.fullName)
 end
 
 function PsyKeystoneHelper:sendScoreInformation()
@@ -269,7 +270,7 @@ PsyKeystoneHelper.mainFrame:SetScript("OnHide", function()
 	PlaySound(808)
 end)
 
-function PsyKeystoneHelper:createPlayerFrame (fullPlayerName)
+function PsyKeystoneHelper:createPlayerFrame (fullPlayerName, index)
 	local playerData = PsyKeystoneHelper.db.profile.keystoneCache or nil
 	if playerData == nil then return end
 	
@@ -300,7 +301,7 @@ dungeonAbbreviations = {
 function PsyKeystoneHelper:assignHeldKeystones()
 	local keystones = LibOpenRaid.GetAllKeystonesInfo()
 
-	for _, player in pairs(self.db.profile.keystoneCache) do
+	for _, player in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 		for unitName, keystone in pairs(keystones) do
 			if UnitInParty(unitName) and  ({strsplit("-", unitName)})[1] == player.name and keystone.level > 0 then
 				local mapName = C_ChallengeMode.GetMapUIInfo(keystone.challengeMapID) or ""
