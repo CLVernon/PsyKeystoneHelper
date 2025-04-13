@@ -1,6 +1,7 @@
 local _, PsyKeystoneHelper = ...
 
 PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
+PsyKeystoneHelper.v = "v0.0.1-alpha"
 
 --Create Minimap Button
 PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHelperDBI", {
@@ -10,18 +11,21 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 	icon = "Interface\\AddOns\\PsyKeystoneHelper\\logo",
 	OnClick = function(_, buttonPressed)	
 		if buttonPressed == "RightButton" then
+			PsyKeystoneHelper.mainFrame:Show()
+		elseif buttonPressed =="MiddleButton" then
 			PsyKeystoneHelper:handleChatCommand("")
 		elseif buttonPressed =="LeftButton" then
 			PsyKeystoneHelper:toggleSessionStatus()
 		end
 	end,
 	OnTooltipShow = function (tt)
-		tt:AddLine("Keystone Helper")
+		tt:AddLine("Keystone Helper " .. "|cFFFFFFFF" .. "v0.0.1-alpha" .. "|r")
 		tt:AddLine(" ")
 		tt:AddLine("Session Status: " .. PsyKeystoneHelper:getSessionStatusString())
 		tt:AddLine(" ")
-		tt:AddLine("Left Click: Toggle the status of the session")
-		tt:AddLine("Right Click: Show commands")
+		tt:AddLine("Left Click: |cFFFFFFFFToggle the status of the session|r")
+		tt:AddLine("Middle Click: |cFFFFFFFFShow commands|r")
+		tt:AddLine("Right Click: |cFFFFFFFFShow Key Helper window|r")
 	end
 })
 
@@ -45,15 +49,6 @@ function PsyKeystoneHelper:OnInitialize()
 			keystoneCache = {},
 			minimap = {
 				hide = false,
-			},
-			frame = {
-				point = "CENTER",
-				relativeFrame = nil,
-				relativePoint = "CENTER",
-				ofsx = 0,
-				ofsy = 0,
-				width = 750,
-				height = 400,
 			}
 		}
 	})
@@ -91,6 +86,9 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		if arg == "session" then
 			PsyKeystoneHelper:toggleSessionStatus()
 			return
+		elseif arg == "show" then
+			PsyKeystoneHelper.mainFrame:Show()
+			return
 		elseif arg == "request" then
 			PsyKeystoneHelper:requestScoreInformation()
 			return
@@ -107,7 +105,9 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		end
 	end
 
+	PsyKeystoneHelper:Print("Chat Commands:")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33session|r ".. "- Toggle the state of the session")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33show|r ".. "- Show the Keystone Helper window")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the keystone cache")
@@ -131,12 +131,13 @@ function PsyKeystoneHelper:toggleSessionStatus()
 	end
 
 	PsyKeystoneHelper:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
+	PsyKeystoneHelper.statusFrame.title:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
 	LibDBIcon:Hide("PsyKeystoneHelperDBI")
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
 end
 
 function PsyKeystoneHelper:getSessionStatus()
-	return self.db.global.session
+	return PsyKeystoneHelper.db.global.session or false
 end
 
 function PsyKeystoneHelper:getSessionStatusString()
@@ -185,6 +186,7 @@ function PsyKeystoneHelper:receiveScoreInformation(playerData)
 	--Update the cache
 	--DevTools_Dump(playerData)
 	self.db.profile.keystoneCache[playerData.fullName] = playerData
+	PsyKeystoneHelper:createPlayerFrame(playerData.fullName)
 end
 
 function PsyKeystoneHelper:sendScoreInformation()
@@ -230,6 +232,57 @@ local function HandleComm(prefix, message, distribution, sender)
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
+-- Frame
+--------------------------------------------------------------------------------------------------------------------------------------------
+PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BasicFrameTemplateWithInset")
+table.insert(UISpecialFrames, "PsyKeystoneHelperFrame")
+PsyKeystoneHelper.mainFrame:SetSize(500,350)
+PsyKeystoneHelper.mainFrame:SetPoint("RIGHT", UIParent, "RIGHT", 0, 0)
+PsyKeystoneHelper.mainFrame:SetFrameStrata("LOW")
+PsyKeystoneHelper.mainFrame:EnableMouse(true)
+PsyKeystoneHelper.mainFrame:SetMovable(true)
+PsyKeystoneHelper.mainFrame:SetClampedToScreen(true)
+PsyKeystoneHelper.mainFrame:RegisterForDrag("LeftButton")
+
+PsyKeystoneHelper.mainFrame.TitleBg:SetHeight(30)
+PsyKeystoneHelper.mainFrame.title = PsyKeystoneHelper.mainFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+PsyKeystoneHelper.mainFrame.title:SetPoint("TOPLEFT", PsyKeystoneHelper.mainFrame.TitleBg, "TOPLEFT", 5, -3)
+PsyKeystoneHelper.mainFrame.title:SetText("Keystone Helper |cffffff33" .. "v0.0.1-alpha" .. "|r")
+
+PsyKeystoneHelper.statusFrame = CreateFrame("Frame", "PsyKeystoneHelperFrame_Status", PsyKeystoneHelper.mainFrame)
+PsyKeystoneHelper.statusFrame.title = PsyKeystoneHelper.statusFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+PsyKeystoneHelper.statusFrame.title:SetPoint("TOPRIGHT", PsyKeystoneHelper.mainFrame.TitleBg, "TOPRIGHT", -5, -3)
+PsyKeystoneHelper.statusFrame.title:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+
+PsyKeystoneHelper.mainFrame:Hide()
+
+PsyKeystoneHelper.mainFrame:SetScript("OnDragStart", function(self)
+	self:StartMoving()
+end)
+PsyKeystoneHelper.mainFrame:SetScript("OnDragStop", function(self)
+	self:StopMovingOrSizing()
+end)
+PsyKeystoneHelper.mainFrame:SetScript("OnShow", function()
+	PlaySound(808)
+end)
+PsyKeystoneHelper.mainFrame:SetScript("OnHide", function()
+	PlaySound(808)
+end)
+
+function PsyKeystoneHelper:createPlayerFrame (fullPlayerName)
+	local playerData = PsyKeystoneHelper.db.profile.keystoneCache or nil
+	if playerData == nil then return end
+	
+	local playerFrame = CreateFrame("frame", fullPlayerName, PsyKeystoneHelper.mainFrame, "ChallengeModeBannerPartyMemberTemplate")
+	playerFrame:SetFrameLevel(PsyKeystoneHelper.mainFrame:GetFrameLevel() + 2)
+	
+	local playerNameFontString = playerFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	--playerNameFontString:SetTextColor -- todo get class colour
+	playerNameFontString:SetText(playerData.name)
+	playerNameFontString:SetPoint("BOTTOM", playerFrame, "BOTTOM", 0, 0)
+end
+
+--------------------------------------------------------------------------------------------------------------------------------------------
 -- Dungeon Stuff
 --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -266,5 +319,3 @@ end
 --------------------------------------------------------------------------------------------------------------------------------------------
 AceComm:RegisterComm("PsyKeyStone", HandleComm)
 AceComm:RegisterComm("LRS", HandleComm)
-PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BackdropTemplate")
-
