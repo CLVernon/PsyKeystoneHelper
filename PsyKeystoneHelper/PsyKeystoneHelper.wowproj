@@ -13,48 +13,6 @@
     <Content Include="lib\LibDBIcon-1.0\LibDBIcon-1.0.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="lib\LibOpenRaid\classes.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\Deprecated.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\docs.txt" />
-    <Content Include="lib\LibOpenRaid\Functions.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\GetPlayerInformation.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\lib.xml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\LibOpenRaid.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\LibOpenRaid.toc">
-      <SubType>TableOfContents</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\LICENSE" />
-    <Content Include="lib\LibOpenRaid\README.md" />
-    <Content Include="lib\LibOpenRaid\ThingsToMantain_Cata.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\ThingsToMantain_Dragonflight.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\ThingsToMantain_Era.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\ThingsToMantain_Shadowlands.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\ThingsToMantain_WarWithin.lua">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="lib\LibOpenRaid\ThingsToMantain_Wrath.lua">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="logo.tga" />
     <Content Include="PsyKeystoneHelper.toc">
       <SubType>TableOfContents</SubType>
@@ -287,7 +245,6 @@
     <Folder Include="lib\AceTab-3.0" />
     <Folder Include="lib\AceTimer-3.0" />
     <Folder Include="lib\CallbackHandler-1.0" />
-    <Folder Include="lib\LibOpenRaid\" />
     <Folder Include="lib\LibStub" />
     <Folder Include="lib\LibDBIcon-1.0" />
   </ItemGroup>

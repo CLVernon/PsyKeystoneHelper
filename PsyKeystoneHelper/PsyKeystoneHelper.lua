@@ -247,58 +247,75 @@ function PsyKeystoneHelper:sendInformation()
 end
 
 local function HandleComm(prefix, message, distribution, sender)
-	if prefix == "LRS" then
-		if PsyKeystoneHelper:getSessionStatus() then
-			PsyKeystoneHelper:assignHeldKeystones()
-		end
-	else
-		local success ,messageObj = LibAceSerializer:Deserialize(message)
-		if not success then return end
-		if messageObj.type == "SEND" then
-			PsyKeystoneHelper:receiveInformation(messageObj.obj)
-		elseif messageObj.type =="REQUEST" then
-			PsyKeystoneHelper:sendInformation()
-		end
+	local success ,messageObj = LibAceSerializer:Deserialize(message)
+	if not success then return end
+	if messageObj.type == "SEND" then
+		PsyKeystoneHelper:receiveInformation(messageObj.obj)
+	elseif messageObj.type =="REQUEST" then
+		PsyKeystoneHelper:sendInformation()
 	end
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 -- Frame
 --------------------------------------------------------------------------------------------------------------------------------------------
-PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BasicFrameTemplateWithInset")
-table.insert(UISpecialFrames, "PsyKeystoneHelperFrame")
-PsyKeystoneHelper.mainFrame:SetSize(500,350)
-PsyKeystoneHelper.mainFrame:SetPoint("RIGHT", UIParent, "RIGHT", 0, 0)
-PsyKeystoneHelper.mainFrame:SetFrameStrata("LOW")
-PsyKeystoneHelper.mainFrame:EnableMouse(true)
-PsyKeystoneHelper.mainFrame:SetMovable(true)
-PsyKeystoneHelper.mainFrame:SetClampedToScreen(true)
-PsyKeystoneHelper.mainFrame:RegisterForDrag("LeftButton")
+--Main Frame
+do
+	PsyKeystoneHelper.mainFrame = CreateFrame("frame", "PsyKeystoneHelperFrame", UIParent, "BasicFrameTemplateWithInset")
+	table.insert(UISpecialFrames, "PsyKeystoneHelperFrame")
+	PsyKeystoneHelper.mainFrame:SetSize(500,350)
+	PsyKeystoneHelper.mainFrame:SetPoint("RIGHT", UIParent, "RIGHT", 0, 0)
+	PsyKeystoneHelper.mainFrame:SetFrameStrata("LOW")
+	PsyKeystoneHelper.mainFrame:EnableMouse(true)
+	PsyKeystoneHelper.mainFrame:SetMovable(true)
+	PsyKeystoneHelper.mainFrame:SetClampedToScreen(true)
+	PsyKeystoneHelper.mainFrame:RegisterForDrag("LeftButton")
+	PsyKeystoneHelper.mainFrame:Hide()
+	
+	PsyKeystoneHelper.mainFrame:SetScript("OnDragStart", function(self)
+		self:StartMoving()
+	end)
+	PsyKeystoneHelper.mainFrame:SetScript("OnDragStop", function(self)
+		self:StopMovingOrSizing()
+	end)
+	PsyKeystoneHelper.mainFrame:SetScript("OnShow", function()
+		PlaySound(808)
+	end)
+	PsyKeystoneHelper.mainFrame:SetScript("OnHide", function()
+		PlaySound(808)
+	end)
+end
 
-PsyKeystoneHelper.mainFrame.TitleBg:SetHeight(30)
-PsyKeystoneHelper.mainFrame.title = PsyKeystoneHelper.mainFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-PsyKeystoneHelper.mainFrame.title:SetPoint("TOPLEFT", PsyKeystoneHelper.mainFrame.TitleBg, "TOPLEFT", 5, -3)
-PsyKeystoneHelper.mainFrame.title:SetText("Keystone Helper |cffffff33" .. "v0.0.1-alpha" .. "|r")
+-- Title Bar
+do
+	PsyKeystoneHelper.mainFrame.TitleBg:SetHeight(30)
+	PsyKeystoneHelper.mainFrame.title = PsyKeystoneHelper.mainFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+	PsyKeystoneHelper.mainFrame.title:SetPoint("TOPLEFT", PsyKeystoneHelper.mainFrame.TitleBg, "TOPLEFT", 5, -4)
+	PsyKeystoneHelper.mainFrame.title:SetText("Keystone Helper |cffffff33" .. "v0.0.1-alpha" .. "|r")
+	
+	PsyKeystoneHelper.statusFrame = CreateFrame("Frame", "PsyKeystoneHelperFrame_Status", PsyKeystoneHelper.mainFrame)
+	PsyKeystoneHelper.statusFrame.title = PsyKeystoneHelper.statusFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+	PsyKeystoneHelper.statusFrame.title:SetPoint("TOPRIGHT", PsyKeystoneHelper.mainFrame.TitleBg, "TOPRIGHT", -5, -4)
+	PsyKeystoneHelper.statusFrame.title:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+end
 
-PsyKeystoneHelper.statusFrame = CreateFrame("Frame", "PsyKeystoneHelperFrame_Status", PsyKeystoneHelper.mainFrame)
-PsyKeystoneHelper.statusFrame.title = PsyKeystoneHelper.statusFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-PsyKeystoneHelper.statusFrame.title:SetPoint("TOPRIGHT", PsyKeystoneHelper.mainFrame.TitleBg, "TOPRIGHT", -5, -3)
-PsyKeystoneHelper.statusFrame.title:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+-- Top Keys Frame
+do
+	PsyKeystoneHelper.mainFrame.topKeysTitle = PsyKeystoneHelper.mainFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+	PsyKeystoneHelper.mainFrame.topKeysTitle:SetPoint("TOPLEFT", PsyKeystoneHelper.mainFrame, "TOPLEFT", 10, -35)
+	PsyKeystoneHelper.mainFrame.topKeysTitle:SetText("Top Keys")
+end
 
-PsyKeystoneHelper.mainFrame:Hide()
+-- Party Frames
+do
+	PsyKeystoneHelper.mainFrame.partyTitle = PsyKeystoneHelper.mainFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+	PsyKeystoneHelper.mainFrame.partyTitle:SetPoint("TOPLEFT", PsyKeystoneHelper.mainFrame, "TOPLEFT", 10, -75)
+	PsyKeystoneHelper.mainFrame.partyTitle:SetText("Party")
+end
 
-PsyKeystoneHelper.mainFrame:SetScript("OnDragStart", function(self)
-	self:StartMoving()
-end)
-PsyKeystoneHelper.mainFrame:SetScript("OnDragStop", function(self)
-	self:StopMovingOrSizing()
-end)
-PsyKeystoneHelper.mainFrame:SetScript("OnShow", function()
-	PlaySound(808)
-end)
-PsyKeystoneHelper.mainFrame:SetScript("OnHide", function()
-	PlaySound(808)
-end)
+-- Action Buttons
+do
+end
 
 function PsyKeystoneHelper:createPlayerFrame (fullPlayerName, index)
 	local playerData = PsyKeystoneHelper.db.profile.keystoneCache or nil
@@ -332,4 +349,3 @@ dungeonAbbreviations = {
 -- Other Init
 --------------------------------------------------------------------------------------------------------------------------------------------
 AceComm:RegisterComm("PsyKeyStone", HandleComm)
-AceComm:RegisterComm("LRS", HandleComm)
