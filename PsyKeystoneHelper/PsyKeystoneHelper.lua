@@ -101,10 +101,13 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
 			return
 		elseif arg == "debug" then
-			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
-			local state = "Disabled"
-			if PsyKeystoneHelper.db.profile.debugPrints then state = "Enabled" end
-			PsyKeystoneHelper:Print("Debug Prints are: " .. state)
+			if PsyKeystoneHelper.db.profile.debugPrints then 
+				PsyKeystoneHelper.db.profile.debugPrints = false
+				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Disabled|r")
+			else
+				PsyKeystoneHelper.db.profile.debugPrints = true
+				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Enabled|r")
+			end
 			return
 		elseif arg == "" then
 		else
