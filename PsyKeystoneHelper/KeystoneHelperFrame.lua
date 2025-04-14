@@ -20,6 +20,7 @@ function KeystoneHelperFrame_OnLoad()
 
 	--Setup Top Keystone lookup
 	KeystoneHelperFrame.topKeystones = {}
+	createTopKeysFrame()
 
 	--Set defaults
 	KeystoneHelperFrame_OnShow()
@@ -81,6 +82,14 @@ function updateColourForDungeonScore(fontString, dungeonScore)
 	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
 end
 
+function createTopKeysFrame()
+	local topKeysFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
+	topKeysFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -30)
+	topKeysFrame:SetSize(515, 70)
+
+
+end
+
 function createDungeonNameFrame() 
 	local dungeonNameFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
 	dungeonNameFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -75)
@@ -103,7 +112,6 @@ function createDungeonNameFrame()
 end
 
 function createPlayerFrame(index)
-
 	--Frame
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))

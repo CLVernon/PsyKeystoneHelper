@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94125-E975-47A2-83D1-FB11245F79DC}",
-      "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94125-E975-47A2-83D1-FB11245F79DC}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.lua||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\KeystoneHelperFrame.lua||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -15,12 +11,16 @@
       "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\PsyKeystoneHelper.lua||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94126-E975-47A2-83D1-FB11245F7ADC}",
-      "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94126-E975-47A2-83D1-FB11245F7ADC}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\PsyKeystoneHelper.toc||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\PsyKeystoneHelper.toc||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94125-E975-47A2-83D1-FB11245F79DC}",
+      "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94125-E975-47A2-83D1-FB11245F79DC}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94126-E975-47A2-83D1-FB11245F7ADC}",
+      "RelativeMoniker": "D:0:0:{D447B2CA-7E26-42D2-9D8C-218D66B599E6}|PsyKeystoneHelper\\PsyKeystoneHelper.wowproj|solutionrelative:PsyKeystoneHelper\\KeystoneHelperFrame.xml||{D5C94126-E975-47A2-83D1-FB11245F7ADC}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 253,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,7 +50,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "KeystoneHelperFrame.xml",
               "DocumentMoniker": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.xml",
               "RelativeDocumentMoniker": "PsyKeystoneHelper\\KeystoneHelperFrame.xml",
@@ -63,7 +63,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "KeystoneHelperFrame.xml [Design]",
               "DocumentMoniker": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.xml",
               "RelativeDocumentMoniker": "PsyKeystoneHelper\\KeystoneHelperFrame.xml",
@@ -75,7 +75,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "PsyKeystoneHelper.toc",
               "DocumentMoniker": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\PsyKeystoneHelper.toc",
               "RelativeDocumentMoniker": "PsyKeystoneHelper\\PsyKeystoneHelper.toc",
@@ -83,30 +83,31 @@
               "RelativeToolTip": "PsyKeystoneHelper\\PsyKeystoneHelper.toc",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-14T17:01:18.154Z"
+              "WhenOpened": "2025-04-14T17:01:18.154Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "KeystoneHelperFrame.lua",
               "DocumentMoniker": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.lua",
               "RelativeDocumentMoniker": "PsyKeystoneHelper\\KeystoneHelperFrame.lua",
               "ToolTip": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\KeystoneHelperFrame.lua",
               "RelativeToolTip": "PsyKeystoneHelper\\KeystoneHelperFrame.lua",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAARAAAA",
+              "ViewState": "AQIAADwAAAAAAAAAAAAAAFcAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-04-14T00:03:18.915Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "PsyKeystoneHelper.lua",
               "DocumentMoniker": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\PsyKeystoneHelper.lua",
               "RelativeDocumentMoniker": "PsyKeystoneHelper\\PsyKeystoneHelper.lua",
               "ToolTip": "C:\\Users\\clver\\OneDrive\\Documents\\AddOn Studio\\PsyKeystoneHelper\\PsyKeystoneHelper\\PsyKeystoneHelper.lua",
               "RelativeToolTip": "PsyKeystoneHelper\\PsyKeystoneHelper.lua",
-              "ViewState": "AQIAACEAAAAAAAAAAAAAAD4AAAA6AAAA",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAAD4AAAA6AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-04-11T18:24:52.717Z",
               "EditorCaption": ""
