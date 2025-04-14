@@ -12,11 +12,11 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 	icon = "Interface\\AddOns\\PsyKeystoneHelper\\logo",
 	OnClick = function(_, buttonPressed)	
 		if buttonPressed == "RightButton" then
-			PsyKeystoneHelper.frame:Show()
+			PsyKeystoneHelper:toggleSessionStatus()
 		elseif buttonPressed =="MiddleButton" then
 			PsyKeystoneHelper:handleChatCommand("")
 		elseif buttonPressed =="LeftButton" then
-			PsyKeystoneHelper:toggleSessionStatus()
+			PsyKeystoneHelper.frame:Show()
 		end
 	end,
 	OnTooltipShow = function (tt)
@@ -24,9 +24,9 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		tt:AddLine(" ")
 		tt:AddLine("Session Status: " .. PsyKeystoneHelper:getSessionStatusString())
 		tt:AddLine(" ")
-		tt:AddLine("Left Click: |cFFFFFFFFToggle the status of the session|r")
-		tt:AddLine("Middle Click: |cFFFFFFFFShow commands|r")
-		tt:AddLine("Right Click: |cFFFFFFFFShow Key Helper window|r")
+		tt:AddLine("Left Click: |cFFFFFFFFShow Key Helper Window|r")
+		tt:AddLine("Middle Click: |cFFFFFFFFShow Commands|r")
+		tt:AddLine("Right Click: |cFFFFFFFFToggle Session State|r")
 	end
 })
 
@@ -59,7 +59,8 @@ function PsyKeystoneHelper:OnInitialize()
 
 	--Register events
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
-	PsyKeystoneHelper:RegisterEvent("GROUP_ROSTER_UPDATE", "handleGroupChange")
+	PsyKeystoneHelper:RegisterEvent("GROUP_JOINED", "handleGroupJoined")
+	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_COMPLETED", "handleChallengeModeCompleted")
 	--CHALLENGE_MODE_COMPLETED
 
 	--Show minimap icon
@@ -176,10 +177,13 @@ function PsyKeystoneHelper:handleGroupLeft()
 	end
 end
 
-function PsyKeystoneHelper:handleGroupChange() 
-	if PsyKeystoneHelper:getSessionStatus() then
-		PsyKeystoneHelper:requestInformation()
-	end
+function PsyKeystoneHelper:handleGroupJoined() 
+	PsyKeystoneHelper:sendInformation()
+end
+
+function PsyKeystoneHelper:handleChallengeModeCompleted() 
+	PsyKeystoneHelper:Print("Challenge Mode Completed!")
+	PsyKeystoneHelper:sendInformation()
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
