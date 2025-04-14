@@ -142,6 +142,10 @@ function PsyKeystoneHelper:toggleSessionStatus()
 			PsyKeystoneHelper:Print("Cannot start a session when not in a party")
 			return
 		end
+		if UnitInRaid("player") then
+			PsyKeystoneHelper:Print("Cannot start a session when in a raid group")
+			return
+		end
 		PsyKeystoneHelper.db.profile.session = true 
 		PsyKeystoneHelper:requestInformation()
 	end
@@ -179,6 +183,12 @@ end
 
 function PsyKeystoneHelper:handleGroupJoined() 
 	PsyKeystoneHelper:DebugPrint("handleGroupJoined()")
+	if UnitInRaid("player") then
+		if PsyKeystoneHelper:getSessionStatus() then 
+			PsyKeystoneHelper:toggleSessionStatus()
+		end
+		return
+	end
 	PsyKeystoneHelper:sendInformation()
 end
 
