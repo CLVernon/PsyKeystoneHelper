@@ -8,3 +8,6 @@
 
 PsyKeystoneHelper.xml
 PsyKeystoneHelper.lua
+
+KeystoneHelperFrame.xml
+KeystoneHelperFrame.lua

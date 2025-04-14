@@ -10,6 +10,13 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="KeystoneHelperFrame.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>KeystoneHelperFrame.xml</DependentUpon>
+    </Content>
+    <Content Include="KeystoneHelperFrame.xml">
+      <SubType>Frame</SubType>
+    </Content>
     <Content Include="lib\LibDBIcon-1.0\LibDBIcon-1.0.lua">
       <SubType>Code</SubType>
     </Content>
