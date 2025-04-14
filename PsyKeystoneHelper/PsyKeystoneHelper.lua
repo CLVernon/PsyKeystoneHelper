@@ -67,8 +67,18 @@ function PsyKeystoneHelper:OnInitialize()
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
 	LibDBIcon:AddButtonToCompartment("PsyKeystoneHelperDBI")
 
+	--Disable state on load if player is not in group or is in raid
+	if (not UnitInParty("player") or UnitInRaid("player") and PsyKeystoneHelper:getSessionStatus()) then
+		PsyKeystoneHelper:toggleSessionStatus()
+	end
+
 	--Remind user of session state
 	PsyKeystoneHelper:Print("Session is " .. PsyKeystoneHelper:getSessionStatusString())
+
+	--Load frame if session is running
+	if PsyKeystoneHelper:getSessionStatus() then
+		PsyKeystoneHelper.frame:Show()
+	end
 end
 
 function PsyKeystoneHelper:OnEnable()
