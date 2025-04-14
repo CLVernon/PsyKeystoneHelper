@@ -20,7 +20,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		end
 	end,
 	OnTooltipShow = function (tt)
-		tt:AddLine("Keystone Helper " .. "|cFFFFFFFF" .. "v0.0.1-alpha" .. "|r")
+		tt:AddLine("Keystone Helper " .. "|cFFFFFFFF" .. PsyKeystoneHelper.v .. "|r")
 		tt:AddLine(" ")
 		tt:AddLine("Session Status: " .. PsyKeystoneHelper:getSessionStatusString())
 		tt:AddLine(" ")
