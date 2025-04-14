@@ -61,7 +61,6 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
 	PsyKeystoneHelper:RegisterEvent("GROUP_JOINED", "handleGroupJoined")
 	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_COMPLETED", "handleChallengeModeCompleted")
-	--CHALLENGE_MODE_COMPLETED
 
 	--Show minimap icon
 	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
@@ -171,17 +170,20 @@ end
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:handleGroupLeft() 
+	PsyKeystoneHelper:DebugPrint("handleGroupLeft()")
 	if PsyKeystoneHelper:getSessionStatus() then
 		PsyKeystoneHelper:toggleSessionStatus()
+		ns:displayPartyData()
 	end
 end
 
 function PsyKeystoneHelper:handleGroupJoined() 
+	PsyKeystoneHelper:DebugPrint("handleGroupJoined()")
 	PsyKeystoneHelper:sendInformation()
 end
 
 function PsyKeystoneHelper:handleChallengeModeCompleted() 
-	PsyKeystoneHelper:Print("Challenge Mode Completed!")
+	PsyKeystoneHelper:DebugPrint("handleChallengeModeCompleted()")
 	PsyKeystoneHelper:sendInformation()
 end
 
@@ -221,11 +223,13 @@ function PsyKeystoneHelper:sendInformation()
 	local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
 	local keystone = nil
 	if ownedChallengeMapId then
-		local mapName = C_ChallengeMode.GetMapUIInfo(ownedChallengeMapId)
+		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(ownedChallengeMapId)
 		keystone = {
-			mapChallengeModeID = C_MythicPlus.GetOwnedKeystoneChallengeMapID(),
-			mapID = C_MythicPlus.GetOwnedKeystoneMapID(),
+			mapChallengeModeID = ownedChallengeMapId,
+			mapID = mapID,
 			level = C_MythicPlus.GetOwnedKeystoneLevel(),
+			texture = texture,
+			backgroundTexture = backgroundTexture,
 			itemLink = nil, --todo
 			mapName = mapName,
 			mapAbbreviation = dungeonAbbreviations[mapName] or mapName

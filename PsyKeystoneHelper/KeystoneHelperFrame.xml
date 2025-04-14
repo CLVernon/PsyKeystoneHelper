@@ -46,69 +46,57 @@
 					</Anchors>
 					<FontHeight val="12" />
 				</FontString>
-				<FontString name="TopKeys_1_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0">
+				<FontString name="TopKeys_1_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0" outline="THICK">
 					<Size x="50" y="20" />
 					<Anchors>
 						<Anchor x="126" y="-26" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="14" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
-				<FontString name="TopKeys_2_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0">
+				<FontString name="TopKeys_2_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0" outline="THICK">
 					<Size x="50" y="20" />
 					<Anchors>
 						<Anchor x="186" y="-26" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="14" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
-				<FontString name="TopKeys_3_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0">
+				<FontString name="TopKeys_3_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0" outline="THICK">
 					<Size x="50" y="20" />
 					<Anchors>
 						<Anchor x="246" y="-26" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="14" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
-				<FontString name="TopKeys_1_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE">
+				<FontString name="TopKeys_1_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE" outline="THICK">
 					<Size x="50" y="20" />
 					<Anchors>
-						<Anchor x="126" y="-73" point="TOPLEFT" />
+						<Anchor x="127" y="-73" point="TOPLEFT" />
 					</Anchors>
-					<FontHeight val="14" />
+					<FontHeight val="12" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
-				<FontString name="TopKeys_2_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE">
+				<FontString name="TopKeys_2_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE" outline="THICK">
 					<Size x="50" y="20" />
 					<Anchors>
-						<Anchor x="186" y="-73" point="TOPLEFT" />
+						<Anchor x="187" y="-73" point="TOPLEFT" />
 					</Anchors>
-					<FontHeight val="14" />
+					<FontHeight val="12" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
-				<FontString name="TopKeys_3_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE">
+				<FontString name="TopKeys_3_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE" outline="THICK">
 					<Size x="50" y="20" />
 					<Anchors>
-						<Anchor x="246" y="-73" point="TOPLEFT" />
+						<Anchor x="247" y="-73" point="TOPLEFT" />
 					</Anchors>
-					<FontHeight val="14" />
+					<FontHeight val="12" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
-			<Frame name="PsyKeystoneHelperFrame_Party1">
-				<Size x="396" y="81" />
-				<Anchors>
-					<Anchor x="10" y="-94" point="TOPLEFT" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
-				</KeyValues>
-			</Frame>
-			<Frame name="PsyKeystoneHelperFrame_Party2" inherits="">
-				<Size x="396" y="81" />
-				<Anchors>
-					<Anchor x="10" y="-175" point="TOPLEFT" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
-				</KeyValues>
-			</Frame>
 			<Button name="Button_ToggleSession" inherits="UIPanelButtonTemplate" text="Toggle Session">
 				<Size x="120" y="30" />
 				<Anchors>
@@ -131,33 +119,6 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Frame name="PsyKeystoneHelperFrame_Party3" inherits="">
-				<Size x="396" y="81" />
-				<Anchors>
-					<Anchor x="10" y="-255" point="TOPLEFT" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
-				</KeyValues>
-			</Frame>
-			<Frame name="PsyKeystoneHelperFrame_Party4" inherits="">
-				<Size x="396" y="81" />
-				<Anchors>
-					<Anchor x="10" y="-342" point="TOPLEFT" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
-				</KeyValues>
-			</Frame>
-			<Frame name="PsyKeystoneHelperFrame_Party5" inherits="">
-				<Size x="396" y="81" />
-				<Anchors>
-					<Anchor x="10" y="-423" point="TOPLEFT" />
-				</Anchors>
-				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
-				</KeyValues>
-			</Frame>
 		</Frames>
 		<Scripts>
 			<OnLoad inherit="prepend">
