@@ -32,14 +32,14 @@
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString name="title" inherits="GameFontHighlight" font="Fonts\bHEI01B.ttf" text="Keystone Helper" justifyH="LEFT">
+				<FontString name="title" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Keystone Helper" justifyH="LEFT">
 					<Size x="198" y="20" />
 					<Anchors>
 						<Anchor x="5" y="-1" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="12" />
 				</FontString>
-				<FontString name="status" inherits="GameFontHighlight" font="Fonts\bHEI01B.ttf" text="Status: Stopped" justifyH="RIGHT">
+				<FontString name="status" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Status: Stopped" justifyH="RIGHT">
 					<Size x="198" y="20" />
 					<Anchors>
 						<Anchor x="193" y="-1" point="TOPLEFT" />
