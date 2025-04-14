@@ -65,6 +65,21 @@ function createString(parent, template, size, defaultText)
 	return string
 end
 
+function updateColourForKeyLevel(fontString, level)
+	local levelColour = C_ChallengeMode.GetKeystoneLevelRarityColor(level)
+	fontString:SetTextColor(levelColour.r, levelColour.g, levelColour.b)
+end
+
+function updateColourForOverallScore(fontString, overallScore)
+	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(overallScore)
+	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
+end
+
+function updateColourForDungeonScore(fontString, dungeonScore)
+	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore * 10)
+	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
+end
+
 function createDungeonNameFrame() 
 	local dungeonNameFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
 	dungeonNameFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -75)
@@ -169,32 +184,38 @@ function defaultPlayerFrames()
 			playerFrame.name:SetText("Player" .. index)
 			playerFrame.name:SetTextColor(1,1,1)
 			playerFrame.score:SetText("Score: 0000")
+			updateColourForOverallScore(playerFrame.score, 0)
 			playerFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
 			playerFrame.keystone.texture:Show()
 			playerFrame.keystone.topText:SetText("+0")
+			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
 			playerFrame.keystone.bottomText:SetText("NONE")
 
 			for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
 				dungeonFrame.texture:Show()
 				dungeonFrame.texture:SetDesaturated(true)
 				dungeonFrame.topText:SetText("+0")
-				dungeonFrame.topText:SetTextColor(1,1,1)
+				updateColourForKeyLevel(dungeonFrame.topText, 0)
 				dungeonFrame.bottomText:SetText("0")
+				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
 			end
 		else
 			playerFrame.name:SetText("")
 			playerFrame.name:SetTextColor(1,1,1)
 			playerFrame.score:SetText("")
+			updateColourForOverallScore(playerFrame.score, 0)
 			playerFrame.keystone.texture:Hide()
 			playerFrame.keystone.topText:SetText("")
+			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
 			playerFrame.keystone.bottomText:SetText("")
 
 			for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
 				dungeonFrame.texture:Hide()
 				dungeonFrame.texture:SetDesaturated(true)
 				dungeonFrame.topText:SetText("")
-				dungeonFrame.topText:SetTextColor(1,1,1)
+				updateColourForKeyLevel(dungeonFrame.topText, 0)
 				dungeonFrame.bottomText:SetText("")
+				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
 			end
 		end
 		index = index + 1
@@ -211,6 +232,7 @@ function populatePlayerFrame(playerFrame, playerData)
 
 	-- Player Score
 	playerFrame.score:SetText("Score: " .. playerData.overallScore)
+	updateColourForOverallScore(playerFrame.score, playerData.overallScore)
 
 	-- Player Keystone
 	if playerData.keystone == nil then
@@ -220,6 +242,7 @@ function populatePlayerFrame(playerFrame, playerData)
 	else
 		playerFrame.keystone.texture:SetTexture(playerData.keystone.texture)
 		playerFrame.keystone.topText:SetText("+" ..playerData.keystone.level)
+		updateColourForKeyLevel(playerFrame.keystone.topText, playerData.keystone.level)
 		playerFrame.keystone.bottomText:SetText(playerData.keystone.mapAbbreviation)
 	end
 	playerFrame.keystone.texture:Show()
@@ -243,10 +266,9 @@ function populatePlayerFrame(playerFrame, playerData)
 			dungeonFrame.texture:SetDesaturated(true)
 		else
 			dungeonFrame.topText:SetText("+" .. dungeonScore.level)
+			updateColourForKeyLevel(dungeonFrame.topText, dungeonScore.level)
 			dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
-
-			local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore.dungeonScore)
-			dungeonFrame.topText:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
+			updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
 			dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0) 
 		end
 	end
