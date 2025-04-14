@@ -225,6 +225,7 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 
 	--Update the cache
 	PsyKeystoneHelper.db.profile.keystoneCache[playerData.fullName] = playerData
+	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
 	ns:displayPartyData()
 end
 
