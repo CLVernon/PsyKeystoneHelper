@@ -148,7 +148,6 @@ function PsyKeystoneHelper:toggleSessionStatus()
 	end
 
 	PsyKeystoneHelper:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
-	PsyKeystoneHelper.statusFrame.title:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
 	PsyKeystoneHelper.frame.status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
 	LibDBIcon:Hide("PsyKeystoneHelperDBI")
 	LibDBIcon:Show("PsyKeystoneHelperDBI")
