@@ -257,11 +257,17 @@ function PsyKeystoneHelper:sendInformation()
 		}
 	end
 
+	-- Get class properties
+	local className, classFilename, classId = UnitClass("player")
+
 	-- Create obj to send
 	local playerData = {
 		name = GetUnitName("player"),
 		realm = GetRealmName("player"),
 		fullName = GetUnitName("player") .. "-" .. GetRealmName("player"),
+		className = className,
+		classFilename = classFileName,
+		classId = classId,
 		scoreInfo = scoreInfo,
 		overallScore = C_ChallengeMode.GetOverallDungeonScore(),
 		keystone = keystone,

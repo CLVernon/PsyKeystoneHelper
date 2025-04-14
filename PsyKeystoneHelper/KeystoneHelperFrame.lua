@@ -57,6 +57,8 @@ function Button_RequestData_OnClick()
 end
 
 function ns:displayPartyData()
+	PsyKeystoneHelper:DebugPrint("Displaying party data...")
+
 	--Default frames
 	defaultFrame()
 
@@ -136,6 +138,7 @@ end
 function defaultPlayerFrames()
 	for _, playerFrame in pairs(KeystoneHelperFrame.playerFrames) do
 		playerFrame.name:SetText("")
+		playerFrame.name:SetTextColor(1,1,1)
 		playerFrame.score:SetText("")
 		playerFrame.keystone.texture:Hide()
 		playerFrame.keystone.topText:SetText("")
@@ -145,6 +148,12 @@ end
 
 function populatePlayerFrame(playerFrame, playerData)
 	playerFrame.name:SetText(playerData.name)
+
+	if playerData.classFilename ~= nil then
+		local classColour = C_ClassColor.GetClassColor(playerData.classFilename)
+		playerFrame.name:SetTextColor(classColour.r,classColour.g,classColour.b)
+	end
+
 	playerFrame.score:SetText("Score: " .. playerData.overallScore)
 
 	if playerData.keystone == nil then
