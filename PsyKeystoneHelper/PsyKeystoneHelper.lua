@@ -46,7 +46,7 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper.db = AceDB:New("PsyKeystoneHelper_Session",{
 		profile = {
 			session = false,
-			debugPrints = false,
+			debugMode = false,
 			keystoneCache = {},
 			minimap = {
 				hide = false,
@@ -111,11 +111,11 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
 			return
 		elseif arg == "debug" then
-			if PsyKeystoneHelper.db.profile.debugPrints then 
-				PsyKeystoneHelper.db.profile.debugPrints = false
+			if PsyKeystoneHelper.db.profile.debugMode then 
+				PsyKeystoneHelper.db.profile.debugMode = false
 				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Disabled|r")
 			else
-				PsyKeystoneHelper.db.profile.debugPrints = true
+				PsyKeystoneHelper.db.profile.debugMode = true
 				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Enabled|r")
 			end
 			return
@@ -131,12 +131,12 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the cache data")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33debug|r ".. "- Toggle debug messages")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
 end
 
 function PsyKeystoneHelper:DebugPrint(msg)
 	if PsyKeystoneHelper.db == nil then return end
-	if PsyKeystoneHelper.db.profile.debugPrints then PsyKeystoneHelper:Print(msg) end
+	if PsyKeystoneHelper.db.profile.debugMode then PsyKeystoneHelper:Print(msg) end
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
@@ -225,8 +225,24 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 
 	--Update the cache
 	PsyKeystoneHelper.db.profile.keystoneCache[playerData.fullName] = playerData
-	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
+	PsyKeystoneHelper:sortInformation() 
 	ns:displayPartyData()
+end
+
+function PsyKeystoneHelper:sortInformation() 
+	for fullName, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+		if 
+		not GetUnitName("Party1") == playerData.name
+		and not GetUnitName("Party2") == playerData.name
+		and not GetUnitName("Party3") == playerData.name
+		and not GetUnitName("Party4") == playerData.name
+		and not GetUnitName("player") == playerData.name
+		then
+			table.remove(playerData, fullName)
+		end
+	end
+
+	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
 end
 
 function PsyKeystoneHelper:sendInformation()
@@ -266,7 +282,7 @@ function PsyKeystoneHelper:sendInformation()
 		realm = GetRealmName("player"),
 		fullName = GetUnitName("player") .. "-" .. GetRealmName("player"),
 		className = className,
-		classFilename = classFileName,
+		classFilename = classFilename,
 		classId = classId,
 		scoreInfo = scoreInfo,
 		overallScore = C_ChallengeMode.GetOverallDungeonScore(),

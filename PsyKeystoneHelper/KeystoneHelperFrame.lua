@@ -74,8 +74,8 @@ end
 
 function createPlayerFrame(index)
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
-	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -95  - (85 * (index - 1)))
-	playerFrame:SetSize(400, 80)
+	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -95  - (65 * (index - 1)))
+	playerFrame:SetSize(400, 60)
 
 	playerFrame.name = playerFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	playerFrame.name:SetFont("Fonts\2002B.ttf", 12, "OUTLINE")
@@ -136,13 +136,25 @@ function defaultTopKeystones()
 end
 
 function defaultPlayerFrames()
+	local index = 1
 	for _, playerFrame in pairs(KeystoneHelperFrame.playerFrames) do
-		playerFrame.name:SetText("")
-		playerFrame.name:SetTextColor(1,1,1)
-		playerFrame.score:SetText("")
-		playerFrame.keystone.texture:Hide()
-		playerFrame.keystone.topText:SetText("")
-		playerFrame.keystone.bottomText:SetText("")
+		if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
+			playerFrame.name:SetText("Player" .. index)
+			playerFrame.name:SetTextColor(1,1,1)
+			playerFrame.score:SetText("Score: 0000")
+			playerFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+			playerFrame.keystone.texture:Show()
+			playerFrame.keystone.topText:SetText("")
+			playerFrame.keystone.bottomText:SetText("")
+		else
+			playerFrame.name:SetText("")
+			playerFrame.name:SetTextColor(1,1,1)
+			playerFrame.score:SetText("")
+			playerFrame.keystone.texture:Hide()
+			playerFrame.keystone.topText:SetText("")
+			playerFrame.keystone.bottomText:SetText("")
+		end
+		index = index + 1
 	end
 end
 
