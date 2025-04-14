@@ -20,6 +20,27 @@ function KeystoneHelperFrame_OnLoad()
 	KeystoneHelperFrame.playerFrames[3] = PsyKeystoneHelperFrame_Party3
 	KeystoneHelperFrame.playerFrames[4] = PsyKeystoneHelperFrame_Party4
 	KeystoneHelperFrame.playerFrames[5] = PsyKeystoneHelperFrame_Party5
+
+	--Setup Top Keystone lookup
+	KeystoneHelperFrame.topKeystones = {}
+	KeystoneHelperFrame.topKeystones[1] = {
+		topText = TopKeys_1_Top,
+		bottomText = TopKeys_1_Bottom,
+		texture = TopKeys_1
+	}
+	KeystoneHelperFrame.topKeystones[2] = {
+		topText = TopKeys_2_Top,
+		bottomText = TopKeys_2_Bottom,
+		texture = TopKeys_2
+	}
+	KeystoneHelperFrame.topKeystones[3] = {
+		topText = TopKeys_3_Top,
+		bottomText = TopKeys_3_Bottom,
+		texture = TopKeys_3
+	}
+
+	--Assign frame components their default values
+	defaultTopKeystones()
 end
 
 function KeystoneHelperFrame_OnShow()
@@ -37,5 +58,23 @@ function Button_RequestData_OnClick()
 end
 
 function ns:displayPartyData()
-		PsyKeystoneHelper:Print("displayPartyData() call")
+	PsyKeystoneHelper:Print("displayPartyData() call")
+
+	--Default frames
+	do
+		defaultTopKeystones()
+	end
+
+	--Now populate with actual data
+	do
+
+	end
+end
+
+function defaultTopKeystones() 
+	for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
+		topKeystone.topText:SetText("")
+		topKeystone.bottomText:SetText("NONE")
+		topKeystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+	end
 end
