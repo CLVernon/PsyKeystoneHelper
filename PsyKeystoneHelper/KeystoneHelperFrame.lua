@@ -20,22 +20,6 @@ function KeystoneHelperFrame_OnLoad()
 
 	--Setup Top Keystone lookup
 	KeystoneHelperFrame.topKeystones = {}
-	KeystoneHelperFrame.topKeystones[1] = {
-		topText = TopKeys_1_Top,
-		bottomText = TopKeys_1_Bottom,
-		texture = TopKeys_1
-	}
-	KeystoneHelperFrame.topKeystones[2] = {
-		topText = TopKeys_2_Top,
-		bottomText = TopKeys_2_Bottom,
-		texture = TopKeys_2
-	}
-	KeystoneHelperFrame.topKeystones[3] = {
-		topText = TopKeys_3_Top,
-		bottomText = TopKeys_3_Bottom,
-		texture = TopKeys_3
-	}
-
 	--Set defaults
 	KeystoneHelperFrame_OnShow()
 end
@@ -72,27 +56,78 @@ function ns:displayPartyData()
 	end
 end
 
-function createPlayerFrame(index)
-	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
-	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -95  - (65 * (index - 1)))
-	playerFrame:SetSize(400, 60)
+function createString(parent, template, size, defaultText)
+	local string  = parent:CreateFontString(nil, "OVERLAY", template)
+	string:SetFont("Fonts\2002B.ttf", size, "OUTLINE")
+	string:SetTextHeight(size)
+	string:SetTextColor(1,1,1)
+	string:SetText(defaultText)
+	return string
+end
 
-	playerFrame.name = playerFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-	playerFrame.name:SetFont("Fonts\2002B.ttf", 12, "OUTLINE")
-	playerFrame.name:SetTextHeight(12)
-	playerFrame.name:SetTextColor(1,1,1)
-	playerFrame.name:SetText("Player " .. index)
+function createDungeonNameFrame() 
+	local dungeonNameFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
+	dungeonNameFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -75)
+	dungeonNameFrame:SetSize(515, 20)
+
+	-- Key
+	local keyName = createString(dungeonNameFrame, "GameFontHighlight", 12, "KEY")
+	keyName:SetPoint("LEFT", dungeonNameFrame, "LEFT", 90, 0)
+
+	-- Dungeon Names
+	local challengeModeIDs = C_ChallengeMode.GetMapTable()
+	for index = 1, #challengeModeIDs do 
+		local dungeonText = createString(dungeonNameFrame, "GameFontHighlight", 12, "")
+		dungeonText:SetJustifyH("CENTER")
+		dungeonText:SetPoint("LEFT", dungeonNameFrame, "LEFT", 145 + ((index - 1) * 45), 0)
+
+		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[index])
+		dungeonText:SetText(ns.dungeonAbbreviations[mapName] or "")
+	end
+end
+
+function createPlayerFrame(index)
+	--Frame
+	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
+	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -95  - (50 * (index - 1)))
+	playerFrame:SetSize(515, 50)
+
+	--Name
+	playerFrame.name = createString(playerFrame, "GameFontHighlight", 12, "Player " .. index)
 	playerFrame.name:SetPoint("LEFT", playerFrame, "LEFT", 10, 5)
 
-	playerFrame.score = playerFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-	playerFrame.score:SetFont("Fonts\2002B.ttf", 12, "OUTLINE")
-	playerFrame.score:SetTextHeight(12)
-	playerFrame.score:SetTextColor(1,1,1)
-	playerFrame.score:SetText("Score: 0000")
-	playerFrame.score:SetPoint("LEFT", playerFrame, "LEFT", 9, -5)
+	--Score
+	playerFrame.score = createString(playerFrame, "GameFontHighlight", 12, "Score: 0000")
+	playerFrame.score:SetPoint("LEFT", playerFrame, "LEFT", 10, -5)
 
+	--Current Key
 	playerFrame.keystone = createKeystoneFrame(playerFrame)
 	playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 90, 0)
+	if index == 1 then
+		local keystoneColumnTitle = createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
+		keystoneColumnTitle:SetJustifyH("CENTER")
+		keystoneColumnTitle:SetPoint("TOP", playerFrame.keystone, "TOP", 0, 20)
+	end
+
+	--Dungeon Bests
+	local challengeModeIDs = C_ChallengeMode.GetMapTable()
+	playerFrame.dungeonScores = {}
+	for i = 1, #challengeModeIDs do 
+		local dungeonFrame = createKeystoneFrame(playerFrame)
+		dungeonFrame:SetPoint("LEFT", playerFrame, "LEFT", 145 + ((i - 1) * 45), 0)
+		playerFrame.dungeonScores[i] = dungeonFrame
+
+		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[i])
+		dungeonFrame.texture:SetTexture(texture)
+		dungeonFrame.challengeModeID = challengeModeIDs[i]
+
+		if index == 1 then
+			local abbrev = ns.dungeonAbbreviations[mapName] or ""
+			local mapColumnTitle = createString(dungeonFrame, "GameFontHighlight", 12, abbrev)
+			mapColumnTitle:SetJustifyH("CENTER")
+			mapColumnTitle:SetPoint("TOP", dungeonFrame, "TOP", 0, 20)
+		end
+	end
 
 	return playerFrame
 end
@@ -105,19 +140,11 @@ function createKeystoneFrame(parent)
 	keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
 	keystoneFrame.texture:SetAllPoints(keystoneFrame)
 
-	keystoneFrame.topText = keystoneFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2Outline")
-	keystoneFrame.topText:SetFont("Fonts\2002B.ttf", 14, "OUTLINE")
-	keystoneFrame.topText:SetTextHeight(14)
-	keystoneFrame.topText:SetTextColor(1,1,1)
-	keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 7)
-	keystoneFrame.topText:SetText("")
+	keystoneFrame.topText = createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+	keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 0)
 
-	keystoneFrame.bottomText = keystoneFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2Outline")
-	keystoneFrame.bottomText:SetFont("Fonts\2002B.ttf", 10, "OUTLINE")
-	keystoneFrame.bottomText:SetTextHeight(10)
-	keystoneFrame.bottomText:SetTextColor(1,1,1)
-	keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, -7)
-	keystoneFrame.bottomText:SetText("")
+	keystoneFrame.bottomText = createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+	keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
 
 	return keystoneFrame
 end
@@ -128,11 +155,11 @@ function defaultFrame()
 end
 
 function defaultTopKeystones() 
-	for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
-		topKeystone.topText:SetText("")
-		topKeystone.bottomText:SetText("NONE")
-		topKeystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
-	end
+	--for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
+	--	topKeystone.topText:SetText("")
+	--	topKeystone.bottomText:SetText("NONE")
+	--	topKeystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+	--end
 end
 
 function defaultPlayerFrames()
@@ -144,8 +171,16 @@ function defaultPlayerFrames()
 			playerFrame.score:SetText("Score: 0000")
 			playerFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
 			playerFrame.keystone.texture:Show()
-			playerFrame.keystone.topText:SetText("")
-			playerFrame.keystone.bottomText:SetText("")
+			playerFrame.keystone.topText:SetText("+0")
+			playerFrame.keystone.bottomText:SetText("NONE")
+
+			for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
+				dungeonFrame.texture:Show()
+				dungeonFrame.texture:SetDesaturated(true)
+				dungeonFrame.topText:SetText("+0")
+				dungeonFrame.topText:SetTextColor(1,1,1)
+				dungeonFrame.bottomText:SetText("0")
+			end
 		else
 			playerFrame.name:SetText("")
 			playerFrame.name:SetTextColor(1,1,1)
@@ -153,21 +188,31 @@ function defaultPlayerFrames()
 			playerFrame.keystone.texture:Hide()
 			playerFrame.keystone.topText:SetText("")
 			playerFrame.keystone.bottomText:SetText("")
+
+			for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
+				dungeonFrame.texture:Hide()
+				dungeonFrame.texture:SetDesaturated(true)
+				dungeonFrame.topText:SetText("")
+				dungeonFrame.topText:SetTextColor(1,1,1)
+				dungeonFrame.bottomText:SetText("")
+			end
 		end
 		index = index + 1
 	end
 end
 
 function populatePlayerFrame(playerFrame, playerData)
+	-- Player Name
 	playerFrame.name:SetText(playerData.name)
-
 	if playerData.classFilename ~= nil then
 		local classColour = C_ClassColor.GetClassColor(playerData.classFilename)
 		playerFrame.name:SetTextColor(classColour.r,classColour.g,classColour.b)
 	end
 
+	-- Player Score
 	playerFrame.score:SetText("Score: " .. playerData.overallScore)
 
+	-- Player Keystone
 	if playerData.keystone == nil then
 		playerFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
 		playerFrame.keystone.topText:SetText("")
@@ -178,4 +223,32 @@ function populatePlayerFrame(playerFrame, playerData)
 		playerFrame.keystone.bottomText:SetText(playerData.keystone.mapAbbreviation)
 	end
 	playerFrame.keystone.texture:Show()
+
+	-- Player Dungeon Score
+	for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
+		dungeonFrame.texture:Show()
+
+		local dungeonScore = nil
+		for _, scoreInfo in pairs(playerData.scoreInfo) do
+			if scoreInfo.mapChallengeModeID == dungeonFrame.challengeModeID then
+				dungeonScore = scoreInfo
+				break
+			end
+		end
+
+		if dungeonScore == nil then
+			dungeonFrame.topText:SetText("")
+			dungeonFrame.topText:SetTextColor(1,1,1)
+			dungeonFrame.bottomText:SetText("")
+			dungeonFrame.texture:SetDesaturated(true)
+		else
+			dungeonFrame.topText:SetText("+" .. dungeonScore.level)
+			dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
+
+			local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore.dungeonScore)
+			dungeonFrame.topText:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
+			dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0) 
+		end
+	end
+
 end

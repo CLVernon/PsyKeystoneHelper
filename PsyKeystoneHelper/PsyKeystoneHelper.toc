@@ -2,7 +2,7 @@
 ## Title: Keystone Helper
 ## Notes:
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
-## Version: 0.0.1-alpha
+## Version: 0.0.3-alpha
 ## Texture: Interface\AddOns\PsyKeystoneHelper\logo
 ## SavedVariables: PsyKeystoneHelper_Session
 

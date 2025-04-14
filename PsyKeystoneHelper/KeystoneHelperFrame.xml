@@ -1,98 +1,30 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="KeystoneHelperFrame.lua" />
 	<Frame name="KeystoneHelperFrame" inherits="BasicFrameTemplateWithInset" parent="UIParent" toplevel="true" movable="true" enableMouse="true" enableMouseClicks="true" enableMouseMotion="true" clampedToScreen="true">
-		<Size x="422" y="546" />
+		<Size x="529" y="395" />
 		<Anchors>
-			<Anchor point="TOPLEFT">
-				<Offset x="858" y="-160" />
+			<Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="53" y="76" />
 			</Anchor>
 		</Anchors>
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
 		</KeyValues>
 		<Layers>
-			<Layer>
-				<Texture name="TopKeys_1" file="Interface\ICONS\INV_Misc_QuestionMark">
-					<Size x="50" y="50" />
-					<Anchors>
-						<Anchor x="-60" y="-35" point="TOP" />
-					</Anchors>
-				</Texture>
-				<Texture name="TopKeys_2" file="Interface\ICONS\INV_Misc_QuestionMark">
-					<Size x="50" y="50" />
-					<Anchors>
-						<Anchor y="-35" point="TOP" />
-					</Anchors>
-				</Texture>
-				<Texture name="TopKeys_3" file="Interface\ICONS\INV_Misc_QuestionMark">
-					<Size x="50" y="50" />
-					<Anchors>
-						<Anchor x="60" y="-35" point="TOP" />
-					</Anchors>
-				</Texture>
-			</Layer>
 			<Layer level="OVERLAY">
 				<FontString name="title" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Keystone Helper" justifyH="LEFT">
-					<Size x="198" y="20" />
+					<Size x="270" y="20" />
 					<Anchors>
 						<Anchor x="5" y="-1" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="12" />
 				</FontString>
 				<FontString name="status" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Status: Stopped" justifyH="RIGHT">
-					<Size x="198" y="20" />
+					<Size x="218" y="20" />
 					<Anchors>
-						<Anchor x="193" y="-1" point="TOPLEFT" />
+						<Anchor x="281" y="-1" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="12" />
-				</FontString>
-				<FontString name="TopKeys_1_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0" outline="THICK">
-					<Size x="50" y="20" />
-					<Anchors>
-						<Anchor x="126" y="-26" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="14" />
-					<Color r="1" g="1" b="1" />
-				</FontString>
-				<FontString name="TopKeys_2_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0" outline="THICK">
-					<Size x="50" y="20" />
-					<Anchors>
-						<Anchor x="186" y="-26" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="14" />
-					<Color r="1" g="1" b="1" />
-				</FontString>
-				<FontString name="TopKeys_3_Top" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="+0" outline="THICK">
-					<Size x="50" y="20" />
-					<Anchors>
-						<Anchor x="246" y="-26" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="14" />
-					<Color r="1" g="1" b="1" />
-				</FontString>
-				<FontString name="TopKeys_1_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE" outline="THICK">
-					<Size x="50" y="20" />
-					<Anchors>
-						<Anchor x="127" y="-73" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="12" />
-					<Color r="1" g="1" b="1" />
-				</FontString>
-				<FontString name="TopKeys_2_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE" outline="THICK">
-					<Size x="50" y="20" />
-					<Anchors>
-						<Anchor x="187" y="-73" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="12" />
-					<Color r="1" g="1" b="1" />
-				</FontString>
-				<FontString name="TopKeys_3_Bottom" inherits="GameFontNormalMed2Outline" font="Fonts\2002B.ttf" text="NONE" outline="THICK">
-					<Size x="50" y="20" />
-					<Anchors>
-						<Anchor x="247" y="-73" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="12" />
-					<Color r="1" g="1" b="1" />
 				</FontString>
 			</Layer>
 		</Layers>

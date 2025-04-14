@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
 PsyKeystoneHelper = ns.PsyKeystoneHelper
-PsyKeystoneHelper.v = "v0.0.1-alpha"
+PsyKeystoneHelper.v = "v0.0.3-alpha"
 
 --Create Minimap Button
 PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHelperDBI", {
@@ -118,6 +118,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 				PsyKeystoneHelper.db.profile.debugMode = true
 				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Enabled|r")
 			end
+			ns:displayPartyData()
 			return
 		elseif arg == "" then
 		else
@@ -242,7 +243,7 @@ function PsyKeystoneHelper:sortInformation()
 		end
 	end
 
-	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
+	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore < t2.overallScore end)
 end
 
 function PsyKeystoneHelper:sendInformation()
@@ -250,7 +251,7 @@ function PsyKeystoneHelper:sendInformation()
 	local scoreInfo = C_ChallengeMode.GetMapScoreInfo()
 	for _, dungeon in pairs(scoreInfo) do
 		local mapName = C_ChallengeMode.GetMapUIInfo(dungeon.mapChallengeModeID) or ""
-		local mapAbbreviation = dungeonAbbreviations[mapName] or ""
+		local mapAbbreviation = ns.dungeonAbbreviations[mapName] or ""
 
 		dungeon.mapName = mapName
 		dungeon.mapAbbreviation = mapAbbreviation
@@ -269,7 +270,7 @@ function PsyKeystoneHelper:sendInformation()
 			backgroundTexture = backgroundTexture,
 			itemLink = nil, --todo
 			mapName = mapName,
-			mapAbbreviation = dungeonAbbreviations[mapName] or mapName
+			mapAbbreviation = ns.dungeonAbbreviations[mapName] or mapName
 		}
 	end
 
@@ -312,7 +313,7 @@ end
 -- Dungeon Stuff
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-dungeonAbbreviations = {
+ns.dungeonAbbreviations = {
     ["Cinderbrew Meadery"] = "BREW",
     ["Darkflame Cleft"] = "DFC",
     ["Operation: Floodgate"] = "FLOOD",
