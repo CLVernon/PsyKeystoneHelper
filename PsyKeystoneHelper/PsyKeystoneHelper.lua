@@ -206,6 +206,9 @@ end
 function PsyKeystoneHelper:handleChallengeModeCompleted() 
 	PsyKeystoneHelper:DebugPrint("handleChallengeModeCompleted()")
 	PsyKeystoneHelper:sendInformation()
+	if PsyKeystoneHelper:getSessionStatus() then
+		PsyKeystoneHelper.frame:Show()
+	end
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
