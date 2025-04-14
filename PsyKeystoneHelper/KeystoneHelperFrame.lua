@@ -4,6 +4,14 @@ function KeystoneHelperFrame_OnLoad()
 	_G.PsyKeystoneHelper.frame = KeystoneHelperFrame
 	KeystoneHelperFrame:Hide()
 
+	--Set default title text
+	title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
+	status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+
+	--Assign child frames
+	KeystoneHelperFrame.title = title
+	KeystoneHelperFrame.status = status
+
 	--Setup Player Frame lookup
 	KeystoneHelperFrame.playerFrames = {}
 	KeystoneHelperFrame.playerFrames[1] = PsyKeystoneHelperFrame_Party1
