@@ -1,7 +1,7 @@
-local _, PsyKeystoneHelper = ...
+local _, ns = ...
 
-_G.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
-PsyKeystoneHelper = _G.PsyKeystoneHelper
+ns.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
+PsyKeystoneHelper = ns.PsyKeystoneHelper
 PsyKeystoneHelper.v = "v0.0.1-alpha"
 
 --Create Minimap Button
@@ -203,7 +203,7 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 
 	--Update the cache
 	PsyKeystoneHelper.db.profile.keystoneCache[playerData.fullName] = playerData
-	--PsyKeystoneHelper:createPlayerFrame(playerData.fullName)
+	ns:displayPartyData()
 end
 
 function PsyKeystoneHelper:sendInformation()
