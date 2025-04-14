@@ -20,6 +20,7 @@ function KeystoneHelperFrame_OnLoad()
 
 	--Setup Top Keystone lookup
 	KeystoneHelperFrame.topKeystones = {}
+
 	--Set defaults
 	KeystoneHelperFrame_OnShow()
 end
@@ -66,17 +67,17 @@ function createString(parent, template, size, defaultText)
 end
 
 function updateColourForKeyLevel(fontString, level)
-	local levelColour = C_ChallengeMode.GetKeystoneLevelRarityColor(level)
+	local levelColour = C_ChallengeMode.GetKeystoneLevelRarityColor(level) or {r=1,g=1,b=1}
 	fontString:SetTextColor(levelColour.r, levelColour.g, levelColour.b)
 end
 
 function updateColourForOverallScore(fontString, overallScore)
-	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(overallScore)
+	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(overallScore) or {r=1,g=1,b=1}
 	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
 end
 
 function updateColourForDungeonScore(fontString, dungeonScore)
-	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore * 10)
+	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore * 10) or {r=1,g=1,b=1}
 	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
 end
 
@@ -102,9 +103,10 @@ function createDungeonNameFrame()
 end
 
 function createPlayerFrame(index)
+
 	--Frame
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
-	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -95  - (50 * (index - 1)))
+	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
 	playerFrame:SetSize(515, 50)
 
 	--Name
