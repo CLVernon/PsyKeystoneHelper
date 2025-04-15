@@ -292,7 +292,10 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 end
 
 function PsyKeystoneHelper:sortInformation() 
-	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
+	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) 
+		if t1.overallScore ~= t2.overallScore then return t1.overallScore > t2.overallScore  end
+		return t1.name < t2.name 
+	end)
 
 	local fullNamesToRemove = {}
 	for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do

@@ -378,7 +378,11 @@ function calculateTopKeyStones()
 		end
 
 		keystone.gainedScore = gainedScore
-		table.sort(keystone.playerUpgrades, function (t1, t2) return t1.gainedScore > t2.gainedScore end)
+		table.sort(keystone.playerUpgrades, function (t1, t2) 
+			if t1.gainedScore ~= t2.gainedScore then return t1.gainedScore > t2.gainedScore  end
+			return t1.name < t2.name 
+		end)
+
 	end
 
 	--Sort keystone table
@@ -467,13 +471,6 @@ end
 
 function checkVersion(versionText, playerVersion)
 	local oldVersion = intifyVersion(playerVersion) < intifyVersion(PsyKeystoneHelper.v)
-	
-	DevTools_Dump({
-		playerVersion=playerVersion,
-		intPlayerVersion=intifyVersion(playerVersion),
-		intVersion=intifyVersion(PsyKeystoneHelper.v),
-		oldVersion=oldVersion
-	})
 
 	if oldVersion then
 		versionText:SetText("X")
