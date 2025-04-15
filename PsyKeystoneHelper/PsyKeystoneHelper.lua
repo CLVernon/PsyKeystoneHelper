@@ -16,7 +16,11 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		elseif buttonPressed =="MiddleButton" then
 			PsyKeystoneHelper:handleChatCommand("")
 		elseif buttonPressed =="LeftButton" then
-			PsyKeystoneHelper.frame:Show()
+			if PsyKeystoneHelper.frame:IsShown() then
+				PsyKeystoneHelper.frame:Hide()
+			else
+				PsyKeystoneHelper.frame:Show()
+			end
 		end
 	end,
 	OnTooltipShow = function (tt)
@@ -24,7 +28,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		tt:AddLine(" ")
 		tt:AddLine("Session Status: " .. PsyKeystoneHelper:getSessionStatusString())
 		tt:AddLine(" ")
-		tt:AddLine("Left Click: |cFFFFFFFFShow Key Helper Window|r")
+		tt:AddLine("Left Click: |cFFFFFFFFShow Window|r")
 		tt:AddLine("Middle Click: |cFFFFFFFFShow Commands|r")
 		tt:AddLine("Right Click: |cFFFFFFFFToggle Session State|r")
 	end
@@ -102,7 +106,11 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			PsyKeystoneHelper:toggleSessionStatus()
 			return
 		elseif arg == "show" then
-			PsyKeystoneHelper.frame:Show()
+			if PsyKeystoneHelper.frame:IsShown() then
+				PsyKeystoneHelper.frame:Hide()
+			else
+				PsyKeystoneHelper.frame:Show()
+			end
 			return
 		elseif arg == "request" then
 			PsyKeystoneHelper:requestInformation()
@@ -117,13 +125,22 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			PsyKeystoneHelper.db.profile.keystoneCache = {}
 			PsyKeystoneHelper:Print("Cache cleared")
 			return
+		elseif arg == "version" then
+			PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
+			if PsyKeystoneHelper:getSessionStatus() then
+				PsyKeystoneHelper:Print("Received Player Versions: ")
+				for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+					PsyKeystoneHelper:Print(playerData.name .. " - " .. playerData.version)
+				end
+			end
+			return
 		elseif arg == "debug" then
 			if PsyKeystoneHelper.db.profile.debugMode then 
 				PsyKeystoneHelper.db.profile.debugMode = false
-				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Disabled|r")
+				PsyKeystoneHelper:Print("Debug mode is: |cffffff33Disabled|r")
 			else
 				PsyKeystoneHelper.db.profile.debugMode = true
-				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Enabled|r")
+				PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
 			end
 			ns:displayPartyData()
 			return
@@ -138,6 +155,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33show|r ".. "- Show the Keystone Helper window")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33send|r ".. "- Send data to the party")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33version|r ".. "- Show version information")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33cache|r ".. "- Print the cache data")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33clear|r ".. "- Clear the cache data")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
@@ -156,6 +174,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
 	if PsyKeystoneHelper.db.profile.session then 
 		PsyKeystoneHelper.db.profile.session = false 
 		PsyKeystoneHelper.db.profile.keystoneCache = {}
+		ns:displayPartyData()
 	else 
 		if not UnitInParty("player") then
 			PsyKeystoneHelper:Print("Cannot start a session when not in a party")

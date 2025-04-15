@@ -43,20 +43,29 @@ function Button_RequestData_OnClick()
 end
 
 function ns:displayPartyData()
+	local debugMode = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode
+	local hasData = PsyKeystoneHelper.db ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
 	PsyKeystoneHelper:DebugPrint("Displaying party data...")
 
 	--Default frames
-	defaultFrame()
+	defaultTopKeystones(hasData, debugMode)
+	defaultPlayerFrames(hasData, debugMode)
 
 	--Now populate with actual data
-	if PsyKeystoneHelper.db ~= nil then
+	if hasData then
+		for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+			columnTitle:SetText(columnTitle.txt)
+		end
+
 		local index = 1
 		for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 			populatePlayerFrame(KeystoneHelperFrame.playerFrames[index], playerData)
 			index = index + 1
 		end
+
+		calculateTopKeyStones() 
 	end
-	calculateTopKeyStones() 
+
 end
 
 function createString(parent, template, size, defaultText)
@@ -104,28 +113,8 @@ function createTopKeysFrame()
 	topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 60, 0)
 end
 
-function createDungeonNameFrame() 
-	local dungeonNameFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
-	dungeonNameFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -75)
-	dungeonNameFrame:SetSize(515, 20)
-
-	-- Key
-	local keyName = createString(dungeonNameFrame, "GameFontHighlight", 12, "KEY")
-	keyName:SetPoint("LEFT", dungeonNameFrame, "LEFT", 90, 0)
-
-	-- Dungeon Names
-	local challengeModeIDs = C_ChallengeMode.GetMapTable()
-	for index = 1, #challengeModeIDs do 
-		local dungeonText = createString(dungeonNameFrame, "GameFontHighlight", 12, "")
-		dungeonText:SetJustifyH("CENTER")
-		dungeonText:SetPoint("LEFT", dungeonNameFrame, "LEFT", 145 + ((index - 1) * 45), 0)
-
-		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[index])
-		dungeonText:SetText(ns.dungeonAbbreviations[mapName] or "")
-	end
-end
-
 function createPlayerFrame(index)
+
 	--Frame
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
@@ -144,8 +133,12 @@ function createPlayerFrame(index)
 	playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 110, 0)
 	if index == 1 then
 		local keystoneColumnTitle = createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
+		keystoneColumnTitle.txt = "KEY"
 		keystoneColumnTitle:SetJustifyH("CENTER")
 		keystoneColumnTitle:SetPoint("TOP", playerFrame.keystone, "TOP", 0, 20)
+
+		KeystoneHelperFrame.headers = {}
+		KeystoneHelperFrame.headers["KEY"] = keystoneColumnTitle
 	end
 
 	--Dungeon Bests
@@ -164,8 +157,11 @@ function createPlayerFrame(index)
 		if index == 1 then
 			local abbrev = ns.dungeonAbbreviations[mapName] or ""
 			local mapColumnTitle = createString(dungeonFrame, "GameFontHighlight", 12, abbrev)
+			mapColumnTitle.txt = abbrev
 			mapColumnTitle:SetJustifyH("CENTER")
 			mapColumnTitle:SetPoint("TOP", dungeonFrame, "TOP", 0, 20)
+
+			KeystoneHelperFrame.headers[abbrev] = mapColumnTitle
 		end
 	end
 
@@ -189,24 +185,43 @@ function createKeystoneFrame(parent)
 	return keystoneFrame
 end
 
-function defaultFrame() 
-	defaultTopKeystones()
-	defaultPlayerFrames()
-end
-
-function defaultTopKeystones() 
+function defaultTopKeystones(hasData, debugMode) 
 	for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
-		topKeystone.topText:SetText("")
-		updateColourForDungeonScore(topKeystone.topText, 0)
-		topKeystone.bottomText:SetText("NONE")
-		updateColourForDungeonScore(topKeystone.bottomText, 0)
-		topKeystone.texture:SetTexture(237555)
-		clearTooltip(topKeystone)
+		if hasData or debugMode then
+			topKeystone.topText:SetText("")
+			updateColourForDungeonScore(topKeystone.topText, 0)
+			topKeystone.bottomText:SetText("NONE")
+			updateColourForDungeonScore(topKeystone.bottomText, 0)
+			topKeystone.texture:SetTexture(237555)
+			topKeystone.texture:Show()
+			clearTooltip(topKeystone)
+		else
+			topKeystone.topText:SetText("")
+			updateColourForDungeonScore(topKeystone.topText, 0)
+			topKeystone.bottomText:SetText("")
+			updateColourForDungeonScore(topKeystone.bottomText, 0)
+			topKeystone.texture:SetTexture(237555)
+			topKeystone.texture:Hide()
+			clearTooltip(topKeystone)
+		end
 	end
 end
 
-function defaultPlayerFrames()
+function defaultPlayerFrames(hasData, debugMode)
 	local index = 1
+
+	--Display column titles
+	if hasData or debugMode then
+		for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+			columnTitle:SetText(columnTitle.txt)
+		end
+	else
+		for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+			columnTitle:SetText("")
+		end
+	end
+
+	--Display player frames
 	for _, playerFrame in pairs(KeystoneHelperFrame.playerFrames) do
 		if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
 			playerFrame.name:SetText("Player_____" .. index)
@@ -304,13 +319,13 @@ function populatePlayerFrame(playerFrame, playerData)
 end
 
 function calculateTopKeyStones() 
-	if PsyKeystoneHelper.db == nil then return end
-
 	--Update data of keystone and add to a simple table
 	local keystones = {}
 	for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 		if playerData.keystone ~= nil then
 			playerData.keystone.scoreForLevel = ns.minTimeScorePerLevels[playerData.keystone.level]
+			playerData.keystone.owner = playerData.name
+			playerData.keystone.ownerClassColour = C_ClassColor.GetClassColor(playerData.classFilename):GenerateHexColor()
 			table.insert(keystones, playerData.keystone)
 		end
 	end
@@ -318,25 +333,30 @@ function calculateTopKeyStones()
 	--Apply gained score to each keystone
 	for _, keystone in pairs(keystones) do
 		local gainedScore = 0
+		keystone.playerUpgrades = {}
+
 		for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+			--Get dungeon score for player
 			local dungeonScore = 0
-			keystone.playerUpgrades = {}
 			for _, dungeonInfo in pairs(playerData.scoreInfo) do
 				if dungeonInfo.mapChallengeModeID == keystone.mapChallengeModeID then
 					dungeonScore = dungeonInfo.dungeonScore
 					break
 				end
 			end
+
+			--Get the score delta
 			local deltaScore = keystone.scoreForLevel - dungeonScore
 			if deltaScore > 0 then
 				gainedScore = gainedScore + deltaScore
 				table.insert(keystone.playerUpgrades, {
 					name=playerData.name,
 					classColour= C_ClassColor.GetClassColor(playerData.classFilename):GenerateHexColor(),
-					gainedScore=gainedScore
+					gainedScore=deltaScore
 				})
 			end
 		end
+
 		keystone.gainedScore = gainedScore
 		table.sort(keystone.playerUpgrades, function (t1, t2) return t1.gainedScore > t2.gainedScore end)
 	end
@@ -347,17 +367,27 @@ function calculateTopKeyStones()
 	--Display data
 	for index = 1, 3 do 
 		local keystone = keystones[index] or nil
-		if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then 
-			local topKeyFrame = KeystoneHelperFrame.topKeystones[index]
+		local topKeyFrame = KeystoneHelperFrame.topKeystones[index]
 
+		if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then 
 			topKeyFrame.topText:SetText("+" .. keystone.level)
 			updateColourForKeyLevel(topKeyFrame.topText, keystone.level)
 			topKeyFrame.bottomText:SetText(keystone.gainedScore)
 			updateColourForDungeonScore(topKeyFrame.bottomText, keystone.gainedScore)
 			topKeyFrame.texture:SetTexture(keystone.texture)
+			topKeyFrame.texture:Show()
 
 			addTopKeystoneTooltip(topKeyFrame, keystone)
+		else
+			topKeyFrame.topText:SetText("")
+			updateColourForDungeonScore(topKeyFrame.topText, 0)
+			topKeyFrame.bottomText:SetText("NONE")
+			updateColourForDungeonScore(topKeyFrame.bottomText, 0)
+			topKeyFrame.texture:SetTexture(237555)
+			topKeyFrame.texture:Show()
+			clearTooltip(topKeyFrame)
 		end
+		
 	end
 
 end
@@ -377,15 +407,16 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
 	topKeyFrame:SetScript("OnEnter", function (self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(keystone.mapName,1,1,1)
-		GameTooltip:AddLine("Level " .. keystone.level)
+		GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
+		GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
+		GameTooltip:AddLine("Owner: |c" .. keystone.ownerClassColour .. keystone.owner .. "|r")
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Total Rating Gained: " .. keystone.gainedScore)
+		GameTooltip:AddLine("Total Rating Gained: |cFFFFFFFF" .. keystone.gainedScore .. "|r")
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine("Player Rating Gained:")
 
 		for _, player in pairs(keystone.playerUpgrades) do
-			GameTooltip:AddLine(player.name .. ": |c" .. player.classColour .. player.gainedScore .. "|r")
+			GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
 		end
 
 		GameTooltip:Show()
