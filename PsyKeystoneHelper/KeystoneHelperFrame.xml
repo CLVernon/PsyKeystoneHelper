@@ -20,7 +20,7 @@
 					<FontHeight val="12" />
 				</FontString>
 				<FontString name="status" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Status: Stopped" justifyH="RIGHT">
-					<Size x="218" y="20" />
+					<Size x="237" y="20" />
 					<Anchors>
 						<Anchor x="281" y="-1" point="TOPLEFT" />
 					</Anchors>
