@@ -56,6 +56,7 @@ function ns:displayPartyData()
 			index = index + 1
 		end
 	end
+	calculateTopKeyStones() 
 end
 
 function createString(parent, template, size, defaultText)
@@ -83,11 +84,24 @@ function updateColourForDungeonScore(fontString, dungeonScore)
 end
 
 function createTopKeysFrame()
-	local topKeysFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
+	local topKeysFrame = CreateFrame("frame", "TopKeysFrame", KeystoneHelperFrame, "")
 	topKeysFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -30)
 	topKeysFrame:SetSize(515, 70)
 
+	local topKey1 = createKeystoneFrame(topKeysFrame)
+	KeystoneHelperFrame.topKeystones[1] = topKey1
+	topKey1:SetSize(50,50)
+	topKey1:SetPoint("CENTER", topKeysFrame, "CENTER", -60, 0)
 
+	local topKey2 = createKeystoneFrame(topKeysFrame)
+	KeystoneHelperFrame.topKeystones[2] = topKey2
+	topKey2:SetSize(50,50)
+	topKey2:SetPoint("CENTER", topKeysFrame, "CENTER", 0, 0)
+
+	local topKey3 = createKeystoneFrame(topKeysFrame)
+	KeystoneHelperFrame.topKeystones[3] = topKey3
+	topKey3:SetSize(50,50)
+	topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 60, 0)
 end
 
 function createDungeonNameFrame() 
@@ -180,11 +194,13 @@ function defaultFrame()
 end
 
 function defaultTopKeystones() 
-	--for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
-	--	topKeystone.topText:SetText("")
-	--	topKeystone.bottomText:SetText("NONE")
-	--	topKeystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
-	--end
+	for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
+		topKeystone.topText:SetText("")
+		updateColourForDungeonScore(topKeystone.topText, 0)
+		topKeystone.bottomText:SetText("NONE")
+		updateColourForDungeonScore(topKeystone.bottomText, 0)
+		topKeystone.texture:SetTexture(237555)
+	end
 end
 
 function defaultPlayerFrames()
@@ -195,7 +211,7 @@ function defaultPlayerFrames()
 			playerFrame.name:SetTextColor(1,1,1)
 			playerFrame.score:SetText("Score: 0000")
 			updateColourForOverallScore(playerFrame.score, 0)
-			playerFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+			playerFrame.keystone.texture:SetTexture(525134)
 			playerFrame.keystone.texture:Show()
 			playerFrame.keystone.topText:SetText("+0")
 			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
@@ -280,6 +296,56 @@ function populatePlayerFrame(playerFrame, playerData)
 			dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
 			updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
 			dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0) 
+		end
+	end
+
+end
+
+function calculateTopKeyStones() 
+	if PsyKeystoneHelper.db == nil then return end
+
+	--Update data of keystone and add to a simple table
+	local keystones = {}
+	for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+		if playerData.keystone ~= nil then
+			playerData.keystone.scoreForLevel = ns.minTimeScorePerLevels[playerData.keystone.level]
+			table.insert(keystones, playerData.keystone)
+		end
+	end
+
+	--Apply gained score to each keystone
+	for _, keystone in pairs(keystones) do
+		local gainedScore = 0
+		for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+			local dungeonScore = 0
+			for _, dungeonInfo in pairs(playerData.scoreInfo) do
+				if dungeonInfo.mapChallengeModeID == keystone.mapChallengeModeID then
+					dungeonScore = dungeonInfo.dungeonScore
+					break
+				end
+			end
+			local deltaScore = keystone.scoreForLevel - dungeonScore
+			if deltaScore > 0 then
+				gainedScore = gainedScore + deltaScore
+			end
+		end
+		keystone.gainedScore = gainedScore
+	end
+
+	--Sort keystone table
+	table.sort(keystones, function (t1, t2) return t1.gainedScore > t2.gainedScore end)
+
+	--Display data
+	for index = 1, 3 do 
+		local keystone = keystones[index] or nil
+		if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then 
+			local topKeyFrame = KeystoneHelperFrame.topKeystones[index]
+
+			topKeyFrame.topText:SetText("+" .. keystone.level)
+			updateColourForKeyLevel(topKeyFrame.topText, keystone.level)
+			topKeyFrame.bottomText:SetText(keystone.gainedScore)
+			updateColourForDungeonScore(topKeyFrame.bottomText, keystone.gainedScore)
+			topKeyFrame.texture:SetTexture(keystone.texture)
 		end
 	end
 

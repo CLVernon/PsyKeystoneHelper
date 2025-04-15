@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
 PsyKeystoneHelper = ns.PsyKeystoneHelper
-PsyKeystoneHelper.v = "v0.1.0-beta"
+PsyKeystoneHelper.v = "v0.1.1-beta"
 
 --Create Minimap Button
 PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHelperDBI", {
@@ -112,6 +112,10 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		elseif arg == "cache" then
 			DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
 			return
+		elseif arg == "clear" then
+			PsyKeystoneHelper.db.profile.keystoneCache = {}
+			PsyKeystoneHelper:Print("Cache cleared")
+			return
 		elseif arg == "debug" then
 			if PsyKeystoneHelper.db.profile.debugMode then 
 				PsyKeystoneHelper.db.profile.debugMode = false
@@ -134,6 +138,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the cache data")
+	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33clear|r ".. "- Clear the cache data")
 	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
 end
 
@@ -247,14 +252,30 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 	PsyKeystoneHelper:DebugPrint("Received data from " .. playerData.fullName)
 	if not PsyKeystoneHelper:getSessionStatus() then return end
 
+	--Check to see if the player already exists in data
+	local existingIndex = 0
+	for index, cachedPlayer in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+		if cachedPlayer.fullName == playerData.fullName then
+			existingIndex = index
+			break
+		end
+	end
+
 	--Update the cache
-	PsyKeystoneHelper.db.profile.keystoneCache[playerData.fullName] = playerData
+	if existingIndex == 0 then
+		PsyKeystoneHelper.db.profile.keystoneCache[#PsyKeystoneHelper.db.profile.keystoneCache + 1] = playerData
+	else 
+		PsyKeystoneHelper.db.profile.keystoneCache[existingIndex] = playerData
+	end
 	PsyKeystoneHelper:sortInformation() 
 	ns:displayPartyData()
 end
 
 function PsyKeystoneHelper:sortInformation() 
-	for fullName, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
+
+	local itemsToRemove = {}
+	for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 		if 
 		not GetUnitName("Party1") == playerData.name
 		and not GetUnitName("Party2") == playerData.name
@@ -262,11 +283,9 @@ function PsyKeystoneHelper:sortInformation()
 		and not GetUnitName("Party4") == playerData.name
 		and not GetUnitName("player") == playerData.name
 		then
-			table.remove(playerData, fullName)
+			table.remove(PsyKeystoneHelper.db.profile.keystoneCache, index)
 		end
 	end
-
-	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore < t2.overallScore end)
 end
 
 function PsyKeystoneHelper:sendInformation()
@@ -336,6 +355,7 @@ end
 -- Dungeon Stuff
 --------------------------------------------------------------------------------------------------------------------------------------------
 
+-- Map or dungeon name to abbreviation
 ns.dungeonAbbreviations = {
     ["Cinderbrew Meadery"] = "BREW",
     ["Darkflame Cleft"] = "DFC",
@@ -345,6 +365,48 @@ ns.dungeonAbbreviations = {
     ["The Rookery"] = "ROOK",
     ["Theater of Pain"] = "TOP",
     ["Operation: Mechagon - Workshop"] = "WORK",
+}
+
+-- Just in-time score of each level
+ns.minTimeScorePerLevels = {
+  [2] =  155,
+  [3] =  170,
+  [4] =  200,
+  [5] =  215,
+  [6] =  230,
+  [7] =  260,
+  [8] =  275,
+  [9] =  290,
+  [10] = 320,
+  [11] = 335,
+  [12] = 365,
+  [13] = 380,
+  [14] = 395,
+  [15] = 410,
+  [16] = 425,
+  [17] = 440,
+  [18] = 455,
+  [19] = 470,
+  [20] = 485,
+  [21] = 500,
+  [22] = 515,
+  [23] = 530,
+  [24] = 545,
+  [25] = 560,
+  [26] = 575,
+  [27] = 590,
+  [28] = 605,
+  [29] = 620,
+  [30] = 635,
+  [31] = 650,
+  [32] = 665,
+  [33] = 680,
+  [34] = 695,
+  [35] = 710,
+  [36] = 725,
+  [37] = 740,
+  [38] = 755,
+  [39] = 770,
 }
 
 --------------------------------------------------------------------------------------------------------------------------------------------
