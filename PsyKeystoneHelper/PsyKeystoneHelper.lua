@@ -56,6 +56,7 @@ function PsyKeystoneHelper:OnInitialize()
 
 	--Register slash command
 	PsyKeystoneHelper:RegisterChatCommand("pkh", "handleChatCommand")
+	PsyKeystoneHelper:RegisterChatCommand("keyhelper", "handleChatCommand")
 
 	--Register events
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
