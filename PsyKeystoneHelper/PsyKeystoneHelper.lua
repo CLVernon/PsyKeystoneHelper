@@ -66,6 +66,7 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
 	PsyKeystoneHelper:RegisterEvent("GROUP_JOINED", "handleGroupJoined")
 	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_COMPLETED", "handleChallengeModeCompleted")
+	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_START", "handleChallengeModeStart")
 	PsyKeystoneHelper:RegisterEvent("ITEM_COUNT_CHANGED", "handleItemCountChanged")
 	PsyKeystoneHelper:RegisterEvent("ITEM_CHANGED", "handleItemChanged")
 
@@ -237,6 +238,11 @@ function PsyKeystoneHelper:handleChallengeModeCompleted()
 	if PsyKeystoneHelper:getSessionStatus() then
 		PsyKeystoneHelper.frame:Show()
 	end
+end
+
+function PsyKeystoneHelper:handleChallengeModeStart() 
+	PsyKeystoneHelper:DebugPrint("handleChallengeModeStart()")
+	C_Timer.After(3, function () PsyKeystoneHelper:sendInformation() end)
 end
 
 function PsyKeystoneHelper:handleItemCountChanged(e, itemId) 
