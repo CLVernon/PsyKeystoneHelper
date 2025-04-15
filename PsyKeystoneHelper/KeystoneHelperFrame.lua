@@ -46,7 +46,6 @@ function ns:displayPartyData()
 	local debugMode = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode
 	local hasData = PsyKeystoneHelper.db ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
 	PsyKeystoneHelper:DebugPrint("Displaying party data...")
-	PsyKeystoneHelper:Print("Displaying party data... (" .. tostring(hasData) .. ")")
 
 	--Default frames
 	defaultTopKeystones(hasData, debugMode)
