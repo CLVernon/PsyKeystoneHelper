@@ -28,7 +28,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		tt:AddLine(" ")
 		tt:AddLine("Session Status: " .. PsyKeystoneHelper:getSessionStatusString())
 		tt:AddLine(" ")
-		tt:AddLine("Left Click: |cFFFFFFFFShow Key Helper Window|r")
+		tt:AddLine("Left Click: |cFFFFFFFFShow Window|r")
 		tt:AddLine("Middle Click: |cFFFFFFFFShow Commands|r")
 		tt:AddLine("Right Click: |cFFFFFFFFToggle Session State|r")
 	end
@@ -106,7 +106,11 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			PsyKeystoneHelper:toggleSessionStatus()
 			return
 		elseif arg == "show" then
-			PsyKeystoneHelper.frame:Show()
+			if PsyKeystoneHelper.frame:IsShown() then
+				PsyKeystoneHelper.frame:Hide()
+			else
+				PsyKeystoneHelper.frame:Show()
+			end
 			return
 		elseif arg == "request" then
 			PsyKeystoneHelper:requestInformation()
