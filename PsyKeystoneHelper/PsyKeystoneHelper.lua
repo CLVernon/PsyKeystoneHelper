@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
 PsyKeystoneHelper = ns.PsyKeystoneHelper
-PsyKeystoneHelper.v = "v0.1.2-beta"
+PsyKeystoneHelper.v = C_AddOns.GetAddOnMetadata("PsyKeystoneHelper", "Version")
 
 --Create Minimap Button
 PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHelperDBI", {

@@ -1,10 +1,25 @@
-## Interface: 110100, 110105
+﻿## Interface: 110100, 110105
 ## Title: Psy Keystone Helper
-## Notes: 
+## Notes: Shows the breakdown of M+ score for the party and the top keystone ugprades for the team
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
-## Version: 0.2.0-beta
-## Texture: Interface\AddOns\PsyKeystoneHelper\logo
+## Version: 0.2.1-beta
+## IconTexture: Interface\AddOns\PsyKeystoneHelper\logo
 ## SavedVariables: PsyKeystoneHelper_Session
+
+## Category-enUS: Dungeons & Raids
+## Category-deDE: Dungeons & Schlachtzüge
+## Category-esES: Mazmorras y bandas
+## Category-esMX: Calabozos y bandas
+## Category-frFR: Donjons et raids
+## Category-itIT: Spedizioni e incursioni
+## Category-koKR: 던전 및 공격대
+## Category-ptBR: Masmorras e Raides
+## Category-ruRU: Подземелья и рейды
+## Category-zhCN: 地下城和团队副本
+## Category-zhTW: 地城與團隊
+
+## X-Curse-Project-ID: 1243679
+## X-Wago-ID: 96dov5NO
 
 PsyKeystoneHelper.xml
 PsyKeystoneHelper.lua
