@@ -386,6 +386,8 @@ function calculateTopKeyStones()
 			topKeyFrame.texture:SetTexture(237555)
 			topKeyFrame.texture:Show()
 			clearTooltip(topKeyFrame)
+
+			addTopKeystoneTooltip(topKeyFrame, nil)
 		end
 		
 	end
@@ -407,20 +409,25 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
 	topKeyFrame:SetScript("OnEnter", function (self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
-		GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
-		GameTooltip:AddLine("Owner: |c" .. keystone.ownerClassColour .. keystone.owner .. "|r")
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Total Rating Gained: |cFFFFFFFF" .. keystone.gainedScore .. "|r")
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Player Rating Gained:")
 
-		for _, player in pairs(keystone.playerUpgrades) do
-			GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
+		if keystone == nil then
+			GameTooltip:AddLine("|cFFFF0000No upgrade found :(|r")
+		else
+			GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
+			GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
+			GameTooltip:AddLine("Owner: |c" .. keystone.ownerClassColour .. keystone.owner .. "|r")
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Total Rating Gained: |cFFFFFFFF" .. keystone.gainedScore .. "|r")
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Player Rating Gained:")
+			for _, player in pairs(keystone.playerUpgrades) do
+				GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
+			end
 		end
 
 		GameTooltip:Show()
 	end)
+
 	topKeyFrame:SetScript("OnLeave", function (self)
 		GameTooltip:Hide()
 	end)
