@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
 PsyKeystoneHelper = ns.PsyKeystoneHelper
-PsyKeystoneHelper.v = "v0.1.1-beta"
+PsyKeystoneHelper.v = "v0.1.2-beta"
 
 --Create Minimap Button
 PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHelperDBI", {
@@ -274,16 +274,31 @@ end
 function PsyKeystoneHelper:sortInformation() 
 	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
 
-	local itemsToRemove = {}
+	local fullNamesToRemove = {}
 	for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
-		if 
-		not GetUnitName("Party1") == playerData.name
-		and not GetUnitName("Party2") == playerData.name
-		and not GetUnitName("Party3") == playerData.name
-		and not GetUnitName("Party4") == playerData.name
-		and not GetUnitName("player") == playerData.name
-		then
-			table.remove(PsyKeystoneHelper.db.profile.keystoneCache, index)
+		local keepPlayer = false
+		if  GetUnitName("Party1") == playerData.name then keepPlayer = true end
+		if  GetUnitName("Party2") == playerData.name then keepPlayer = true end
+		if  GetUnitName("Party3") == playerData.name then keepPlayer = true end
+		if  GetUnitName("Party4") == playerData.name then keepPlayer = true end
+		if  GetUnitName("player") == playerData.name then keepPlayer = true end
+
+		if not keepPlayer then
+			table.insert(fullNamesToRemove, playerData.fullName)
+		end
+	end
+
+	for _, fullName in pairs(fullNamesToRemove) do
+		local indexToRemove = 0
+		for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+			if playerData.fullName == fullName then
+				indexToRemove = index
+				break
+			end
+		end
+
+		if indexToRemove > 0 then 
+			table.remove(PsyKeystoneHelper.db.profile.keystoneCache, indexToRemove)
 		end
 	end
 end
