@@ -43,20 +43,30 @@ function Button_RequestData_OnClick()
 end
 
 function ns:displayPartyData()
+	local debugMode = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode
+	local hasData = PsyKeystoneHelper.db ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
 	PsyKeystoneHelper:DebugPrint("Displaying party data...")
+	PsyKeystoneHelper:Print("Displaying party data... (" .. tostring(hasData) .. ")")
 
 	--Default frames
-	defaultFrame()
+	defaultTopKeystones(hasData, debugMode)
+	defaultPlayerFrames(hasData, debugMode)
 
 	--Now populate with actual data
-	if PsyKeystoneHelper.db ~= nil then
+	if hasData then
+		for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+			columnTitle:SetText(columnTitle.txt)
+		end
+
 		local index = 1
 		for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 			populatePlayerFrame(KeystoneHelperFrame.playerFrames[index], playerData)
 			index = index + 1
 		end
+
+		calculateTopKeyStones() 
 	end
-	calculateTopKeyStones() 
+
 end
 
 function createString(parent, template, size, defaultText)
@@ -104,28 +114,8 @@ function createTopKeysFrame()
 	topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 60, 0)
 end
 
-function createDungeonNameFrame() 
-	local dungeonNameFrame = CreateFrame("frame", nil, KeystoneHelperFrame, "")
-	dungeonNameFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -75)
-	dungeonNameFrame:SetSize(515, 20)
-
-	-- Key
-	local keyName = createString(dungeonNameFrame, "GameFontHighlight", 12, "KEY")
-	keyName:SetPoint("LEFT", dungeonNameFrame, "LEFT", 90, 0)
-
-	-- Dungeon Names
-	local challengeModeIDs = C_ChallengeMode.GetMapTable()
-	for index = 1, #challengeModeIDs do 
-		local dungeonText = createString(dungeonNameFrame, "GameFontHighlight", 12, "")
-		dungeonText:SetJustifyH("CENTER")
-		dungeonText:SetPoint("LEFT", dungeonNameFrame, "LEFT", 145 + ((index - 1) * 45), 0)
-
-		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[index])
-		dungeonText:SetText(ns.dungeonAbbreviations[mapName] or "")
-	end
-end
-
 function createPlayerFrame(index)
+
 	--Frame
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
@@ -144,8 +134,12 @@ function createPlayerFrame(index)
 	playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 110, 0)
 	if index == 1 then
 		local keystoneColumnTitle = createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
+		keystoneColumnTitle.txt = "KEY"
 		keystoneColumnTitle:SetJustifyH("CENTER")
 		keystoneColumnTitle:SetPoint("TOP", playerFrame.keystone, "TOP", 0, 20)
+
+		KeystoneHelperFrame.headers = {}
+		KeystoneHelperFrame.headers["KEY"] = keystoneColumnTitle
 	end
 
 	--Dungeon Bests
@@ -164,8 +158,11 @@ function createPlayerFrame(index)
 		if index == 1 then
 			local abbrev = ns.dungeonAbbreviations[mapName] or ""
 			local mapColumnTitle = createString(dungeonFrame, "GameFontHighlight", 12, abbrev)
+			mapColumnTitle.txt = abbrev
 			mapColumnTitle:SetJustifyH("CENTER")
 			mapColumnTitle:SetPoint("TOP", dungeonFrame, "TOP", 0, 20)
+
+			KeystoneHelperFrame.headers[abbrev] = mapColumnTitle
 		end
 	end
 
@@ -189,14 +186,9 @@ function createKeystoneFrame(parent)
 	return keystoneFrame
 end
 
-function defaultFrame() 
-	defaultTopKeystones()
-	defaultPlayerFrames()
-end
-
-function defaultTopKeystones() 
+function defaultTopKeystones(hasData, debugMode) 
 	for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
-		if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
+		if hasData or debugMode then
 			topKeystone.topText:SetText("")
 			updateColourForDungeonScore(topKeystone.topText, 0)
 			topKeystone.bottomText:SetText("NONE")
@@ -216,8 +208,21 @@ function defaultTopKeystones()
 	end
 end
 
-function defaultPlayerFrames()
+function defaultPlayerFrames(hasData, debugMode)
 	local index = 1
+
+	--Display column titles
+	if hasData or debugMode then
+		for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+			columnTitle:SetText(columnTitle.txt)
+		end
+	else
+		for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+			columnTitle:SetText("")
+		end
+	end
+
+	--Display player frames
 	for _, playerFrame in pairs(KeystoneHelperFrame.playerFrames) do
 		if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
 			playerFrame.name:SetText("Player_____" .. index)
@@ -315,9 +320,6 @@ function populatePlayerFrame(playerFrame, playerData)
 end
 
 function calculateTopKeyStones() 
-	if PsyKeystoneHelper.db == nil then return end
-	if #PsyKeystoneHelper.db.profile.keystoneCache == 0 then return end
-
 	--Update data of keystone and add to a simple table
 	local keystones = {}
 	for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do

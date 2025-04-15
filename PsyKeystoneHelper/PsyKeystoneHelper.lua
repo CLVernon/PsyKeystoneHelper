@@ -164,6 +164,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
 	if PsyKeystoneHelper.db.profile.session then 
 		PsyKeystoneHelper.db.profile.session = false 
 		PsyKeystoneHelper.db.profile.keystoneCache = {}
+		ns:displayPartyData()
 	else 
 		if not UnitInParty("player") then
 			PsyKeystoneHelper:Print("Cannot start a session when not in a party")
