@@ -297,10 +297,10 @@ function PsyKeystoneHelper:sortInformation()
 	local fullNamesToRemove = {}
 	for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 		local keepPlayer = false
-		if  GetUnitName("Party1") == playerData.name then keepPlayer = true end
-		if  GetUnitName("Party2") == playerData.name then keepPlayer = true end
-		if  GetUnitName("Party3") == playerData.name then keepPlayer = true end
-		if  GetUnitName("Party4") == playerData.name then keepPlayer = true end
+		if  GetUnitName("Party1") == playerData.name and UnitIsConnected("Party1") then keepPlayer = true end
+		if  GetUnitName("Party2") == playerData.name and UnitIsConnected("Party2") then keepPlayer = true end
+		if  GetUnitName("Party3") == playerData.name and UnitIsConnected("Party3") then keepPlayer = true end
+		if  GetUnitName("Party4") == playerData.name and UnitIsConnected("Party4") and UnitIsConnected("Party1") then keepPlayer = true end
 		if  GetUnitName("player") == playerData.name then keepPlayer = true end
 
 		if not keepPlayer then
