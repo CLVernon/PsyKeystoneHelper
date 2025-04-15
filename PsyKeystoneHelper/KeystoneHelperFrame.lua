@@ -141,7 +141,7 @@ function createPlayerFrame(index)
 
 	--Current Key
 	playerFrame.keystone = createKeystoneFrame(playerFrame)
-	playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 90, 0)
+	playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 110, 0)
 	if index == 1 then
 		local keystoneColumnTitle = createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
 		keystoneColumnTitle:SetJustifyH("CENTER")
@@ -154,7 +154,7 @@ function createPlayerFrame(index)
 	playerFrame.dungeonScores = {}
 	for i = 1, #challengeModeIDs do 
 		local dungeonFrame = createKeystoneFrame(playerFrame)
-		dungeonFrame:SetPoint("LEFT", playerFrame, "LEFT", 145 + ((i - 1) * 45), 0)
+		dungeonFrame:SetPoint("LEFT", playerFrame, "LEFT", 165 + ((i - 1) * 45), 0)
 		playerFrame.dungeonScores[i] = dungeonFrame
 
 		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[i])
@@ -208,7 +208,7 @@ function defaultPlayerFrames()
 	local index = 1
 	for _, playerFrame in pairs(KeystoneHelperFrame.playerFrames) do
 		if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
-			playerFrame.name:SetText("Player" .. index)
+			playerFrame.name:SetText("Player_____" .. index)
 			playerFrame.name:SetTextColor(1,1,1)
 			playerFrame.score:SetText("Score: 0000")
 			updateColourForOverallScore(playerFrame.score, 0)
