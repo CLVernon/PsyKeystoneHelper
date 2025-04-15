@@ -16,7 +16,11 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		elseif buttonPressed =="MiddleButton" then
 			PsyKeystoneHelper:handleChatCommand("")
 		elseif buttonPressed =="LeftButton" then
-			PsyKeystoneHelper.frame:Show()
+			if PsyKeystoneHelper.frame:IsShown() then
+				PsyKeystoneHelper.frame:Hide()
+			else
+				PsyKeystoneHelper.frame:Show()
+			end
 		end
 	end,
 	OnTooltipShow = function (tt)
