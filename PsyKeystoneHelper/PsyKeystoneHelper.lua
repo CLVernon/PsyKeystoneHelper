@@ -14,7 +14,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		if buttonPressed == "RightButton" then
 			PsyKeystoneHelper:toggleSessionStatus()
 		elseif buttonPressed =="MiddleButton" then
-			PsyKeystoneHelper:handleChatCommand("")
+			PsyKeystoneHelper:handleChatCommand("commands")
 		elseif buttonPressed =="LeftButton" then
 			if PsyKeystoneHelper.frame:IsShown() then
 				PsyKeystoneHelper.frame:Hide()
@@ -66,6 +66,7 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
 	PsyKeystoneHelper:RegisterEvent("GROUP_JOINED", "handleGroupJoined")
 	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_COMPLETED", "handleChallengeModeCompleted")
+	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_START", "handleChallengeModeStart")
 	PsyKeystoneHelper:RegisterEvent("ITEM_COUNT_CHANGED", "handleItemCountChanged")
 	PsyKeystoneHelper:RegisterEvent("ITEM_CHANGED", "handleItemChanged")
 
@@ -105,7 +106,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		if arg == "session" then
 			PsyKeystoneHelper:toggleSessionStatus()
 			return
-		elseif arg == "show" then
+		elseif arg == "show" or arg == "" then
 			if PsyKeystoneHelper.frame:IsShown() then
 				PsyKeystoneHelper.frame:Hide()
 			else
@@ -144,7 +145,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			end
 			ns:displayPartyData()
 			return
-		elseif arg == "" then
+		elseif arg == "commands" then
 		else
 			PsyKeystoneHelper:Print("Unknown command")
 		end
@@ -239,6 +240,11 @@ function PsyKeystoneHelper:handleChallengeModeCompleted()
 	end
 end
 
+function PsyKeystoneHelper:handleChallengeModeStart() 
+	PsyKeystoneHelper:DebugPrint("handleChallengeModeStart()")
+	C_Timer.After(3, function () PsyKeystoneHelper:sendInformation() end)
+end
+
 function PsyKeystoneHelper:handleItemCountChanged(e, itemId) 
 	if itemId == 180653 or itemId == 138019 then
 		PsyKeystoneHelper:DebugPrint("handleItemCountChanged()")
@@ -292,15 +298,18 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 end
 
 function PsyKeystoneHelper:sortInformation() 
-	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) return t1.overallScore > t2.overallScore end)
+	table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function (t1, t2) 
+		if t1.overallScore ~= t2.overallScore then return t1.overallScore > t2.overallScore  end
+		return t1.name < t2.name 
+	end)
 
 	local fullNamesToRemove = {}
 	for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 		local keepPlayer = false
-		if  GetUnitName("Party1") == playerData.name then keepPlayer = true end
-		if  GetUnitName("Party2") == playerData.name then keepPlayer = true end
-		if  GetUnitName("Party3") == playerData.name then keepPlayer = true end
-		if  GetUnitName("Party4") == playerData.name then keepPlayer = true end
+		if  GetUnitName("Party1") == playerData.name and UnitIsConnected("Party1") then keepPlayer = true end
+		if  GetUnitName("Party2") == playerData.name and UnitIsConnected("Party2") then keepPlayer = true end
+		if  GetUnitName("Party3") == playerData.name and UnitIsConnected("Party3") then keepPlayer = true end
+		if  GetUnitName("Party4") == playerData.name and UnitIsConnected("Party4") and UnitIsConnected("Party1") then keepPlayer = true end
 		if  GetUnitName("player") == playerData.name then keepPlayer = true end
 
 		if not keepPlayer then

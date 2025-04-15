@@ -120,6 +120,13 @@ function createPlayerFrame(index)
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
 	playerFrame:SetSize(515, 50)
 
+	--Version Indicator
+	--playerFrame.version = CreateFrame("frame", "player_frame_version" .. index, playerFrame, "")
+	--playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
+	playerFrame.version = createString(playerFrame, "GameFontHighlight", 8, "X")
+	playerFrame.version:SetTextColor(1,0,0)
+	playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
+
 	--Name
 	playerFrame.name = createString(playerFrame, "GameFontHighlight", 12, "Player " .. index)
 	playerFrame.name:SetPoint("LEFT", playerFrame, "LEFT", 10, 5)
@@ -261,6 +268,16 @@ function defaultPlayerFrames(hasData, debugMode)
 				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
 			end
 		end
+
+		playerFrame.version:SetText("")
+		playerFrame.version:SetScript("OnEnter", function (self)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines()
+			GameTooltip:Show()
+		end)
+		playerFrame.version:SetScript("OnLeave", function (self)
+			GameTooltip:Hide()
+		end)
 		index = index + 1
 	end
 end
@@ -272,6 +289,9 @@ function populatePlayerFrame(playerFrame, playerData)
 		local classColour = C_ClassColor.GetClassColor(playerData.classFilename)
 		playerFrame.name:SetTextColor(classColour.r,classColour.g,classColour.b)
 	end
+
+	-- Player version
+	checkVersion(playerFrame.version, playerData.version)
 
 	-- Player Score
 	playerFrame.score:SetText("Score: " .. playerData.overallScore)
@@ -358,7 +378,11 @@ function calculateTopKeyStones()
 		end
 
 		keystone.gainedScore = gainedScore
-		table.sort(keystone.playerUpgrades, function (t1, t2) return t1.gainedScore > t2.gainedScore end)
+		table.sort(keystone.playerUpgrades, function (t1, t2) 
+			if t1.gainedScore ~= t2.gainedScore then return t1.gainedScore > t2.gainedScore  end
+			return t1.name < t2.name 
+		end)
+
 	end
 
 	--Sort keystone table
@@ -386,6 +410,8 @@ function calculateTopKeyStones()
 			topKeyFrame.texture:SetTexture(237555)
 			topKeyFrame.texture:Show()
 			clearTooltip(topKeyFrame)
+
+			addTopKeystoneTooltip(topKeyFrame, nil)
 		end
 		
 	end
@@ -407,20 +433,25 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
 	topKeyFrame:SetScript("OnEnter", function (self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
-		GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
-		GameTooltip:AddLine("Owner: |c" .. keystone.ownerClassColour .. keystone.owner .. "|r")
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Total Rating Gained: |cFFFFFFFF" .. keystone.gainedScore .. "|r")
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Player Rating Gained:")
 
-		for _, player in pairs(keystone.playerUpgrades) do
-			GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
+		if keystone == nil then
+			GameTooltip:AddLine("|cFFFF0000No upgrade found :(|r")
+		else
+			GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
+			GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
+			GameTooltip:AddLine("Owner: |c" .. keystone.ownerClassColour .. keystone.owner .. "|r")
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Total Rating Gained: |cFFFFFFFF" .. keystone.gainedScore .. "|r")
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Player Rating Gained:")
+			for _, player in pairs(keystone.playerUpgrades) do
+				GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
+			end
 		end
 
 		GameTooltip:Show()
 	end)
+
 	topKeyFrame:SetScript("OnLeave", function (self)
 		GameTooltip:Hide()
 	end)
@@ -433,4 +464,47 @@ function addDungeonBestTooltip(dungeonBest)
 		GameTooltip:ClearLines()
 		GameTooltip:Show()
 	end)
+	dungeonBest:SetScript("OnLeave", function (self)
+		GameTooltip:Hide()
+	end)
+end
+
+function checkVersion(versionText, playerVersion)
+	local oldVersion = intifyVersion(playerVersion) < intifyVersion(PsyKeystoneHelper.v)
+
+	if oldVersion then
+		versionText:SetText("X")
+		versionText:SetScript("OnEnter", function (self)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines()
+			GameTooltip:AddLine("|cFFFF0000Player has older version:|r")
+			GameTooltip:AddLine(playerVersion)
+			GameTooltip:Show()
+		end)
+		versionText:SetScript("OnLeave", function (self)
+			GameTooltip:Hide()
+		end)
+	else
+		versionText:SetText("")
+		versionText:SetScript("OnEnter", function (self)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines()
+			GameTooltip:Show()
+		end)
+		versionText:SetScript("OnLeave", function (self)
+			GameTooltip:Hide()
+		end)
+	end
+end
+
+function intifyVersion(versionString)
+	local versionInt = string.gsub(versionString, "%.", "")
+	if string.find(versionInt, "-beta") then
+		versionInt = string.gsub(versionInt, "-beta", "2")
+	elseif string.find(versionInt, "-alpha") then
+		versionInt = string.gsub(versionInt, "-alpha", "1")
+	else
+		versionInt = versionInt .. "3"
+	end
+	return tonumber(versionInt)
 end

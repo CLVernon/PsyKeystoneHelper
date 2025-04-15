@@ -11,11 +11,19 @@
 			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
 		</KeyValues>
 		<Layers>
+			<Layer>
+				<Texture file="Interface\AddOns\PsyKeystoneHelper\logo.tga">
+					<Size x="21" y="21" />
+					<Anchors>
+						<Anchor x="3" point="TOPLEFT" />
+					</Anchors>
+				</Texture>
+			</Layer>
 			<Layer level="OVERLAY">
 				<FontString name="title" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Keystone Helper" justifyH="LEFT">
-					<Size x="270" y="20" />
+					<Size x="245" y="20" />
 					<Anchors>
-						<Anchor x="5" y="-1" point="TOPLEFT" />
+						<Anchor x="30" y="-1" point="TOPLEFT" />
 					</Anchors>
 					<FontHeight val="12" />
 				</FontString>
