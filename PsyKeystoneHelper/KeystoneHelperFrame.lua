@@ -201,6 +201,7 @@ function defaultTopKeystones()
 		topKeystone.bottomText:SetText("NONE")
 		updateColourForDungeonScore(topKeystone.bottomText, 0)
 		topKeystone.texture:SetTexture(237555)
+		clearTooltip(topKeystone)
 	end
 end
 
@@ -319,6 +320,7 @@ function calculateTopKeyStones()
 		local gainedScore = 0
 		for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 			local dungeonScore = 0
+			keystone.playerUpgrades = {}
 			for _, dungeonInfo in pairs(playerData.scoreInfo) do
 				if dungeonInfo.mapChallengeModeID == keystone.mapChallengeModeID then
 					dungeonScore = dungeonInfo.dungeonScore
@@ -328,9 +330,15 @@ function calculateTopKeyStones()
 			local deltaScore = keystone.scoreForLevel - dungeonScore
 			if deltaScore > 0 then
 				gainedScore = gainedScore + deltaScore
+				table.insert(keystone.playerUpgrades, {
+					name=playerData.name,
+					classColour= C_ClassColor.GetClassColor(playerData.classFilename):GenerateHexColor(),
+					gainedScore=gainedScore
+				})
 			end
 		end
 		keystone.gainedScore = gainedScore
+		table.sort(keystone.playerUpgrades, function (t1, t2) return t1.gainedScore > t2.gainedScore end)
 	end
 
 	--Sort keystone table
@@ -347,7 +355,51 @@ function calculateTopKeyStones()
 			topKeyFrame.bottomText:SetText(keystone.gainedScore)
 			updateColourForDungeonScore(topKeyFrame.bottomText, keystone.gainedScore)
 			topKeyFrame.texture:SetTexture(keystone.texture)
+
+			addTopKeystoneTooltip(topKeyFrame, keystone)
 		end
 	end
 
+end
+
+function clearTooltip(frame)
+	frame:SetScript("OnEnter", function (self)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+		GameTooltip:ClearLines()
+		GameTooltip:Hide()
+	end)
+	frame:SetScript("OnLeave", function (self)
+		GameTooltip:Hide()
+	end)
+end
+
+function addTopKeystoneTooltip(topKeyFrame, keystone)
+	topKeyFrame:SetScript("OnEnter", function (self)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(keystone.mapName,1,1,1)
+		GameTooltip:AddLine("Level " .. keystone.level)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine("Total Rating Gained: " .. keystone.gainedScore)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine("Player Rating Gained:")
+
+		for _, player in pairs(keystone.playerUpgrades) do
+			GameTooltip:AddLine(player.name .. ": |c" .. player.classColour .. player.gainedScore .. "|r")
+		end
+
+		GameTooltip:Show()
+	end)
+	topKeyFrame:SetScript("OnLeave", function (self)
+		GameTooltip:Hide()
+	end)
+
+end
+
+function addDungeonBestTooltip(dungeonBest)
+	dungeonBest:SetScript("OnEnter", function (self)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+		GameTooltip:ClearLines()
+		GameTooltip:Show()
+	end)
 end
