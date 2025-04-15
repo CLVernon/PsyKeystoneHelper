@@ -323,6 +323,8 @@ function calculateTopKeyStones()
 	for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
 		if playerData.keystone ~= nil then
 			playerData.keystone.scoreForLevel = ns.minTimeScorePerLevels[playerData.keystone.level]
+			playerData.keystone.owner = playerData.name
+			playerData.keystone.ownerClassColour = C_ClassColor.GetClassColor(playerData.classFilename):GenerateHexColor()
 			table.insert(keystones, playerData.keystone)
 		end
 	end
@@ -404,15 +406,16 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
 	topKeyFrame:SetScript("OnEnter", function (self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(keystone.mapName,1,1,1)
-		GameTooltip:AddLine("Level " .. keystone.level)
+		GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
+		GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
+		GameTooltip:AddLine("Owner: |c" .. keystone.ownerClassColour .. keystone.owner .. "|r")
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Total Rating Gained: " .. keystone.gainedScore)
+		GameTooltip:AddLine("Total Rating Gained: |cFFFFFFFF" .. keystone.gainedScore .. "|r")
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine("Player Rating Gained:")
 
 		for _, player in pairs(keystone.playerUpgrades) do
-			GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: " .. player.gainedScore)
+			GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
 		end
 
 		GameTooltip:Show()
