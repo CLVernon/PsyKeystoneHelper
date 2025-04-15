@@ -196,12 +196,23 @@ end
 
 function defaultTopKeystones() 
 	for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
-		topKeystone.topText:SetText("")
-		updateColourForDungeonScore(topKeystone.topText, 0)
-		topKeystone.bottomText:SetText("NONE")
-		updateColourForDungeonScore(topKeystone.bottomText, 0)
-		topKeystone.texture:SetTexture(237555)
-		clearTooltip(topKeystone)
+		if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
+			topKeystone.topText:SetText("")
+			updateColourForDungeonScore(topKeystone.topText, 0)
+			topKeystone.bottomText:SetText("NONE")
+			updateColourForDungeonScore(topKeystone.bottomText, 0)
+			topKeystone.texture:SetTexture(237555)
+			topKeystone.texture:Show()
+			clearTooltip(topKeystone)
+		else
+			topKeystone.topText:SetText("")
+			updateColourForDungeonScore(topKeystone.topText, 0)
+			topKeystone.bottomText:SetText("")
+			updateColourForDungeonScore(topKeystone.bottomText, 0)
+			topKeystone.texture:SetTexture(237555)
+			topKeystone.texture:Hide()
+			clearTooltip(topKeystone)
+		end
 	end
 end
 
@@ -347,17 +358,27 @@ function calculateTopKeyStones()
 	--Display data
 	for index = 1, 3 do 
 		local keystone = keystones[index] or nil
-		if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then 
-			local topKeyFrame = KeystoneHelperFrame.topKeystones[index]
+		local topKeyFrame = KeystoneHelperFrame.topKeystones[index]
 
+		if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then 
 			topKeyFrame.topText:SetText("+" .. keystone.level)
 			updateColourForKeyLevel(topKeyFrame.topText, keystone.level)
 			topKeyFrame.bottomText:SetText(keystone.gainedScore)
 			updateColourForDungeonScore(topKeyFrame.bottomText, keystone.gainedScore)
 			topKeyFrame.texture:SetTexture(keystone.texture)
+			topKeyFrame.texture:Show()
 
 			addTopKeystoneTooltip(topKeyFrame, keystone)
+		else
+			topKeyFrame.topText:SetText("")
+			updateColourForDungeonScore(topKeyFrame.topText, 0)
+			topKeyFrame.bottomText:SetText("NONE")
+			updateColourForDungeonScore(topKeyFrame.bottomText, 0)
+			topKeyFrame.texture:SetTexture(237555)
+			topKeyFrame.texture:Show()
+			clearTooltip(topKeyFrame)
 		end
+		
 	end
 
 end
