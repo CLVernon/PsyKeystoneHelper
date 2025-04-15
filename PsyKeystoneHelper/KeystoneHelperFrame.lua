@@ -120,6 +120,13 @@ function createPlayerFrame(index)
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
 	playerFrame:SetSize(515, 50)
 
+	--Version Indicator
+	--playerFrame.version = CreateFrame("frame", "player_frame_version" .. index, playerFrame, "")
+	--playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
+	playerFrame.version = createString(playerFrame, "GameFontHighlight", 8, "X")
+	playerFrame.version:SetTextColor(1,0,0)
+	playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
+
 	--Name
 	playerFrame.name = createString(playerFrame, "GameFontHighlight", 12, "Player " .. index)
 	playerFrame.name:SetPoint("LEFT", playerFrame, "LEFT", 10, 5)
@@ -261,6 +268,16 @@ function defaultPlayerFrames(hasData, debugMode)
 				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
 			end
 		end
+
+		playerFrame.version:SetText("")
+		playerFrame.version:SetScript("OnEnter", function (self)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines()
+			GameTooltip:Show()
+		end)
+		playerFrame.version:SetScript("OnLeave", function (self)
+			GameTooltip:Hide()
+		end)
 		index = index + 1
 	end
 end
@@ -272,6 +289,9 @@ function populatePlayerFrame(playerFrame, playerData)
 		local classColour = C_ClassColor.GetClassColor(playerData.classFilename)
 		playerFrame.name:SetTextColor(classColour.r,classColour.g,classColour.b)
 	end
+
+	-- Player version
+	checkVersion(playerFrame.version, playerData.version)
 
 	-- Player Score
 	playerFrame.score:SetText("Score: " .. playerData.overallScore)
@@ -440,4 +460,54 @@ function addDungeonBestTooltip(dungeonBest)
 		GameTooltip:ClearLines()
 		GameTooltip:Show()
 	end)
+	dungeonBest:SetScript("OnLeave", function (self)
+		GameTooltip:Hide()
+	end)
+end
+
+function checkVersion(versionText, playerVersion)
+	local oldVersion = intifyVersion(playerVersion) < intifyVersion(PsyKeystoneHelper.v)
+	
+	DevTools_Dump({
+		playerVersion=playerVersion,
+		intPlayerVersion=intifyVersion(playerVersion),
+		intVersion=intifyVersion(PsyKeystoneHelper.v),
+		oldVersion=oldVersion
+	})
+
+	if oldVersion then
+		versionText:SetText("X")
+		versionText:SetScript("OnEnter", function (self)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines()
+			GameTooltip:AddLine("|cFFFF0000Player has older version:|r")
+			GameTooltip:AddLine(playerVersion)
+			GameTooltip:Show()
+		end)
+		versionText:SetScript("OnLeave", function (self)
+			GameTooltip:Hide()
+		end)
+	else
+		versionText:SetText("")
+		versionText:SetScript("OnEnter", function (self)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines()
+			GameTooltip:Show()
+		end)
+		versionText:SetScript("OnLeave", function (self)
+			GameTooltip:Hide()
+		end)
+	end
+end
+
+function intifyVersion(versionString)
+	local versionInt = string.gsub(versionString, "%.", "")
+	if string.find(versionInt, "-beta") then
+		versionInt = string.gsub(versionInt, "-beta", "2")
+	elseif string.find(versionInt, "-alpha") then
+		versionInt = string.gsub(versionInt, "-alpha", "1")
+	else
+		versionInt = versionInt .. "3"
+	end
+	return tonumber(versionInt)
 end
