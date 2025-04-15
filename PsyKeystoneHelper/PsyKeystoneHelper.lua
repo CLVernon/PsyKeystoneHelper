@@ -14,7 +14,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 		if buttonPressed == "RightButton" then
 			PsyKeystoneHelper:toggleSessionStatus()
 		elseif buttonPressed =="MiddleButton" then
-			PsyKeystoneHelper:handleChatCommand("")
+			PsyKeystoneHelper:handleChatCommand("commands")
 		elseif buttonPressed =="LeftButton" then
 			if PsyKeystoneHelper.frame:IsShown() then
 				PsyKeystoneHelper.frame:Hide()
@@ -105,7 +105,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		if arg == "session" then
 			PsyKeystoneHelper:toggleSessionStatus()
 			return
-		elseif arg == "show" then
+		elseif arg == "show" or arg == "" then
 			if PsyKeystoneHelper.frame:IsShown() then
 				PsyKeystoneHelper.frame:Hide()
 			else
@@ -144,7 +144,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			end
 			ns:displayPartyData()
 			return
-		elseif arg == "" then
+		elseif arg == "commands" then
 		else
 			PsyKeystoneHelper:Print("Unknown command")
 		end
