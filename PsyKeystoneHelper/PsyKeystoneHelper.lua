@@ -2,7 +2,7 @@ local _, ns = ...
 
 ns.PsyKeystoneHelper = LibStub("AceAddon-3.0"):NewAddon("PsyKeystoneHelper", "AceConsole-3.0", "AceEvent-3.0" );
 PsyKeystoneHelper = ns.PsyKeystoneHelper
-PsyKeystoneHelper.v = "v0.0.3-alpha"
+PsyKeystoneHelper.v = "v0.1.0-beta"
 
 --Create Minimap Button
 PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHelperDBI", {
@@ -61,6 +61,8 @@ function PsyKeystoneHelper:OnInitialize()
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
 	PsyKeystoneHelper:RegisterEvent("GROUP_JOINED", "handleGroupJoined")
 	PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_COMPLETED", "handleChallengeModeCompleted")
+	PsyKeystoneHelper:RegisterEvent("ITEM_COUNT_CHANGED", "handleItemCountChanged")
+	PsyKeystoneHelper:RegisterEvent("ITEM_CHANGED", "handleItemChanged")
 
 	--Show minimap icon
 	LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
@@ -206,8 +208,26 @@ end
 function PsyKeystoneHelper:handleChallengeModeCompleted() 
 	PsyKeystoneHelper:DebugPrint("handleChallengeModeCompleted()")
 	PsyKeystoneHelper:sendInformation()
+	C_Timer.After(3, function () PsyKeystoneHelper:sendInformation() end)
 	if PsyKeystoneHelper:getSessionStatus() then
 		PsyKeystoneHelper.frame:Show()
+	end
+end
+
+function PsyKeystoneHelper:handleItemCountChanged(e, itemId) 
+	if itemId == 180653 or itemId == 138019 then
+		PsyKeystoneHelper:DebugPrint("handleItemCountChanged()")
+		PsyKeystoneHelper:sendInformation()
+		C_Timer.After(2, function () PsyKeystoneHelper:sendInformation() end)
+		return
+	end
+end
+
+function PsyKeystoneHelper:handleItemChanged(e, itemFrom, itemTo) 
+	if string.find(itemFrom, "Mythic Keystone") ~= nil then
+		PsyKeystoneHelper:DebugPrint("handleItemChanged()")
+		PsyKeystoneHelper:sendInformation()
+		C_Timer.After(2, function () PsyKeystoneHelper:sendInformation() end)
 	end
 end
 
