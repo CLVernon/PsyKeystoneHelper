@@ -316,6 +316,7 @@ end
 
 function calculateTopKeyStones() 
 	if PsyKeystoneHelper.db == nil then return end
+	if #PsyKeystoneHelper.db.profile.keystoneCache == 0 then return end
 
 	--Update data of keystone and add to a simple table
 	local keystones = {}
@@ -329,25 +330,30 @@ function calculateTopKeyStones()
 	--Apply gained score to each keystone
 	for _, keystone in pairs(keystones) do
 		local gainedScore = 0
+		keystone.playerUpgrades = {}
+
 		for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+			--Get dungeon score for player
 			local dungeonScore = 0
-			keystone.playerUpgrades = {}
 			for _, dungeonInfo in pairs(playerData.scoreInfo) do
 				if dungeonInfo.mapChallengeModeID == keystone.mapChallengeModeID then
 					dungeonScore = dungeonInfo.dungeonScore
 					break
 				end
 			end
+
+			--Get the score delta
 			local deltaScore = keystone.scoreForLevel - dungeonScore
 			if deltaScore > 0 then
 				gainedScore = gainedScore + deltaScore
 				table.insert(keystone.playerUpgrades, {
 					name=playerData.name,
 					classColour= C_ClassColor.GetClassColor(playerData.classFilename):GenerateHexColor(),
-					gainedScore=gainedScore
+					gainedScore=deltaScore
 				})
 			end
 		end
+
 		keystone.gainedScore = gainedScore
 		table.sort(keystone.playerUpgrades, function (t1, t2) return t1.gainedScore > t2.gainedScore end)
 	end
@@ -406,7 +412,7 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
 		GameTooltip:AddLine("Player Rating Gained:")
 
 		for _, player in pairs(keystone.playerUpgrades) do
-			GameTooltip:AddLine(player.name .. ": |c" .. player.classColour .. player.gainedScore .. "|r")
+			GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: " .. player.gainedScore)
 		end
 
 		GameTooltip:Show()
