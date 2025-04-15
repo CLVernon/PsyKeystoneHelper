@@ -150,6 +150,7 @@ function createPlayerFrame(index)
 
 	--Dungeon Bests
 	local challengeModeIDs = C_ChallengeMode.GetMapTable()
+	table.sort(challengeModeIDs, function(t1, t2) return t1 < t2 end)
 	playerFrame.dungeonScores = {}
 	for i = 1, #challengeModeIDs do 
 		local dungeonFrame = createKeystoneFrame(playerFrame)
