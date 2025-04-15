@@ -125,6 +125,15 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			PsyKeystoneHelper.db.profile.keystoneCache = {}
 			PsyKeystoneHelper:Print("Cache cleared")
 			return
+		elseif arg == "version" then
+			PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
+			if PsyKeystoneHelper:getSessionStatus() then
+				PsyKeystoneHelper:Print("Received Player Versions: ")
+				for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+					PsyKeystoneHelper:Print(playerData.name .. " - " .. playerData.version)
+				end
+			end
+			return
 		elseif arg == "debug" then
 			if PsyKeystoneHelper.db.profile.debugMode then 
 				PsyKeystoneHelper.db.profile.debugMode = false
@@ -146,6 +155,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33show|r ".. "- Show the Keystone Helper window")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33send|r ".. "- Send data to the party")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33version|r ".. "- Show version information")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33cache|r ".. "- Print the cache data")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33clear|r ".. "- Clear the cache data")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
