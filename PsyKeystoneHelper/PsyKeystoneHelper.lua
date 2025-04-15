@@ -55,7 +55,7 @@ function PsyKeystoneHelper:OnInitialize()
 	})
 
 	--Register slash command
-	PsyKeystoneHelper:RegisterChatCommand("keyhelper", "handleChatCommand")
+	PsyKeystoneHelper:RegisterChatCommand("pkh", "handleChatCommand")
 
 	--Register events
 	PsyKeystoneHelper:RegisterEvent("GROUP_LEFT", "handleGroupLeft")
@@ -133,13 +133,13 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	end
 
 	PsyKeystoneHelper:Print("Chat Commands:")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33session|r ".. "- Toggle the state of the session")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33show|r ".. "- Show the Keystone Helper window")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33request|r ".. "- Request data from the party")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33send|r ".. "- Send data to the party")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33cache|r ".. "- Print the cache data")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33clear|r ".. "- Clear the cache data")
-	PsyKeystoneHelper:Print("|cffffaeae/keyhelper|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33session|r ".. "- Toggle the state of the session")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33show|r ".. "- Show the Keystone Helper window")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33request|r ".. "- Request data from the party")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33send|r ".. "- Send data to the party")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33cache|r ".. "- Print the cache data")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33clear|r ".. "- Clear the cache data")
+	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
 end
 
 function PsyKeystoneHelper:DebugPrint(msg)

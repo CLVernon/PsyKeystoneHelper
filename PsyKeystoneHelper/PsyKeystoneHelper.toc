@@ -1,6 +1,6 @@
 ## Interface: 110100, 110105
-## Title: Keystone Helper
-## Notes:
+## Title: Psy Keystone Helper
+## Notes: 
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
 ## Version: 0.1.2-beta
 ## Texture: Interface\AddOns\PsyKeystoneHelper\logo
