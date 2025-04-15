@@ -120,10 +120,10 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		elseif arg == "debug" then
 			if PsyKeystoneHelper.db.profile.debugMode then 
 				PsyKeystoneHelper.db.profile.debugMode = false
-				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Disabled|r")
+				PsyKeystoneHelper:Print("Debug mode is: |cffffff33Disabled|r")
 			else
 				PsyKeystoneHelper.db.profile.debugMode = true
-				PsyKeystoneHelper:Print("Debug Prints are: |cffffff33Enabled|r")
+				PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
 			end
 			ns:displayPartyData()
 			return
