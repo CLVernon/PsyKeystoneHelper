@@ -157,9 +157,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33request|r ".. "- Request data from the party")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33send|r ".. "- Send data to the party")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33version|r ".. "- Show version information")
-	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33cache|r ".. "- Print the cache data")
 	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33clear|r ".. "- Clear the cache data")
-	PsyKeystoneHelper:Print("|cffffaeae/pkh|r " .. "|cffffff33debug|r ".. "- Toggle debug mode")
 end
 
 function PsyKeystoneHelper:DebugPrint(msg)
