@@ -88,7 +88,7 @@ function updateColourForOverallScore(fontString, overallScore)
 end
 
 function updateColourForDungeonScore(fontString, dungeonScore)
-	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore * 10) or {r=1,g=1,b=1}
+	local scoreColour = C_ChallengeMode.GetSpecificDungeonScoreRarityColor(dungeonScore) or {r=1,g=1,b=1}
 	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
 end
 
@@ -237,9 +237,11 @@ function defaultPlayerFrames(hasData, debugMode)
 			updateColourForOverallScore(playerFrame.score, 0)
 			playerFrame.keystone.texture:SetTexture(525134)
 			playerFrame.keystone.texture:Show()
+			playerFrame.keystone.texture:SetDesaturated(false)
 			playerFrame.keystone.topText:SetText("+0")
 			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
 			playerFrame.keystone.bottomText:SetText("NONE")
+			clearTooltip(playerFrame.keystone)
 
 			for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
 				dungeonFrame.texture:Show()
@@ -248,6 +250,7 @@ function defaultPlayerFrames(hasData, debugMode)
 				updateColourForKeyLevel(dungeonFrame.topText, 0)
 				dungeonFrame.bottomText:SetText("0")
 				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
+				clearTooltip(dungeonFrame)
 			end
 		else
 			playerFrame.name:SetText("")
@@ -255,9 +258,11 @@ function defaultPlayerFrames(hasData, debugMode)
 			playerFrame.score:SetText("")
 			updateColourForOverallScore(playerFrame.score, 0)
 			playerFrame.keystone.texture:Hide()
+			playerFrame.keystone.texture:SetDesaturated(false)
 			playerFrame.keystone.topText:SetText("")
 			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
 			playerFrame.keystone.bottomText:SetText("")
+			clearTooltip(playerFrame.keystone)
 
 			for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
 				dungeonFrame.texture:Hide()
@@ -266,6 +271,7 @@ function defaultPlayerFrames(hasData, debugMode)
 				updateColourForKeyLevel(dungeonFrame.topText, 0)
 				dungeonFrame.bottomText:SetText("")
 				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
+				clearTooltip(dungeonFrame)
 			end
 		end
 
@@ -307,7 +313,10 @@ function populatePlayerFrame(playerFrame, playerData)
 		playerFrame.keystone.topText:SetText("+" ..playerData.keystone.level)
 		updateColourForKeyLevel(playerFrame.keystone.topText, playerData.keystone.level)
 		playerFrame.keystone.bottomText:SetText(playerData.keystone.mapAbbreviation)
+
+		playerData.keystone.keystoneFrame = playerFrame.keystone
 	end
+	addKeystoneTooltip(playerFrame.keystone, playerData.keystone)
 	playerFrame.keystone.texture:Show()
 
 	-- Player Dungeon Score
@@ -327,13 +336,15 @@ function populatePlayerFrame(playerFrame, playerData)
 			dungeonFrame.topText:SetTextColor(1,1,1)
 			dungeonFrame.bottomText:SetText("")
 			dungeonFrame.texture:SetDesaturated(true)
+			clearTooltip(dungeonFrame)
 		else
 			dungeonFrame.topText:SetText("+" .. dungeonScore.level)
 			updateColourForKeyLevel(dungeonFrame.topText, dungeonScore.level)
 			dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
 			updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
 			dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0) 
-		end
+			addDungeonBestTooltip(dungeonFrame, dungeonScore)
+		end		
 	end
 
 end
@@ -383,6 +394,29 @@ function calculateTopKeyStones()
 			return t1.name < t2.name 
 		end)
 
+		--If key has no score gain...
+		if gainedScore == 0 then
+			local rerollingGood = false
+			for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+				for _, dungeonInfo in pairs(playerData.scoreInfo) do
+					if dungeonInfo.dungeonScore < keystone.scoreForLevel then
+						rerollingGood = true
+						break
+					end
+				end
+				if rerollingGood then break end
+			end
+
+			--Mark keystone for reroll in no gained score and rolling to another key of same level would result in score
+			if rerollingGood then
+				keystone.keystoneFrame.texture:SetTexture([[Interface\AddOns\PsyKeystoneHelper\reroll_keystone]])
+			else
+				keystone.keystoneFrame.topText:SetText("DEAD")
+				keystone.keystoneFrame.topText:SetTextColor(1,1,1)
+				keystone.keystoneFrame.texture:SetDesaturated(true)
+			end
+		end
+
 	end
 
 	--Sort keystone table
@@ -413,9 +447,7 @@ function calculateTopKeyStones()
 
 			addTopKeystoneTooltip(topKeyFrame, nil)
 		end
-		
 	end
-
 end
 
 function clearTooltip(frame)
@@ -455,16 +487,41 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
 	topKeyFrame:SetScript("OnLeave", function (self)
 		GameTooltip:Hide()
 	end)
-
 end
 
-function addDungeonBestTooltip(dungeonBest)
-	dungeonBest:SetScript("OnEnter", function (self)
+function addKeystoneTooltip(keystoneFrame, keystone)
+	keystoneFrame:SetScript("OnEnter", function (self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 		GameTooltip:ClearLines()
+
+		if keystone == nil then
+			GameTooltip:AddLine("|cFFFF0000No keystone found|r")
+		else
+			GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
+			GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
+			GameTooltip:AddLine("Available Score: |c" ..  C_ChallengeMode.GetSpecificDungeonScoreRarityColor(keystone.scoreForLevel):GenerateHexColor() .. keystone.scoreForLevel .. "|r")
+		end
+
 		GameTooltip:Show()
 	end)
-	dungeonBest:SetScript("OnLeave", function (self)
+
+	keystoneFrame:SetScript("OnLeave", function (self)
+		GameTooltip:Hide()
+	end)
+end
+
+function addDungeonBestTooltip(dungeonBestFrame, scoreInfo)
+	dungeonBestFrame:SetScript("OnEnter", function (self)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+		GameTooltip:ClearLines()
+
+		GameTooltip:AddLine("|cFFFFFFFF" .. scoreInfo.mapName .. "|r")
+		GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(scoreInfo.level):GenerateHexColor() .. scoreInfo.level .. "|r")
+		GameTooltip:AddLine("Rating: |c" .. C_ChallengeMode.GetSpecificDungeonScoreRarityColor(scoreInfo.dungeonScore):GenerateHexColor() .. scoreInfo.dungeonScore .. "|r")
+		
+		GameTooltip:Show()
+	end)
+	dungeonBestFrame:SetScript("OnLeave", function (self)
 		GameTooltip:Hide()
 	end)
 end

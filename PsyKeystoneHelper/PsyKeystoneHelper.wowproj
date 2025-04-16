@@ -30,6 +30,7 @@
     <Content Include="PsyKeystoneHelper.xml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="reroll_keystone.tga" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\LibStub\LibStub.lua">
