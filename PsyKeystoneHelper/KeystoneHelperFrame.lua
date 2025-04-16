@@ -237,6 +237,7 @@ function defaultPlayerFrames(hasData, debugMode)
 			updateColourForOverallScore(playerFrame.score, 0)
 			playerFrame.keystone.texture:SetTexture(525134)
 			playerFrame.keystone.texture:Show()
+			playerFrame.keystone.texture:SetDesaturated(false)
 			playerFrame.keystone.topText:SetText("+0")
 			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
 			playerFrame.keystone.bottomText:SetText("NONE")
@@ -255,6 +256,7 @@ function defaultPlayerFrames(hasData, debugMode)
 			playerFrame.score:SetText("")
 			updateColourForOverallScore(playerFrame.score, 0)
 			playerFrame.keystone.texture:Hide()
+			playerFrame.keystone.texture:SetDesaturated(false)
 			playerFrame.keystone.topText:SetText("")
 			updateColourForKeyLevel(playerFrame.keystone.topText, 0)
 			playerFrame.keystone.bottomText:SetText("")
@@ -307,6 +309,8 @@ function populatePlayerFrame(playerFrame, playerData)
 		playerFrame.keystone.topText:SetText("+" ..playerData.keystone.level)
 		updateColourForKeyLevel(playerFrame.keystone.topText, playerData.keystone.level)
 		playerFrame.keystone.bottomText:SetText(playerData.keystone.mapAbbreviation)
+
+		playerData.keystone.keystoneFrame = playerFrame.keystone
 	end
 	playerFrame.keystone.texture:Show()
 
@@ -382,6 +386,31 @@ function calculateTopKeyStones()
 			if t1.gainedScore ~= t2.gainedScore then return t1.gainedScore > t2.gainedScore  end
 			return t1.name < t2.name 
 		end)
+
+		--If key has no score gain...
+		if gainedScore == 0 then
+			local rerollingGood = false
+			for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+				for _, dungeonInfo in pairs(playerData.scoreInfo) do
+					if dungeonInfo.dungeonScore < keystone.scoreForLevel then
+						rerollingGood = true
+						break
+					end
+				end
+				if rerollingGood then break end
+			end
+
+			--Mark keystone for reroll in no gained score and rolling to another key of same level would result in score
+			if rerollingGood then
+				keystone.keystoneFrame.texture:SetTexture([[Interface\AddOns\PsyKeystoneHelper\reroll_keystone]])
+			else
+				keystone.keystoneFrame.topText:SetText("DEAD")
+				keystone.keystoneFrame.topText:SetTextColor(1,1,1)
+				keystone.keystoneFrame.texture:SetDesaturated(true)
+			end
+
+			
+		end
 
 	end
 
