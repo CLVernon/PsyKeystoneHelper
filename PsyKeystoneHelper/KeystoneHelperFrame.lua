@@ -88,7 +88,7 @@ function updateColourForOverallScore(fontString, overallScore)
 end
 
 function updateColourForDungeonScore(fontString, dungeonScore)
-	local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore * 10) or {r=1,g=1,b=1}
+	local scoreColour = C_ChallengeMode.GetSpecificDungeonScoreRarityColor(dungeonScore) or {r=1,g=1,b=1}
 	fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
 end
 
@@ -250,6 +250,7 @@ function defaultPlayerFrames(hasData, debugMode)
 				updateColourForKeyLevel(dungeonFrame.topText, 0)
 				dungeonFrame.bottomText:SetText("0")
 				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
+				clearTooltip(dungeonFrame)
 			end
 		else
 			playerFrame.name:SetText("")
@@ -270,6 +271,7 @@ function defaultPlayerFrames(hasData, debugMode)
 				updateColourForKeyLevel(dungeonFrame.topText, 0)
 				dungeonFrame.bottomText:SetText("")
 				updateColourForDungeonScore(dungeonFrame.bottomText, 0)
+				clearTooltip(dungeonFrame)
 			end
 		end
 
@@ -334,13 +336,15 @@ function populatePlayerFrame(playerFrame, playerData)
 			dungeonFrame.topText:SetTextColor(1,1,1)
 			dungeonFrame.bottomText:SetText("")
 			dungeonFrame.texture:SetDesaturated(true)
+			clearTooltip(dungeonFrame)
 		else
 			dungeonFrame.topText:SetText("+" .. dungeonScore.level)
 			updateColourForKeyLevel(dungeonFrame.topText, dungeonScore.level)
 			dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
 			updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
 			dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0) 
-		end
+			addDungeonBestTooltip(dungeonFrame, dungeonScore)
+		end		
 	end
 
 end
@@ -495,7 +499,7 @@ function addKeystoneTooltip(keystoneFrame, keystone)
 		else
 			GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
 			GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
-			GameTooltip:AddLine("Available Score: |cFFFFFFFF" .. keystone.scoreForLevel .. "|r")
+			GameTooltip:AddLine("Available Score: |c" ..  C_ChallengeMode.GetSpecificDungeonScoreRarityColor(keystone.scoreForLevel):GenerateHexColor() .. keystone.scoreForLevel .. "|r")
 		end
 
 		GameTooltip:Show()
@@ -506,13 +510,18 @@ function addKeystoneTooltip(keystoneFrame, keystone)
 	end)
 end
 
-function addDungeonBestTooltip(dungeonBest)
-	dungeonBest:SetScript("OnEnter", function (self)
+function addDungeonBestTooltip(dungeonBestFrame, scoreInfo)
+	dungeonBestFrame:SetScript("OnEnter", function (self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 		GameTooltip:ClearLines()
+
+		GameTooltip:AddLine("|cFFFFFFFF" .. scoreInfo.mapName .. "|r")
+		GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(scoreInfo.level):GenerateHexColor() .. scoreInfo.level .. "|r")
+		GameTooltip:AddLine("Rating: |c" .. C_ChallengeMode.GetSpecificDungeonScoreRarityColor(scoreInfo.dungeonScore):GenerateHexColor() .. scoreInfo.dungeonScore .. "|r")
+		
 		GameTooltip:Show()
 	end)
-	dungeonBest:SetScript("OnLeave", function (self)
+	dungeonBestFrame:SetScript("OnLeave", function (self)
 		GameTooltip:Hide()
 	end)
 end
