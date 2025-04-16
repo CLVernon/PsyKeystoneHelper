@@ -2,7 +2,7 @@
 ## Title: Psy Keystone Helper
 ## Notes: Shows the breakdown of M+ score for the party and the top keystone ugprades for the team
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
-## Version: 1.0.0
+## Version: 1.0.1
 ## IconTexture: Interface\AddOns\PsyKeystoneHelper\logo
 ## SavedVariables: PsyKeystoneHelper_Session
 
