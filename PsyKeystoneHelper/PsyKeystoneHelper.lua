@@ -131,7 +131,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			if PsyKeystoneHelper:getSessionStatus() then
 				PsyKeystoneHelper:Print("Received Player Versions: ")
 				for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
-					PsyKeystoneHelper:Print(playerData.name .. " - " .. playerData.version)
+					PsyKeystoneHelper:Print(playerData.name .. " - " .. (playerData.version or "Unknown"))
 				end
 			end
 			return

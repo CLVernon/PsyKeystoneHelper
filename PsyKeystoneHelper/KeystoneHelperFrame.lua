@@ -121,8 +121,6 @@ function createPlayerFrame(index)
 	playerFrame:SetSize(515, 50)
 
 	--Version Indicator
-	--playerFrame.version = CreateFrame("frame", "player_frame_version" .. index, playerFrame, "")
-	--playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
 	playerFrame.version = createString(playerFrame, "GameFontHighlight", 8, "X")
 	playerFrame.version:SetTextColor(1,0,0)
 	playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
@@ -555,6 +553,10 @@ function checkVersion(versionText, playerVersion)
 end
 
 function intifyVersion(versionString)
+	if versionString == nil or versionString == "" then
+		return 0
+	end
+
 	local versionInt = string.gsub(versionString, "%.", "")
 	if string.find(versionInt, "-beta") then
 		versionInt = string.gsub(versionInt, "-beta", "2")
