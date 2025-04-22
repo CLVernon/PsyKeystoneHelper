@@ -1,3 +1,18 @@
-.vs/PsyKeystoneHelper/v17/.wowsuo
-.vs/PsyKeystoneHelper/v17/DocumentLayout.json
-*.wowprok.user
+# Addon Project Files
+.vs/
+*.wowproj.user
+*.wowproj
+
+# IDEA Files
+.idea/shelf
+.idea/dataSources
+.idea/copilot/chatSessions
+.idea/workspace.xml
+.idea/misc.xml
+.idea/dataSources.local.xml
+.idea/dataSources/
+.idea/dataSources.xml
+.idea/sqldialects.xml
+
+# The rest
+/build
