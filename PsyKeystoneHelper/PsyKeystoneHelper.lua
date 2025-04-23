@@ -145,7 +145,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 			end
 			ns:renderData()
 			return
-		elseif arg == "commands" then
+		elseif arg == "commands" or arg == "command" or arg == "help" or arg == "?" then
 		else
 			PsyKeystoneHelper:Print("Unknown command")
 		end
