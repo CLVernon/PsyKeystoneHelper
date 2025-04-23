@@ -22,15 +22,15 @@ function KeystoneHelperFrame_OnShow()
         firstLoad = false
     end
 
-    PsyKeystoneHelper.KeystoneHelperFrame:renderData()
+    KeystoneHelperFrame:renderData()
 end
 
 function Button_ToggleSession_OnClick()
-    _G.PsyKeystoneHelper:toggleSessionStatus()
+    PsyKeystoneHelper:toggleSessionStatus()
 end
 
 function Button_RequestData_OnClick()
-    _G.PsyKeystoneHelper:requestInformation()
+    PsyKeystoneHelper:requestInformation()
 end
 
 function createFrameComponents()
@@ -47,7 +47,7 @@ function createFrameComponents()
     createTopKeysFrame()
 end
 
-function PsyKeystoneHelper.KeystoneHelperFrame:renderData()
+function KeystoneHelperFrame:renderData()
     local profileAvailable = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile ~= nil
     local debugMode = profileAvailable and PsyKeystoneHelper.db.profile.debugMode
     local hasData = profileAvailable and PsyKeystoneHelper.db.profile.keystoneCache ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
