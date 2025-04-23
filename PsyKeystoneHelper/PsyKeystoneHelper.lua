@@ -125,6 +125,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 		elseif arg == "clear" then
 			PsyKeystoneHelper.db.profile.keystoneCache = {}
 			PsyKeystoneHelper:Print("Cache cleared")
+			ns:renderData()
 			return
 		elseif arg == "version" then
 			PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
@@ -161,7 +162,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 end
 
 function PsyKeystoneHelper:DebugPrint(msg)
-	if PsyKeystoneHelper.db == nil then return end
+	if PsyKeystoneHelper.db == nil or PsyKeystoneHelper.db.profile == nil then return end
 	if PsyKeystoneHelper.db.profile.debugMode then PsyKeystoneHelper:Print(msg) end
 end
 
@@ -170,7 +171,7 @@ end
 --------------------------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:toggleSessionStatus()
-	if PsyKeystoneHelper.db.profile.session then 
+	if PsyKeystoneHelper:getSessionStatus() then
 		PsyKeystoneHelper.db.profile.session = false 
 		PsyKeystoneHelper.db.profile.keystoneCache = {}
 		ns:renderData()

@@ -43,8 +43,9 @@ function Button_RequestData_OnClick()
 end
 
 function ns:renderData()
-	local debugMode = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode
-	local hasData = PsyKeystoneHelper.db ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
+	local profileAvailable = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile ~= nil
+	local debugMode = profileAvailable and PsyKeystoneHelper.db.profile.debugMode
+	local hasData = profileAvailable and PsyKeystoneHelper.db.profile.keystoneCache ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
 	PsyKeystoneHelper:DebugPrint("Displaying party data...")
 
 	--Default frames
