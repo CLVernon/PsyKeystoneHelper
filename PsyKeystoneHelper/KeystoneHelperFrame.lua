@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
+local firstLoad = true
 
 function KeystoneHelperFrame_OnLoad()
 	PsyKeystoneHelper.frame = KeystoneHelperFrame
@@ -9,7 +10,30 @@ function KeystoneHelperFrame_OnLoad()
 	--Assign child frames
 	KeystoneHelperFrame.title = title
 	KeystoneHelperFrame.status = status
+end
 
+function KeystoneHelperFrame_OnShow()
+	--Update title text
+	title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
+	status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+
+	if firstLoad then
+		createFrameComponents()
+		firstLoad = false
+	end
+
+	ns:renderData()
+end
+
+function Button_ToggleSession_OnClick()
+	_G.PsyKeystoneHelper:toggleSessionStatus()
+end
+
+function Button_RequestData_OnClick()
+	_G.PsyKeystoneHelper:requestInformation()
+end
+
+function createFrameComponents()
 	--Setup Player Frame lookup
 	KeystoneHelperFrame.playerFrames = {}
 	KeystoneHelperFrame.playerFrames[1] = createPlayerFrame(1)
@@ -21,25 +45,6 @@ function KeystoneHelperFrame_OnLoad()
 	--Setup Top Keystone lookup
 	KeystoneHelperFrame.topKeystones = {}
 	createTopKeysFrame()
-
-	--Set defaults
-	KeystoneHelperFrame_OnShow()
-end
-
-function KeystoneHelperFrame_OnShow()
-	--Update title text
-	title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
-	status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
-
-	ns:renderData()
-end
-
-function Button_ToggleSession_OnClick()
-	_G.PsyKeystoneHelper:toggleSessionStatus()
-end
-
-function Button_RequestData_OnClick()
-	_G.PsyKeystoneHelper:requestInformation()
 end
 
 function ns:renderData()
@@ -71,7 +76,7 @@ end
 
 function createString(parent, template, size, defaultText)
 	local string  = parent:CreateFontString(nil, "OVERLAY", template)
-	string:SetFont("Fonts\2002B.ttf", size, "OUTLINE")
+	string:SetFont("Fonts/2002B.ttf", size, "OUTLINE")
 	string:SetTextHeight(size)
 	string:SetTextColor(1,1,1)
 	string:SetText(defaultText)
@@ -115,7 +120,6 @@ function createTopKeysFrame()
 end
 
 function createPlayerFrame(index)
-
 	--Frame
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
