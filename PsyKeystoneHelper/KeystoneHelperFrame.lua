@@ -31,7 +31,7 @@ function KeystoneHelperFrame_OnShow()
 	title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
 	status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
 
-	ns:displayPartyData()
+	ns:renderData()
 end
 
 function Button_ToggleSession_OnClick()
@@ -42,7 +42,7 @@ function Button_RequestData_OnClick()
 	_G.PsyKeystoneHelper:requestInformation()
 end
 
-function ns:displayPartyData()
+function ns:renderData()
 	local debugMode = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode
 	local hasData = PsyKeystoneHelper.db ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
 	PsyKeystoneHelper:DebugPrint("Displaying party data...")

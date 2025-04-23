@@ -9,7 +9,7 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
 	type = "data source",
 	text = "PsyKeystoneHelper",
 	label = "PsyKeystoneHelper",
-	icon = "Interface\\AddOns\\PsyKeystoneHelper\\logo",
+	icon = "Interface\\AddOns\\PsyKeystoneHelper\\img\\logo",
 	OnClick = function(_, buttonPressed)	
 		if buttonPressed == "RightButton" then
 			PsyKeystoneHelper:toggleSessionStatus()
@@ -76,7 +76,7 @@ function PsyKeystoneHelper:OnInitialize()
 	LibDBIcon:AddButtonToCompartment("PsyKeystoneHelperDBI")
 
 	--Disable state on load if player is not in group or is in raid
-	if (not UnitInParty("player") or UnitInRaid("player") and PsyKeystoneHelper:getSessionStatus()) then
+	if (not UnitInParty("player") or UnitInRaid("player")) and PsyKeystoneHelper:getSessionStatus() then
 		PsyKeystoneHelper:toggleSessionStatus()
 	end
 
@@ -143,7 +143,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
 				PsyKeystoneHelper.db.profile.debugMode = true
 				PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
 			end
-			ns:displayPartyData()
+			ns:renderData()
 			return
 		elseif arg == "commands" then
 		else
@@ -173,7 +173,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
 	if PsyKeystoneHelper.db.profile.session then 
 		PsyKeystoneHelper.db.profile.session = false 
 		PsyKeystoneHelper.db.profile.keystoneCache = {}
-		ns:displayPartyData()
+		ns:renderData()
 	else 
 		if not UnitInParty("player") then
 			PsyKeystoneHelper:Print("Cannot start a session when not in a party")
@@ -214,7 +214,7 @@ function PsyKeystoneHelper:handleGroupLeft()
 	PsyKeystoneHelper:DebugPrint("handleGroupLeft()")
 	if PsyKeystoneHelper:getSessionStatus() then
 		PsyKeystoneHelper:toggleSessionStatus()
-		ns:displayPartyData()
+		ns:renderData()
 	end
 end
 
@@ -292,7 +292,7 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 		PsyKeystoneHelper.db.profile.keystoneCache[existingIndex] = playerData
 	end
 	PsyKeystoneHelper:sortInformation() 
-	ns:displayPartyData()
+	ns:renderData()
 end
 
 function PsyKeystoneHelper:sortInformation() 
