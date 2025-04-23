@@ -4,7 +4,7 @@ local PsyKeystoneHelper = ns.PsyKeystoneHelper
 local firstLoad = true
 
 function KeystoneHelperFrame_OnLoad()
-    PsyKeystoneHelper.frame = KeystoneHelperFrame
+    PsyKeystoneHelper.KeystoneHelperFrame = KeystoneHelperFrame
     KeystoneHelperFrame:Hide()
 
     --Assign child frames
@@ -22,7 +22,7 @@ function KeystoneHelperFrame_OnShow()
         firstLoad = false
     end
 
-    ns:renderData()
+    PsyKeystoneHelper.KeystoneHelperFrame:renderData()
 end
 
 function Button_ToggleSession_OnClick()
@@ -47,7 +47,7 @@ function createFrameComponents()
     createTopKeysFrame()
 end
 
-function ns:renderData()
+function PsyKeystoneHelper.KeystoneHelperFrame:renderData()
     local profileAvailable = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile ~= nil
     local debugMode = profileAvailable and PsyKeystoneHelper.db.profile.debugMode
     local hasData = profileAvailable and PsyKeystoneHelper.db.profile.keystoneCache ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0

@@ -16,10 +16,10 @@ PsyKeystoneHelperDBI = LibStub("LibDataBroker-1.1"):NewDataObject("PsyKeystoneHe
         elseif buttonPressed == "MiddleButton" then
             PsyKeystoneHelper:printChatCommands()
         elseif buttonPressed == "LeftButton" then
-            if PsyKeystoneHelper.frame:IsShown() then
-                PsyKeystoneHelper.frame:Hide()
+            if PsyKeystoneHelper.KeystoneHelperFrame:IsShown() then
+                PsyKeystoneHelper.KeystoneHelperFrame:Hide()
             else
-                PsyKeystoneHelper.frame:Show()
+                PsyKeystoneHelper.KeystoneHelperFrame:Show()
             end
         end
     end,
@@ -103,7 +103,7 @@ function PsyKeystoneHelper:OnInitialize()
 
     --Load frame if session is running
     if PsyKeystoneHelper:getSessionStatus() then
-        PsyKeystoneHelper.frame:Show()
+        PsyKeystoneHelper.KeystoneHelperFrame:Show()
     end
 end
 
@@ -121,7 +121,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
     if PsyKeystoneHelper:getSessionStatus() then
         PsyKeystoneHelper.db.profile.session = false
         PsyKeystoneHelper.db.profile.keystoneCache = {}
-        ns:renderData()
+        PsyKeystoneHelper.KeystoneHelperFrame:renderData()
     else
         if not UnitInParty("player") then
             PsyKeystoneHelper:Print("Cannot start a session when not in a party")
@@ -136,7 +136,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
     end
 
     PsyKeystoneHelper:Print("Session is now " .. PsyKeystoneHelper:getSessionStatusString())
-    PsyKeystoneHelper.frame.status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+    PsyKeystoneHelper.KeystoneHelperFrame.status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
     LibDBIcon:Hide("PsyKeystoneHelperDBI")
     LibDBIcon:Show("PsyKeystoneHelperDBI")
 end
@@ -160,63 +160,7 @@ end
 -- Event Handling
 --------------------------------------------------------------------------------------------------------------------------------------------
 
-function PsyKeystoneHelper:handleGroupLeft()
-    PsyKeystoneHelper:DebugPrint("handleGroupLeft()")
-    if PsyKeystoneHelper:getSessionStatus() then
-        PsyKeystoneHelper:toggleSessionStatus()
-        ns:renderData()
-    end
-end
 
-function PsyKeystoneHelper:handleGroupJoined()
-    PsyKeystoneHelper:DebugPrint("handleGroupJoined()")
-    if UnitInRaid("player") then
-        if PsyKeystoneHelper:getSessionStatus() then
-            PsyKeystoneHelper:toggleSessionStatus()
-        end
-        return
-    end
-    PsyKeystoneHelper:sendInformation()
-end
-
-function PsyKeystoneHelper:handleChallengeModeCompleted()
-    PsyKeystoneHelper:DebugPrint("handleChallengeModeCompleted()")
-    PsyKeystoneHelper:sendInformation()
-    C_Timer.After(3, function()
-        PsyKeystoneHelper:sendInformation()
-    end)
-    if PsyKeystoneHelper:getSessionStatus() then
-        PsyKeystoneHelper.frame:Show()
-    end
-end
-
-function PsyKeystoneHelper:handleChallengeModeStart()
-    PsyKeystoneHelper:DebugPrint("handleChallengeModeStart()")
-    C_Timer.After(3, function()
-        PsyKeystoneHelper:sendInformation()
-    end)
-end
-
-function PsyKeystoneHelper:handleItemCountChanged(e, itemId)
-    if itemId == 180653 or itemId == 138019 then
-        PsyKeystoneHelper:DebugPrint("handleItemCountChanged()")
-        PsyKeystoneHelper:sendInformation()
-        C_Timer.After(2, function()
-            PsyKeystoneHelper:sendInformation()
-        end)
-        return
-    end
-end
-
-function PsyKeystoneHelper:handleItemChanged(e, itemFrom, itemTo)
-    if string.find(itemFrom, "Mythic Keystone") ~= nil then
-        PsyKeystoneHelper:DebugPrint("handleItemChanged()")
-        PsyKeystoneHelper:sendInformation()
-        C_Timer.After(2, function()
-            PsyKeystoneHelper:sendInformation()
-        end)
-    end
-end
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 -- Communications
@@ -252,7 +196,7 @@ function PsyKeystoneHelper:receiveInformation(playerData)
         PsyKeystoneHelper.db.profile.keystoneCache[existingIndex] = playerData
     end
     PsyKeystoneHelper:sortInformation()
-    ns:renderData()
+    PsyKeystoneHelper.KeystoneHelperFrame:renderData()
 end
 
 function PsyKeystoneHelper:sortInformation()

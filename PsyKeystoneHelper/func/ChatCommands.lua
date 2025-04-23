@@ -19,10 +19,10 @@ function PsyKeystoneHelper:handleChatCommand(input)
             PsyKeystoneHelper:toggleSessionStatus()
             return
         elseif arg == "show" or arg == "" then
-            if PsyKeystoneHelper.frame:IsShown() then
-                PsyKeystoneHelper.frame:Hide()
+            if PsyKeystoneHelper.KeystoneHelperFrame:IsShown() then
+                PsyKeystoneHelper.KeystoneHelperFrame:Hide()
             else
-                PsyKeystoneHelper.frame:Show()
+                PsyKeystoneHelper.KeystoneHelperFrame:Show()
             end
             return
         elseif arg == "request" then
@@ -37,7 +37,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
         elseif arg == "clear" then
             PsyKeystoneHelper.db.profile.keystoneCache = {}
             PsyKeystoneHelper:Print("Cache cleared")
-            ns:renderData()
+            PsyKeystoneHelper.KeystoneHelperFrame:renderData()
             return
         elseif arg == "version" then
             PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
@@ -56,7 +56,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
                 PsyKeystoneHelper.db.profile.debugMode = true
                 PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
             end
-            ns:renderData()
+            PsyKeystoneHelper.KeystoneHelperFrame:renderData()
             return
         elseif arg == "commands" or arg == "command" or arg == "help" or arg == "?" then
             PsyKeystoneHelper:printChatCommands()
