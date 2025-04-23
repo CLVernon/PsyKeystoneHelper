@@ -1,14 +1,14 @@
+Clear-Host
 #Get the installation directory
 $installDir = "C:\Program Files\World of Warcraft\_retail_\Interface\AddOns\"
 if (Test-Path $installDir) {
-    Write-Host "Installation directory found: $installDir"
+    Write-Host "WoW Installation directory found: $installDir"
 } else {
     $installDir = "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\"
 
     if (Test-Path $installDir) {
-        Write-Host "Installation directory found: $installDir"
-    } else
-    {
+        Write-Host "WoW Installation directory found: $installDir"
+    } else {
         Write-Host "ERR: No installation directory found!"
         exit
     }
@@ -16,9 +16,11 @@ if (Test-Path $installDir) {
 
 #Delete the old build if present
 $buildDir = "$installDir\PsyKeystoneHelper"
-if (Test-Path buildDir) {
-    Write-Host "Deleting old build..."
+if (Test-Path $buildDir) {
+    Write-Host "Addon build folder found, deleting old build..."
     Remove-Item -Recurse -Force $buildDir
+} else {
+    Write-Host "Addon build folder not found at: $buildDir"
 }
 
 #Create the new build
