@@ -46,7 +46,7 @@ function PsyKeystoneHelper:receiveInformation(playerData)
         PsyKeystoneHelper.db.profile.keystoneCache[existingIndex] = playerData
     end
     PsyKeystoneHelper:sortInformation()
-    PsyKeystoneHelper.KeystoneHelperFrame:renderData()
+    ns:renderKeystoneHelperFrame()
 end
 
 function PsyKeystoneHelper:sendInformation()

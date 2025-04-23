@@ -5,7 +5,7 @@ function PsyKeystoneHelper:handleGroupLeft()
     PsyKeystoneHelper:DebugPrint("handleGroupLeft()")
     if PsyKeystoneHelper:getSessionStatus() then
         PsyKeystoneHelper:toggleSessionStatus()
-        PsyKeystoneHelper.KeystoneHelperFrame:renderData()
+        ns:renderKeystoneHelperFrame()
     end
 end
 
