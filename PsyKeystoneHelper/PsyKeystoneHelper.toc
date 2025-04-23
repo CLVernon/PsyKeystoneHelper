@@ -3,7 +3,7 @@
 ## Notes: Shows the breakdown of M+ score for the party and the top keystone ugprades for the team
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
 ## Version: 1.0.2
-## IconTexture: Interface\AddOns\PsyKeystoneHelper\logo
+## IconTexture: Interface\AddOns\PsyKeystoneHelper\img\logo
 ## SavedVariables: PsyKeystoneHelper_Session
 
 ## Category-enUS: Dungeons & Raids

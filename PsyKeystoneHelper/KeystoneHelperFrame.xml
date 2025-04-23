@@ -12,7 +12,7 @@
 		</KeyValues>
 		<Layers>
 			<Layer>
-				<Texture file="Interface\AddOns\PsyKeystoneHelper\logo.tga">
+				<Texture file="Interface\AddOns\PsyKeystoneHelper\img\logo.tga">
 					<Size x="21" y="21" />
 					<Anchors>
 						<Anchor x="3" point="TOPLEFT" />
