@@ -28,6 +28,9 @@ PsyKeystoneHelper.lua
 func/ChatCommands.lua
 func/EventHandling.lua
 func/Communication.lua
+func/Dungeons.lua
+func/Session.lua
+func/UI.lua
 func/Util.lua
 
 frame/KeystoneHelperFrame.xml

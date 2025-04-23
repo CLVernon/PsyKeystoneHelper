@@ -2,6 +2,7 @@ local _, ns = ...
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
 
 AceComm = LibStub("AceComm-3.0")
+LibAceSerializer = LibStub("AceSerializer-3.0")
 
 local function HandleComm(prefix, message, distribution, sender)
     local success, messageObj = LibAceSerializer:Deserialize(message)
@@ -54,7 +55,7 @@ function PsyKeystoneHelper:sendInformation()
     local scoreInfo = C_ChallengeMode.GetMapScoreInfo()
     for _, dungeon in pairs(scoreInfo) do
         local mapName = C_ChallengeMode.GetMapUIInfo(dungeon.mapChallengeModeID) or ""
-        local mapAbbreviation = ns.dungeonAbbreviations[mapName] or ""
+        local mapAbbreviation = PsyKeystoneHelper.dungeonAbbreviations[mapName] or ""
 
         dungeon.mapName = mapName
         dungeon.mapAbbreviation = mapAbbreviation
@@ -73,7 +74,7 @@ function PsyKeystoneHelper:sendInformation()
             backgroundTexture = backgroundTexture,
             itemLink = nil, --todo
             mapName = mapName,
-            mapAbbreviation = ns.dungeonAbbreviations[mapName] or mapName
+            mapAbbreviation = PsyKeystoneHelper.dungeonAbbreviations[mapName] or mapName
         }
     end
 

@@ -74,30 +74,6 @@ function ns:renderKeystoneHelperFrame()
 
 end
 
-function createString(parent, template, size, defaultText)
-    local string = parent:CreateFontString(nil, "OVERLAY", template)
-    string:SetFont("Fonts/2002B.ttf", size, "OUTLINE")
-    string:SetTextHeight(size)
-    string:SetTextColor(1, 1, 1)
-    string:SetText(defaultText)
-    return string
-end
-
-function updateColourForKeyLevel(fontString, level)
-    local levelColour = C_ChallengeMode.GetKeystoneLevelRarityColor(level) or { r = 1, g = 1, b = 1 }
-    fontString:SetTextColor(levelColour.r, levelColour.g, levelColour.b)
-end
-
-function updateColourForOverallScore(fontString, overallScore)
-    local scoreColour = C_ChallengeMode.GetDungeonScoreRarityColor(overallScore) or { r = 1, g = 1, b = 1 }
-    fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
-end
-
-function updateColourForDungeonScore(fontString, dungeonScore)
-    local scoreColour = C_ChallengeMode.GetSpecificDungeonScoreRarityColor(dungeonScore) or { r = 1, g = 1, b = 1 }
-    fontString:SetTextColor(scoreColour.r, scoreColour.g, scoreColour.b)
-end
-
 function createTopKeysFrame()
     local topKeysFrame = CreateFrame("frame", "TopKeysFrame", KeystoneHelperFrame, "")
     topKeysFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -30)
@@ -126,23 +102,23 @@ function createPlayerFrame(index)
     playerFrame:SetSize(515, 50)
 
     --Version Indicator
-    playerFrame.version = createString(playerFrame, "GameFontHighlight", 8, "X")
+    playerFrame.version = PsyKeystoneHelper:createString(playerFrame, "GameFontHighlight", 8, "X")
     playerFrame.version:SetTextColor(1, 0, 0)
     playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
 
     --Name
-    playerFrame.name = createString(playerFrame, "GameFontHighlight", 12, "Player " .. index)
+    playerFrame.name = PsyKeystoneHelper:createString(playerFrame, "GameFontHighlight", 12, "Player " .. index)
     playerFrame.name:SetPoint("LEFT", playerFrame, "LEFT", 10, 5)
 
     --Score
-    playerFrame.score = createString(playerFrame, "GameFontHighlight", 12, "Score: 0000")
+    playerFrame.score = PsyKeystoneHelper:createString(playerFrame, "GameFontHighlight", 12, "Score: 0000")
     playerFrame.score:SetPoint("LEFT", playerFrame, "LEFT", 10, -5)
 
     --Current Key
     playerFrame.keystone = createKeystoneFrame(playerFrame)
     playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 110, 0)
     if index == 1 then
-        local keystoneColumnTitle = createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
+        local keystoneColumnTitle = PsyKeystoneHelper:createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
         keystoneColumnTitle.txt = "KEY"
         keystoneColumnTitle:SetJustifyH("CENTER")
         keystoneColumnTitle:SetPoint("TOP", playerFrame.keystone, "TOP", 0, 20)
@@ -167,8 +143,8 @@ function createPlayerFrame(index)
         dungeonFrame.challengeModeID = challengeModeIDs[i]
 
         if index == 1 then
-            local abbrev = ns.dungeonAbbreviations[mapName] or ""
-            local mapColumnTitle = createString(dungeonFrame, "GameFontHighlight", 12, abbrev)
+            local abbrev = PsyKeystoneHelper.dungeonAbbreviations[mapName] or ""
+            local mapColumnTitle = PsyKeystoneHelper:createString(dungeonFrame, "GameFontHighlight", 12, abbrev)
             mapColumnTitle.txt = abbrev
             mapColumnTitle:SetJustifyH("CENTER")
             mapColumnTitle:SetPoint("TOP", dungeonFrame, "TOP", 0, 20)
@@ -188,10 +164,10 @@ function createKeystoneFrame(parent)
     keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
     keystoneFrame.texture:SetAllPoints(keystoneFrame)
 
-    keystoneFrame.topText = createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+    keystoneFrame.topText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
     keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 0)
 
-    keystoneFrame.bottomText = createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+    keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
     keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
 
     return keystoneFrame
@@ -201,20 +177,20 @@ function defaultTopKeystones(hasData, debugMode)
     for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
         if hasData or debugMode then
             topKeystone.topText:SetText("")
-            updateColourForDungeonScore(topKeystone.topText, 0)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeystone.topText, 0)
             topKeystone.bottomText:SetText("NONE")
-            updateColourForDungeonScore(topKeystone.bottomText, 0)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeystone.bottomText, 0)
             topKeystone.texture:SetTexture(237555)
             topKeystone.texture:Show()
-            clearTooltip(topKeystone)
+            PsyKeystoneHelper:clearTooltip(topKeystone)
         else
             topKeystone.topText:SetText("")
-            updateColourForDungeonScore(topKeystone.topText, 0)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeystone.topText, 0)
             topKeystone.bottomText:SetText("")
-            updateColourForDungeonScore(topKeystone.bottomText, 0)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeystone.bottomText, 0)
             topKeystone.texture:SetTexture(237555)
             topKeystone.texture:Hide()
-            clearTooltip(topKeystone)
+            PsyKeystoneHelper:clearTooltip(topKeystone)
         end
     end
 end
@@ -239,44 +215,44 @@ function defaultPlayerFrames(hasData, debugMode)
             playerFrame.name:SetText("Player_____" .. index)
             playerFrame.name:SetTextColor(1, 1, 1)
             playerFrame.score:SetText("Score: 0000")
-            updateColourForOverallScore(playerFrame.score, 0)
+            PsyKeystoneHelper:updateColourForOverallScore(playerFrame.score, 0)
             playerFrame.keystone.texture:SetTexture(525134)
             playerFrame.keystone.texture:Show()
             playerFrame.keystone.texture:SetDesaturated(false)
             playerFrame.keystone.topText:SetText("+0")
-            updateColourForKeyLevel(playerFrame.keystone.topText, 0)
+            PsyKeystoneHelper:updateColourForKeyLevel(playerFrame.keystone.topText, 0)
             playerFrame.keystone.bottomText:SetText("NONE")
-            clearTooltip(playerFrame.keystone)
+            PsyKeystoneHelper:clearTooltip(playerFrame.keystone)
 
             for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
                 dungeonFrame.texture:Show()
                 dungeonFrame.texture:SetDesaturated(true)
                 dungeonFrame.topText:SetText("+0")
-                updateColourForKeyLevel(dungeonFrame.topText, 0)
+                PsyKeystoneHelper:updateColourForKeyLevel(dungeonFrame.topText, 0)
                 dungeonFrame.bottomText:SetText("0")
-                updateColourForDungeonScore(dungeonFrame.bottomText, 0)
-                clearTooltip(dungeonFrame)
+                PsyKeystoneHelper:updateColourForDungeonScore(dungeonFrame.bottomText, 0)
+                PsyKeystoneHelper:clearTooltip(dungeonFrame)
             end
         else
             playerFrame.name:SetText("")
             playerFrame.name:SetTextColor(1, 1, 1)
             playerFrame.score:SetText("")
-            updateColourForOverallScore(playerFrame.score, 0)
+            PsyKeystoneHelper:updateColourForOverallScore(playerFrame.score, 0)
             playerFrame.keystone.texture:Hide()
             playerFrame.keystone.texture:SetDesaturated(false)
             playerFrame.keystone.topText:SetText("")
-            updateColourForKeyLevel(playerFrame.keystone.topText, 0)
+            PsyKeystoneHelper:updateColourForKeyLevel(playerFrame.keystone.topText, 0)
             playerFrame.keystone.bottomText:SetText("")
-            clearTooltip(playerFrame.keystone)
+            PsyKeystoneHelper:clearTooltip(playerFrame.keystone)
 
             for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
                 dungeonFrame.texture:Hide()
                 dungeonFrame.texture:SetDesaturated(true)
                 dungeonFrame.topText:SetText("")
-                updateColourForKeyLevel(dungeonFrame.topText, 0)
+                PsyKeystoneHelper:updateColourForKeyLevel(dungeonFrame.topText, 0)
                 dungeonFrame.bottomText:SetText("")
-                updateColourForDungeonScore(dungeonFrame.bottomText, 0)
-                clearTooltip(dungeonFrame)
+                PsyKeystoneHelper:updateColourForDungeonScore(dungeonFrame.bottomText, 0)
+                PsyKeystoneHelper:clearTooltip(dungeonFrame)
             end
         end
 
@@ -306,7 +282,7 @@ function populatePlayerFrame(playerFrame, playerData)
 
     -- Player Score
     playerFrame.score:SetText("Score: " .. playerData.overallScore)
-    updateColourForOverallScore(playerFrame.score, playerData.overallScore)
+    PsyKeystoneHelper:updateColourForOverallScore(playerFrame.score, playerData.overallScore)
 
     -- Player Keystone
     if playerData.keystone == nil then
@@ -316,7 +292,7 @@ function populatePlayerFrame(playerFrame, playerData)
     else
         playerFrame.keystone.texture:SetTexture(playerData.keystone.texture)
         playerFrame.keystone.topText:SetText("+" .. playerData.keystone.level)
-        updateColourForKeyLevel(playerFrame.keystone.topText, playerData.keystone.level)
+        PsyKeystoneHelper:updateColourForKeyLevel(playerFrame.keystone.topText, playerData.keystone.level)
         playerFrame.keystone.bottomText:SetText(playerData.keystone.mapAbbreviation)
 
         playerData.keystone.keystoneFrame = playerFrame.keystone
@@ -341,12 +317,12 @@ function populatePlayerFrame(playerFrame, playerData)
             dungeonFrame.topText:SetTextColor(1, 1, 1)
             dungeonFrame.bottomText:SetText("")
             dungeonFrame.texture:SetDesaturated(true)
-            clearTooltip(dungeonFrame)
+            PsyKeystoneHelper:clearTooltip(dungeonFrame)
         else
             dungeonFrame.topText:SetText("+" .. dungeonScore.level)
-            updateColourForKeyLevel(dungeonFrame.topText, dungeonScore.level)
+            PsyKeystoneHelper:updateColourForKeyLevel(dungeonFrame.topText, dungeonScore.level)
             dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
-            updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
+            PsyKeystoneHelper:updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
             dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0)
             addDungeonBestTooltip(dungeonFrame, dungeonScore)
         end
@@ -359,7 +335,7 @@ function calculateTopKeyStones()
     local keystones = {}
     for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
         if playerData.keystone ~= nil then
-            playerData.keystone.scoreForLevel = ns.minTimeScorePerLevels[playerData.keystone.level]
+            playerData.keystone.scoreForLevel = PsyKeystoneHelper.minTimeScorePerLevels[playerData.keystone.level]
             playerData.keystone.owner = playerData.name
             playerData.keystone.ownerClassColour = C_ClassColor.GetClassColor(playerData.classFilename):GenerateHexColor()
             table.insert(keystones, playerData.keystone)
@@ -440,36 +416,25 @@ function calculateTopKeyStones()
 
         if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then
             topKeyFrame.topText:SetText("+" .. keystone.level)
-            updateColourForKeyLevel(topKeyFrame.topText, keystone.level)
+            PsyKeystoneHelper:updateColourForKeyLevel(topKeyFrame.topText, keystone.level)
             topKeyFrame.bottomText:SetText(keystone.gainedScore)
-            updateColourForDungeonScore(topKeyFrame.bottomText, keystone.gainedScore)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeyFrame.bottomText, keystone.gainedScore)
             topKeyFrame.texture:SetTexture(keystone.texture)
             topKeyFrame.texture:Show()
 
             addTopKeystoneTooltip(topKeyFrame, keystone)
         else
             topKeyFrame.topText:SetText("")
-            updateColourForDungeonScore(topKeyFrame.topText, 0)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeyFrame.topText, 0)
             topKeyFrame.bottomText:SetText("NONE")
-            updateColourForDungeonScore(topKeyFrame.bottomText, 0)
+            PsyKeystoneHelper:updateColourForDungeonScore(topKeyFrame.bottomText, 0)
             topKeyFrame.texture:SetTexture(237555)
             topKeyFrame.texture:Show()
-            clearTooltip(topKeyFrame)
+            PsyKeystoneHelper:clearTooltip(topKeyFrame)
 
             addTopKeystoneTooltip(topKeyFrame, nil)
         end
     end
-end
-
-function clearTooltip(frame)
-    frame:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
-        GameTooltip:ClearLines()
-        GameTooltip:Hide()
-    end)
-    frame:SetScript("OnLeave", function(self)
-        GameTooltip:Hide()
-    end)
 end
 
 function addTopKeystoneTooltip(topKeyFrame, keystone)
