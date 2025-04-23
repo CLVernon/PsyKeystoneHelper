@@ -21,8 +21,11 @@
 ## X-Curse-Project-ID: 1243679
 ## X-Wago-ID: 96dov5NO
 
-PsyKeystoneHelper.xml
+lib/Lib.xml
+
 PsyKeystoneHelper.lua
 
-KeystoneHelperFrame.xml
-KeystoneHelperFrame.lua
+func/ChatCommands.lua
+
+frame/KeystoneHelperFrame.xml
+frame/KeystoneHelperFrame.lua
