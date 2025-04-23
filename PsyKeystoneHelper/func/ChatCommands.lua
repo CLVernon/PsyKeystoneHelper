@@ -1,5 +1,4 @@
 local _, ns = ...
-
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
 
 function PsyKeystoneHelper:printChatCommands()
