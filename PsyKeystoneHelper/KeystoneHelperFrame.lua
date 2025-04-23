@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
+local firstLoad = true
 
 function KeystoneHelperFrame_OnLoad()
 	PsyKeystoneHelper.frame = KeystoneHelperFrame
@@ -9,7 +10,30 @@ function KeystoneHelperFrame_OnLoad()
 	--Assign child frames
 	KeystoneHelperFrame.title = title
 	KeystoneHelperFrame.status = status
+end
 
+function KeystoneHelperFrame_OnShow()
+	--Update title text
+	title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
+	status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
+
+	if firstLoad then
+		createFrameComponents()
+		firstLoad = false
+	end
+
+	ns:renderData()
+end
+
+function Button_ToggleSession_OnClick()
+	_G.PsyKeystoneHelper:toggleSessionStatus()
+end
+
+function Button_RequestData_OnClick()
+	_G.PsyKeystoneHelper:requestInformation()
+end
+
+function createFrameComponents()
 	--Setup Player Frame lookup
 	KeystoneHelperFrame.playerFrames = {}
 	KeystoneHelperFrame.playerFrames[1] = createPlayerFrame(1)
@@ -21,30 +45,12 @@ function KeystoneHelperFrame_OnLoad()
 	--Setup Top Keystone lookup
 	KeystoneHelperFrame.topKeystones = {}
 	createTopKeysFrame()
-
-	--Set defaults
-	KeystoneHelperFrame_OnShow()
 end
 
-function KeystoneHelperFrame_OnShow()
-	--Update title text
-	title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
-	status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
-
-	ns:displayPartyData()
-end
-
-function Button_ToggleSession_OnClick()
-	_G.PsyKeystoneHelper:toggleSessionStatus()
-end
-
-function Button_RequestData_OnClick()
-	_G.PsyKeystoneHelper:requestInformation()
-end
-
-function ns:displayPartyData()
-	local debugMode = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode
-	local hasData = PsyKeystoneHelper.db ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
+function ns:renderData()
+	local profileAvailable = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile ~= nil
+	local debugMode = profileAvailable and PsyKeystoneHelper.db.profile.debugMode
+	local hasData = profileAvailable and PsyKeystoneHelper.db.profile.keystoneCache ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
 	PsyKeystoneHelper:DebugPrint("Displaying party data...")
 
 	--Default frames
@@ -70,7 +76,7 @@ end
 
 function createString(parent, template, size, defaultText)
 	local string  = parent:CreateFontString(nil, "OVERLAY", template)
-	string:SetFont("Fonts\2002B.ttf", size, "OUTLINE")
+	string:SetFont("Fonts/2002B.ttf", size, "OUTLINE")
 	string:SetTextHeight(size)
 	string:SetTextColor(1,1,1)
 	string:SetText(defaultText)
@@ -114,15 +120,12 @@ function createTopKeysFrame()
 end
 
 function createPlayerFrame(index)
-
 	--Frame
 	local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
 	playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125  - (50 * (index - 1)))
 	playerFrame:SetSize(515, 50)
 
 	--Version Indicator
-	--playerFrame.version = CreateFrame("frame", "player_frame_version" .. index, playerFrame, "")
-	--playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
 	playerFrame.version = createString(playerFrame, "GameFontHighlight", 8, "X")
 	playerFrame.version:SetTextColor(1,0,0)
 	playerFrame.version:SetPoint("LEFT", playerFrame, "LEFT", 0, 0)
@@ -555,6 +558,10 @@ function checkVersion(versionText, playerVersion)
 end
 
 function intifyVersion(versionString)
+	if versionString == nil or versionString == "" then
+		return 0
+	end
+
 	local versionInt = string.gsub(versionString, "%.", "")
 	if string.find(versionInt, "-beta") then
 		versionInt = string.gsub(versionInt, "-beta", "2")
