@@ -160,7 +160,7 @@ function createPlayerFrame(index)
 		dungeonFrame:SetPoint("LEFT", playerFrame, "LEFT", 165 + ((i - 1) * 45), 0)
 		playerFrame.dungeonScores[i] = dungeonFrame
 
-		local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[i])
+		local mapName, _, _, texture, _ = C_ChallengeMode.GetMapUIInfo(challengeModeIDs[i])
 		dungeonFrame.texture:SetTexture(texture)
 		dungeonFrame.challengeModeID = challengeModeIDs[i]
 
