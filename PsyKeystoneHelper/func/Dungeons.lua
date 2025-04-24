@@ -54,3 +54,25 @@ PsyKeystoneHelper.minTimeScorePerLevels = {
     [38] = 755,
     [39] = 770,
 }
+
+-- Dungeon teleport spell ids
+local siegeID = nil
+local motherloadId = nil
+local factionGroup = UnitFactionGroup("player")
+if factionGroup == "Horde" then
+    siegeID = 464256
+    motherloadId = 467555
+elseif factionGroup == "Alliance" then
+    siegeID = 445418
+    motherloadId = 467553
+end
+PsyKeystoneHelper.dungeonSpellIds = {
+    ["Cinderbrew Meadery"] = 445440,
+    ["Darkflame Cleft"] = 445441,
+    ["Operation: Floodgate"] = 1216786,
+    ["The MOTHERLODE!!"] = motherloadId,
+    ["Priory of the Sacred Flame"] = 445444,
+    ["The Rookery"] = 445443,
+    ["Theater of Pain"] = 354467,
+    ["Operation: Mechagon - Workshop"] = 373274,
+}

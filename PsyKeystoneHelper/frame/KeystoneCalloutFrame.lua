@@ -54,7 +54,7 @@ function KeystoneCallout:createFrameComponents()
     KeystoneCalloutFrame.text = PsyKeystoneHelper:createString(KeystoneCalloutFrame, "GameFontHighlight", 14, "")
     KeystoneCalloutFrame.text:SetPoint("TOP", KeystoneCalloutFrame, "TOP", 0, -20)
 
-    KeystoneCalloutFrame.keystone = PsyKeystoneHelper:createKeystoneFrame(KeystoneCalloutFrame, 60, 18)
+    KeystoneCalloutFrame.keystone = PsyKeystoneHelper:createKeystoneButton(KeystoneCalloutFrame, 60, 18)
     KeystoneCalloutFrame.keystone:SetPoint("CENTER", KeystoneCalloutFrame, "CENTER", 0, 5)
 end
 
@@ -65,6 +65,7 @@ function KeystoneCallout:populateCalloutFrames(keystoneCallout)
         KeystoneCalloutFrame.keystone.topText:SetText("")
         PsyKeystoneHelper:updateColourForKeyLevel(KeystoneCalloutFrame.keystone.topText, 0)
         KeystoneCalloutFrame.keystone.bottomText:SetText("")
+        KeystoneCalloutFrame.keystone:SetAttribute("spell", 0)
     else
         local callerClassColour = C_ClassColor.GetClassColor(keystoneCallout.callerClassFilename):GenerateHexColor()
         KeystoneCalloutFrame.text:SetText("|c" .. callerClassColour .. keystoneCallout.caller .. "|r has called a dungeon:")
@@ -72,6 +73,7 @@ function KeystoneCallout:populateCalloutFrames(keystoneCallout)
         KeystoneCalloutFrame.keystone.topText:SetText("+" .. keystoneCallout.keystone.level)
         PsyKeystoneHelper:updateColourForKeyLevel(KeystoneCalloutFrame.keystone.topText, keystoneCallout.keystone.level)
         KeystoneCalloutFrame.keystone.bottomText:SetText(keystoneCallout.keystone.mapAbbreviation)
+        KeystoneCalloutFrame.keystone:SetAttribute("spell", PsyKeystoneHelper.dungeonSpellIds[keystoneCallout.keystone.mapName] or 0)
     end
 end
 

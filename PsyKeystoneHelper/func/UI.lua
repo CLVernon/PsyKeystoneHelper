@@ -52,6 +52,63 @@ function PsyKeystoneHelper:createKeystoneFrame(parent, size, fontSize)
     return keystoneFrame
 end
 
+function PsyKeystoneHelper:createKeystoneButton(parent, size, fontSize)
+    local keystoneFrame = CreateFrame("button", nil, parent, "SecureActionButtonTemplate")
+    keystoneFrame:SetSize(size, size)
+
+    keystoneFrame.texture = keystoneFrame:CreateTexture()
+    keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+    keystoneFrame.texture:SetAllPoints(keystoneFrame)
+
+    keystoneFrame.topText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", fontSize, "")
+    keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 0)
+
+    keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", fontSize, "")
+    keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
+
+    keystoneFrame:RegisterForClicks("AnyDown", "AnyUp")
+    keystoneFrame:SetAttribute("type", "spell")
+    keystoneFrame:SetAttribute("spell", 0)
+
+    keystoneFrame:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+        GameTooltip:ClearLines()
+
+        local spellId = keystoneFrame:GetAttribute("spell")
+        if spellId == 0 then
+            GameTooltip:Hide()
+        else
+            GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("left") .. " Teleport to dungeon")
+
+            if IsSpellKnown(spellId) then
+                local spellCooldownInfo = C_Spell.GetSpellCooldown(spellId)
+                if spellCooldownInfo then
+                    local startTime = spellCooldownInfo.startTime
+                    local duration = spellCooldownInfo.duration
+                    local isEnabled = spellCooldownInfo.isEnabled
+                    local remaining = max(0, (startTime + duration) - GetTime())
+                    if isEnabled and remaining > 5 then
+                        GameTooltip:AddLine("")
+                        GameTooltip:AddLine("|cFF6F0000Dungeon teleport is on cooldown!|r")
+                    end
+                end
+            else
+                GameTooltip:AddLine("")
+                GameTooltip:AddLine("|cFFFF0000Dungeon teleport not known :(|r")
+            end
+
+            GameTooltip:Show()
+        end
+
+    end)
+
+    keystoneFrame:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    return keystoneFrame
+end
+
 ------------------------------------------------------------------------------------------------------------------------
 --- UI Alters
 ------------------------------------------------------------------------------------------------------------------------

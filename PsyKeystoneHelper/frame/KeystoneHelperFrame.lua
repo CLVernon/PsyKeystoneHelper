@@ -82,18 +82,15 @@ function KeystoneHelper:createTopKeysFrame()
 
     local topKey1 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
     KeystoneHelperFrame.topKeystones[1] = topKey1
-    topKey1:SetSize(50, 50)
-    topKey1:SetPoint("CENTER", topKeysFrame, "CENTER", -60, 0)
+    topKey1:SetPoint("CENTER", topKeysFrame, "CENTER", -70, 0)
 
     local topKey2 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
     KeystoneHelperFrame.topKeystones[2] = topKey2
-    topKey2:SetSize(50, 50)
     topKey2:SetPoint("CENTER", topKeysFrame, "CENTER", 0, 0)
 
     local topKey3 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
     KeystoneHelperFrame.topKeystones[3] = topKey3
-    topKey3:SetSize(50, 50)
-    topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 60, 0)
+    topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 70, 0)
 end
 
 function KeystoneHelper:createPlayerFrame(index)
@@ -420,6 +417,7 @@ function KeystoneHelper:calculateTopKeyStones()
             PsyKeystoneHelper:clearTooltip(topKeyFrame)
 
             KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, nil)
+            PsyKeystoneHelper:clearClickListener(topKeyFrame)
         end
     end
 end
@@ -427,8 +425,6 @@ end
 function KeystoneHelper:addActionsToTopKeystone(topKeyFrame, keystone)
     topKeyFrame:SetScript("OnMouseDown", function(self, button)
         if button == "LeftButton" then
-            --PsyKeystoneHelper:teleport(keystone)
-        elseif button == "RightButton" then
             PsyKeystoneHelper:calloutKey(keystone)
         end
     end)
@@ -453,8 +449,7 @@ function KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, keystone)
                 GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
             end
             GameTooltip:AddLine(" ")
-            --GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("left") .. " Teleport to dungeon")
-            GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("right") .. " Callout dungeon to party")
+            GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("left") .. " Callout dungeon to party")
         end
 
         GameTooltip:Show()
