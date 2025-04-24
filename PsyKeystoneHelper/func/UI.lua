@@ -35,6 +35,23 @@ function PsyKeystoneHelper:createString(parent, template, size, defaultText)
     return string
 end
 
+function PsyKeystoneHelper:createKeystoneFrame(parent)
+    local keystoneFrame = CreateFrame("frame", nil, parent, "")
+    keystoneFrame:SetSize(40, 40)
+
+    keystoneFrame.texture = keystoneFrame:CreateTexture()
+    keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+    keystoneFrame.texture:SetAllPoints(keystoneFrame)
+
+    keystoneFrame.topText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+    keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 0)
+
+    keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+    keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
+
+    return keystoneFrame
+end
+
 ------------------------------------------------------------------------------------------------------------------------
 --- UI Alters
 ------------------------------------------------------------------------------------------------------------------------
@@ -66,5 +83,14 @@ function PsyKeystoneHelper:clearTooltip(frame)
     end)
     frame:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
+    end)
+end
+
+------------------------------------------------------------------------------------------------------------------------
+--- Click Events
+------------------------------------------------------------------------------------------------------------------------
+
+function PsyKeystoneHelper:clearClickListener(frame)
+    frame:SetScript("OnMouseDown", function(self, button)
     end)
 end

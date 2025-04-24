@@ -1,6 +1,7 @@
 local _, ns = ...
 
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
+local KeystoneHelper = {}
 local firstLoad = true
 
 function KeystoneHelperFrame_OnLoad()
@@ -18,7 +19,7 @@ function KeystoneHelperFrame_OnShow()
     status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
 
     if firstLoad then
-        createFrameComponents()
+        KeystoneHelper:createFrameComponents()
         firstLoad = false
     end
 
@@ -33,18 +34,18 @@ function Button_RequestData_OnClick()
     PsyKeystoneHelper:requestInformation()
 end
 
-function createFrameComponents()
+function KeystoneHelper:createFrameComponents()
     --Setup Player Frame lookup
     KeystoneHelperFrame.playerFrames = {}
-    KeystoneHelperFrame.playerFrames[1] = createPlayerFrame(1)
-    KeystoneHelperFrame.playerFrames[2] = createPlayerFrame(2)
-    KeystoneHelperFrame.playerFrames[3] = createPlayerFrame(3)
-    KeystoneHelperFrame.playerFrames[4] = createPlayerFrame(4)
-    KeystoneHelperFrame.playerFrames[5] = createPlayerFrame(5)
+    KeystoneHelperFrame.playerFrames[1] = KeystoneHelper:createPlayerFrame(1)
+    KeystoneHelperFrame.playerFrames[2] = KeystoneHelper:createPlayerFrame(2)
+    KeystoneHelperFrame.playerFrames[3] = KeystoneHelper:createPlayerFrame(3)
+    KeystoneHelperFrame.playerFrames[4] = KeystoneHelper:createPlayerFrame(4)
+    KeystoneHelperFrame.playerFrames[5] = KeystoneHelper:createPlayerFrame(5)
 
     --Setup Top Keystone lookup
     KeystoneHelperFrame.topKeystones = {}
-    createTopKeysFrame()
+    KeystoneHelper:createTopKeysFrame()
 end
 
 function ns:renderKeystoneHelperFrame()
@@ -54,8 +55,8 @@ function ns:renderKeystoneHelperFrame()
     PsyKeystoneHelper:DebugPrint("Displaying party data...")
 
     --Default frames
-    defaultTopKeystones(hasData, debugMode)
-    defaultPlayerFrames(hasData, debugMode)
+    KeystoneHelper:defaultTopKeystones(hasData, debugMode)
+    KeystoneHelper:defaultPlayerFrames(hasData, debugMode)
 
     --Now populate with actual data
     if hasData then
@@ -65,37 +66,37 @@ function ns:renderKeystoneHelperFrame()
 
         local index = 1
         for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
-            populatePlayerFrame(KeystoneHelperFrame.playerFrames[index], playerData)
+            KeystoneHelper:populatePlayerFrame(KeystoneHelperFrame.playerFrames[index], playerData)
             index = index + 1
         end
 
-        calculateTopKeyStones()
+        KeystoneHelper:calculateTopKeyStones()
     end
 
 end
 
-function createTopKeysFrame()
+function KeystoneHelper:createTopKeysFrame()
     local topKeysFrame = CreateFrame("frame", "TopKeysFrame", KeystoneHelperFrame, "")
     topKeysFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -30)
     topKeysFrame:SetSize(515, 70)
 
-    local topKey1 = createKeystoneFrame(topKeysFrame)
+    local topKey1 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame)
     KeystoneHelperFrame.topKeystones[1] = topKey1
     topKey1:SetSize(50, 50)
     topKey1:SetPoint("CENTER", topKeysFrame, "CENTER", -60, 0)
 
-    local topKey2 = createKeystoneFrame(topKeysFrame)
+    local topKey2 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame)
     KeystoneHelperFrame.topKeystones[2] = topKey2
     topKey2:SetSize(50, 50)
     topKey2:SetPoint("CENTER", topKeysFrame, "CENTER", 0, 0)
 
-    local topKey3 = createKeystoneFrame(topKeysFrame)
+    local topKey3 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame)
     KeystoneHelperFrame.topKeystones[3] = topKey3
     topKey3:SetSize(50, 50)
     topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 60, 0)
 end
 
-function createPlayerFrame(index)
+function KeystoneHelper:createPlayerFrame(index)
     --Frame
     local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
     playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125 - (50 * (index - 1)))
@@ -115,7 +116,7 @@ function createPlayerFrame(index)
     playerFrame.score:SetPoint("LEFT", playerFrame, "LEFT", 10, -5)
 
     --Current Key
-    playerFrame.keystone = createKeystoneFrame(playerFrame)
+    playerFrame.keystone = PsyKeystoneHelper:createKeystoneFrame(playerFrame)
     playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 110, 0)
     if index == 1 then
         local keystoneColumnTitle = PsyKeystoneHelper:createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
@@ -134,7 +135,7 @@ function createPlayerFrame(index)
     end)
     playerFrame.dungeonScores = {}
     for i = 1, #challengeModeIDs do
-        local dungeonFrame = createKeystoneFrame(playerFrame)
+        local dungeonFrame = PsyKeystoneHelper:createKeystoneFrame(playerFrame)
         dungeonFrame:SetPoint("LEFT", playerFrame, "LEFT", 165 + ((i - 1) * 45), 0)
         playerFrame.dungeonScores[i] = dungeonFrame
 
@@ -156,24 +157,7 @@ function createPlayerFrame(index)
     return playerFrame
 end
 
-function createKeystoneFrame(parent)
-    local keystoneFrame = CreateFrame("frame", nil, parent, "")
-    keystoneFrame:SetSize(40, 40)
-
-    keystoneFrame.texture = keystoneFrame:CreateTexture()
-    keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
-    keystoneFrame.texture:SetAllPoints(keystoneFrame)
-
-    keystoneFrame.topText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
-    keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 0)
-
-    keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
-    keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
-
-    return keystoneFrame
-end
-
-function defaultTopKeystones(hasData, debugMode)
+function KeystoneHelper:defaultTopKeystones(hasData, debugMode)
     for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
         if hasData or debugMode then
             topKeystone.topText:SetText("")
@@ -183,6 +167,7 @@ function defaultTopKeystones(hasData, debugMode)
             topKeystone.texture:SetTexture(237555)
             topKeystone.texture:Show()
             PsyKeystoneHelper:clearTooltip(topKeystone)
+            PsyKeystoneHelper:clearClickListener(topKeystone)
         else
             topKeystone.topText:SetText("")
             PsyKeystoneHelper:updateColourForDungeonScore(topKeystone.topText, 0)
@@ -191,11 +176,12 @@ function defaultTopKeystones(hasData, debugMode)
             topKeystone.texture:SetTexture(237555)
             topKeystone.texture:Hide()
             PsyKeystoneHelper:clearTooltip(topKeystone)
+            PsyKeystoneHelper:clearClickListener(topKeystone)
         end
     end
 end
 
-function defaultPlayerFrames(hasData, debugMode)
+function KeystoneHelper:defaultPlayerFrames(hasData, debugMode)
     local index = 1
 
     --Display column titles
@@ -269,7 +255,7 @@ function defaultPlayerFrames(hasData, debugMode)
     end
 end
 
-function populatePlayerFrame(playerFrame, playerData)
+function KeystoneHelper:populatePlayerFrame(playerFrame, playerData)
     -- Player Name
     playerFrame.name:SetText(playerData.name)
     if playerData.classFilename ~= nil then
@@ -278,7 +264,7 @@ function populatePlayerFrame(playerFrame, playerData)
     end
 
     -- Player version
-    checkVersion(playerFrame.version, playerData.version)
+    KeystoneHelper:checkVersion(playerFrame.version, playerData.version)
 
     -- Player Score
     playerFrame.score:SetText("Score: " .. playerData.overallScore)
@@ -297,7 +283,7 @@ function populatePlayerFrame(playerFrame, playerData)
 
         playerData.keystone.keystoneFrame = playerFrame.keystone
     end
-    addKeystoneTooltip(playerFrame.keystone, playerData.keystone)
+    KeystoneHelper:addKeystoneTooltip(playerFrame.keystone, playerData.keystone)
     playerFrame.keystone.texture:Show()
 
     -- Player Dungeon Score
@@ -324,13 +310,13 @@ function populatePlayerFrame(playerFrame, playerData)
             dungeonFrame.bottomText:SetText(dungeonScore.dungeonScore)
             PsyKeystoneHelper:updateColourForDungeonScore(dungeonFrame.bottomText, dungeonScore.dungeonScore)
             dungeonFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0)
-            addDungeonBestTooltip(dungeonFrame, dungeonScore)
+            KeystoneHelper:addDungeonBestTooltip(dungeonFrame, dungeonScore)
         end
     end
 
 end
 
-function calculateTopKeyStones()
+function KeystoneHelper:calculateTopKeyStones()
     --Update data of keystone and add to a simple table
     local keystones = {}
     for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
@@ -422,7 +408,8 @@ function calculateTopKeyStones()
             topKeyFrame.texture:SetTexture(keystone.texture)
             topKeyFrame.texture:Show()
 
-            addTopKeystoneTooltip(topKeyFrame, keystone)
+            KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, keystone)
+            KeystoneHelper:addActionsToTopKeystone(topKeyFrame, keystone)
         else
             topKeyFrame.topText:SetText("")
             PsyKeystoneHelper:updateColourForDungeonScore(topKeyFrame.topText, 0)
@@ -432,12 +419,22 @@ function calculateTopKeyStones()
             topKeyFrame.texture:Show()
             PsyKeystoneHelper:clearTooltip(topKeyFrame)
 
-            addTopKeystoneTooltip(topKeyFrame, nil)
+            KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, nil)
         end
     end
 end
 
-function addTopKeystoneTooltip(topKeyFrame, keystone)
+function KeystoneHelper:addActionsToTopKeystone(topKeyFrame, keystone)
+    topKeyFrame:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" then
+            --PsyKeystoneHelper:teleport(keystone)
+        elseif button == "RightButton" then
+            --PsyKeystoneHelper:calloutKey(keystone, GetUnitName("player"))
+        end
+    end)
+end
+
+function KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, keystone)
     topKeyFrame:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
         GameTooltip:ClearLines()
@@ -455,6 +452,9 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
             for _, player in pairs(keystone.playerUpgrades) do
                 GameTooltip:AddLine("|c" .. player.classColour .. player.name .. "|r: |cFFFFFFFF" .. player.gainedScore .. "|r")
             end
+            GameTooltip:AddLine(" ")
+            --GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("left") .. " Teleport to dungeon")
+            --GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("right") .. " Callout dungeon to party")
         end
 
         GameTooltip:Show()
@@ -465,7 +465,7 @@ function addTopKeystoneTooltip(topKeyFrame, keystone)
     end)
 end
 
-function addKeystoneTooltip(keystoneFrame, keystone)
+function KeystoneHelper:addKeystoneTooltip(keystoneFrame, keystone)
     keystoneFrame:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
         GameTooltip:ClearLines()
@@ -486,7 +486,7 @@ function addKeystoneTooltip(keystoneFrame, keystone)
     end)
 end
 
-function addDungeonBestTooltip(dungeonBestFrame, scoreInfo)
+function KeystoneHelper:addDungeonBestTooltip(dungeonBestFrame, scoreInfo)
     dungeonBestFrame:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
         GameTooltip:ClearLines()
@@ -502,8 +502,8 @@ function addDungeonBestTooltip(dungeonBestFrame, scoreInfo)
     end)
 end
 
-function checkVersion(versionText, playerVersion)
-    local oldVersion = intifyVersion(playerVersion) < intifyVersion(PsyKeystoneHelper.v)
+function KeystoneHelper:checkVersion(versionText, playerVersion)
+    local oldVersion = PsyKeystoneHelper:isOldVersion(playerVersion)
 
     if oldVersion then
         versionText:SetText("X")
@@ -528,20 +528,4 @@ function checkVersion(versionText, playerVersion)
             GameTooltip:Hide()
         end)
     end
-end
-
-function intifyVersion(versionString)
-    if versionString == nil or versionString == "" then
-        return 0
-    end
-
-    local versionInt = string.gsub(versionString, "%.", "")
-    if string.find(versionInt, "-beta") then
-        versionInt = string.gsub(versionInt, "-beta", "2")
-    elseif string.find(versionInt, "-alpha") then
-        versionInt = string.gsub(versionInt, "-alpha", "1")
-    else
-        versionInt = versionInt .. "3"
-    end
-    return tonumber(versionInt)
 end

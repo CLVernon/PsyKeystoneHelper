@@ -13,9 +13,15 @@ local function HandleComm(prefix, message, distribution, sender)
         PsyKeystoneHelper:receiveInformation(messageObj.obj)
     elseif messageObj.type == "REQUEST" then
         PsyKeystoneHelper:sendInformation()
+    elseif messageObj.type == "KEY_CALL" then
+        PsyKeystoneHelper:receiveCalloutKey(messageObj.obj)
     end
 end
 AceComm:RegisterComm("PsyKeyStone", HandleComm)
+
+------------------------------------------------------------------------------------------------------------------------
+--- Communication for passing around party data
+------------------------------------------------------------------------------------------------------------------------
 
 function PsyKeystoneHelper:requestInformation()
     PsyKeystoneHelper:DebugPrint("Requesting data from party...")
@@ -72,7 +78,6 @@ function PsyKeystoneHelper:sendInformation()
             level = C_MythicPlus.GetOwnedKeystoneLevel(),
             texture = texture,
             backgroundTexture = backgroundTexture,
-            itemLink = nil, --todo
             mapName = mapName,
             mapAbbreviation = PsyKeystoneHelper.dungeonAbbreviations[mapName] or mapName
         }
@@ -148,4 +153,34 @@ function PsyKeystoneHelper:sortInformation()
             table.remove(PsyKeystoneHelper.db.profile.keystoneCache, indexToRemove)
         end
     end
+end
+
+------------------------------------------------------------------------------------------------------------------------
+--- Keystone Callout Communication
+------------------------------------------------------------------------------------------------------------------------
+
+function PsyKeystoneHelper:calloutKey(keystone, caller)
+    PsyKeystoneHelper:DebugPrint("Calling out selected keystone...")
+
+    local keystoneCallout = {
+        keystone = {
+            texture = keystone.texture,
+            mapName = keystone.mapName,
+            mapAbbreviation = keystone.mapAbbreviation,
+            level = keystone.level,
+            owner = keystone.ownedChallengeMapId,
+            ownerClassColour = keystone.ownerClassColour
+        },
+        caller = caller
+    }
+
+    AceComm:SendCommMessage("PsyKeyStone", LibAceSerializer:Serialize({
+        type = "KEY_CALL",
+        obj = keystoneCallout
+    }), "PARTY", UnitName("player"))
+end
+
+function PsyKeystoneHelper:receiveCalloutKey(keystoneCallout)
+    PsyKeystoneHelper:DebugPrint("Received keystone callout from " .. keystoneCallout.caller)
+    ns.KeystoneCallout:show(keystoneCallout)
 end
