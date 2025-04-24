@@ -89,7 +89,7 @@ function PsyKeystoneHelper:createKeystoneButton(parent, size, fontSize)
                     local remaining = max(0, (startTime + duration) - GetTime())
                     if isEnabled and remaining > 5 then
                         GameTooltip:AddLine("")
-                        GameTooltip:AddLine("|cFF6F0000Dungeon teleport is on cooldown!|r")
+                        GameTooltip:AddLine("|cFFFF0000Dungeon teleport is on cooldown!|r")
                     end
                 end
             else

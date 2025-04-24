@@ -281,6 +281,7 @@ function KeystoneHelper:populatePlayerFrame(playerFrame, playerData)
         playerData.keystone.keystoneFrame = playerFrame.keystone
     end
     KeystoneHelper:addKeystoneTooltip(playerFrame.keystone, playerData.keystone)
+    KeystoneHelper:addCalloutActionToKeystoneFrame(playerFrame.keystone, playerData.keystone)
     playerFrame.keystone.texture:Show()
 
     -- Player Dungeon Score
@@ -406,7 +407,7 @@ function KeystoneHelper:calculateTopKeyStones()
             topKeyFrame.texture:Show()
 
             KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, keystone)
-            KeystoneHelper:addActionsToTopKeystone(topKeyFrame, keystone)
+            KeystoneHelper:addCalloutActionToKeystoneFrame(topKeyFrame, keystone)
         else
             topKeyFrame.topText:SetText("")
             PsyKeystoneHelper:updateColourForDungeonScore(topKeyFrame.topText, 0)
@@ -422,12 +423,14 @@ function KeystoneHelper:calculateTopKeyStones()
     end
 end
 
-function KeystoneHelper:addActionsToTopKeystone(topKeyFrame, keystone)
-    topKeyFrame:SetScript("OnMouseDown", function(self, button)
-        if button == "LeftButton" then
-            PsyKeystoneHelper:calloutKey(keystone)
-        end
-    end)
+function KeystoneHelper:addCalloutActionToKeystoneFrame(topKeyFrame, keystone)
+    if keystone ~= nil then
+        topKeyFrame:SetScript("OnMouseDown", function(self, button)
+            if button == "LeftButton" then
+                PsyKeystoneHelper:calloutKey(keystone)
+            end
+        end)
+    end
 end
 
 function KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, keystone)
@@ -471,6 +474,8 @@ function KeystoneHelper:addKeystoneTooltip(keystoneFrame, keystone)
             GameTooltip:AddLine("|cFFFFFFFF" .. keystone.mapName .. "|r")
             GameTooltip:AddLine("Level: |c" .. C_ChallengeMode.GetKeystoneLevelRarityColor(keystone.level):GenerateHexColor() .. keystone.level .. "|r")
             GameTooltip:AddLine("Available Score: |c" .. C_ChallengeMode.GetSpecificDungeonScoreRarityColor(keystone.scoreForLevel):GenerateHexColor() .. keystone.scoreForLevel .. "|r")
+            GameTooltip:AddLine(" ")
+            GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("left") .. " Callout dungeon to party")
         end
 
         GameTooltip:Show()
