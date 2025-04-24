@@ -80,17 +80,17 @@ function KeystoneHelper:createTopKeysFrame()
     topKeysFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -30)
     topKeysFrame:SetSize(515, 70)
 
-    local topKey1 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame)
+    local topKey1 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
     KeystoneHelperFrame.topKeystones[1] = topKey1
     topKey1:SetSize(50, 50)
     topKey1:SetPoint("CENTER", topKeysFrame, "CENTER", -60, 0)
 
-    local topKey2 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame)
+    local topKey2 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
     KeystoneHelperFrame.topKeystones[2] = topKey2
     topKey2:SetSize(50, 50)
     topKey2:SetPoint("CENTER", topKeysFrame, "CENTER", 0, 0)
 
-    local topKey3 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame)
+    local topKey3 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
     KeystoneHelperFrame.topKeystones[3] = topKey3
     topKey3:SetSize(50, 50)
     topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 60, 0)
@@ -116,7 +116,7 @@ function KeystoneHelper:createPlayerFrame(index)
     playerFrame.score:SetPoint("LEFT", playerFrame, "LEFT", 10, -5)
 
     --Current Key
-    playerFrame.keystone = PsyKeystoneHelper:createKeystoneFrame(playerFrame)
+    playerFrame.keystone = PsyKeystoneHelper:createKeystoneFrame(playerFrame, 40, 12)
     playerFrame.keystone:SetPoint("LEFT", playerFrame, "LEFT", 110, 0)
     if index == 1 then
         local keystoneColumnTitle = PsyKeystoneHelper:createString(playerFrame.keystone, "GameFontHighlight", 12, "KEY")
@@ -135,7 +135,7 @@ function KeystoneHelper:createPlayerFrame(index)
     end)
     playerFrame.dungeonScores = {}
     for i = 1, #challengeModeIDs do
-        local dungeonFrame = PsyKeystoneHelper:createKeystoneFrame(playerFrame)
+        local dungeonFrame = PsyKeystoneHelper:createKeystoneFrame(playerFrame, 40, 12)
         dungeonFrame:SetPoint("LEFT", playerFrame, "LEFT", 165 + ((i - 1) * 45), 0)
         playerFrame.dungeonScores[i] = dungeonFrame
 
@@ -429,7 +429,7 @@ function KeystoneHelper:addActionsToTopKeystone(topKeyFrame, keystone)
         if button == "LeftButton" then
             --PsyKeystoneHelper:teleport(keystone)
         elseif button == "RightButton" then
-            --PsyKeystoneHelper:calloutKey(keystone, GetUnitName("player"))
+            PsyKeystoneHelper:calloutKey(keystone)
         end
     end)
 end
@@ -454,7 +454,7 @@ function KeystoneHelper:addTopKeystoneTooltip(topKeyFrame, keystone)
             end
             GameTooltip:AddLine(" ")
             --GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("left") .. " Teleport to dungeon")
-            --GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("right") .. " Callout dungeon to party")
+            GameTooltip:AddLine(PsyKeystoneHelper:getMouseIconTooltipMarkup("right") .. " Callout dungeon to party")
         end
 
         GameTooltip:Show()

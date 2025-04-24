@@ -159,8 +159,11 @@ end
 --- Keystone Callout Communication
 ------------------------------------------------------------------------------------------------------------------------
 
-function PsyKeystoneHelper:calloutKey(keystone, caller)
+function PsyKeystoneHelper:calloutKey(keystone)
     PsyKeystoneHelper:DebugPrint("Calling out selected keystone...")
+
+    -- Get class properties
+    local _, classFilename, _ = UnitClass("player")
 
     local keystoneCallout = {
         keystone = {
@@ -171,7 +174,8 @@ function PsyKeystoneHelper:calloutKey(keystone, caller)
             owner = keystone.ownedChallengeMapId,
             ownerClassColour = keystone.ownerClassColour
         },
-        caller = caller
+        caller = UnitName("player"),
+        callerClassFilename = classFilename
     }
 
     AceComm:SendCommMessage("PsyKeyStone", LibAceSerializer:Serialize({

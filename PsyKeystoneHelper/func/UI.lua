@@ -35,18 +35,18 @@ function PsyKeystoneHelper:createString(parent, template, size, defaultText)
     return string
 end
 
-function PsyKeystoneHelper:createKeystoneFrame(parent)
+function PsyKeystoneHelper:createKeystoneFrame(parent, size, fontSize)
     local keystoneFrame = CreateFrame("frame", nil, parent, "")
-    keystoneFrame:SetSize(40, 40)
+    keystoneFrame:SetSize(size, size)
 
     keystoneFrame.texture = keystoneFrame:CreateTexture()
     keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
     keystoneFrame.texture:SetAllPoints(keystoneFrame)
 
-    keystoneFrame.topText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+    keystoneFrame.topText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", fontSize, "")
     keystoneFrame.topText:SetPoint("TOP", keystoneFrame, "TOP", 0, 0)
 
-    keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", 12, "")
+    keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", fontSize, "")
     keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
 
     return keystoneFrame
