@@ -378,7 +378,7 @@ function KeystoneHelper:calculateTopKeyStones()
 
             --Mark keystone for reroll in no gained score and rolling to another key of same level would result in score
             if rerollingGood then
-                keystone.keystoneFrame.texture:SetTexture([[Interface\AddOns\PsyKeystoneHelper\reroll_keystone]])
+                keystone.keystoneFrame.texture:SetTexture([[Interface\AddOns\PsyKeystoneHelper\img\reroll_keystone]])
             else
                 keystone.keystoneFrame.topText:SetText("DEAD")
                 keystone.keystoneFrame.topText:SetTextColor(1, 1, 1)
