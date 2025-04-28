@@ -49,7 +49,7 @@ function KeystoneHelper:createFrameComponents()
 
     --Setup version check string
     KeystoneHelper.versionCheckText = PsyKeystoneHelper:createString(PKH_KeystoneHelperFrame, "GameFontHighlight", 10, "")
-    KeystoneHelper.versionCheckText:SetPoint("BOTTOM", PKH_KeystoneHelperFrame, "BOTTOM", 0, 20)
+    KeystoneHelper.versionCheckText:SetPoint("BOTTOM", PKH_KeystoneHelperFrame, "BOTTOM", 0, -20)
     KeystoneHelper.versionCheckText:SetTextColor(1, 0, 0)
 end
 
@@ -89,7 +89,7 @@ function ns:renderKeystoneHelperFrame()
             end
         end
         if higherVersionFound then
-            KeystoneHelper.versionCheckText:SetText("Addon version out of date. Please download the latest update on Curseforge or Wago.")
+            KeystoneHelper.versionCheckText:SetText("Out of date version detected. Please download the latest update on Curseforge or Wago.")
         end
     else
         KeystoneHelper.versionCheckText:SetText("")
