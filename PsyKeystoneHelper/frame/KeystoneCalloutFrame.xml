@@ -1,7 +1,7 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="KeystoneCalloutFrame.lua"/>
-    <Frame name="KeystoneCalloutFrame" inherits="BackdropTemplate" parent="UIParent" toplevel="true" movable="true"
+    <Frame name="PKH_KeystoneCalloutFrame" inherits="BackdropTemplate" parent="UIParent" toplevel="true" movable="true"
            clampedToScreen="true">
         <Size x="350" y="150"/>
         <Anchors>
@@ -13,21 +13,21 @@
             <KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global"/>
         </KeyValues>
         <Frames>
-            <Button name="CloseButton" inherits="UIPanelButtonTemplate" text="Close">
+            <Button name="PKH_CloseButton" inherits="UIPanelButtonTemplate" text="Close">
                 <Size x="90" y="30"/>
                 <Anchors>
                     <Anchor y="15" point="BOTTOM"/>
                 </Anchors>
                 <Scripts>
                     <OnClick>
-                        CloseButton_OnClick()
+                        PKH_CloseButton_OnClick()
                     </OnClick>
                 </Scripts>
             </Button>
         </Frames>
         <Scripts>
             <OnLoad inherit="prepend">
-                KeystoneCalloutFrame_OnLoad()
+                PKH_KeystoneCalloutFrame_OnLoad()
                 self:RegisterForDrag("LeftButton")
             </OnLoad>
             <OnDragStart>

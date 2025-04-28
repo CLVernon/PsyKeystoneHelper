@@ -5,11 +5,11 @@ ns.ReminderPopup = ReminderPopup
 
 local firstLoad = true
 
-function ReminderFrame_OnLoad()
-    ReminderFrame:Hide()
+function PKH_ReminderFrame_OnLoad()
+    PKH_ReminderFrame:Hide()
 end
 
-function CloseButton_OnClick()
+function PKH_Reminder_CloseButton_OnClick()
     ReminderPopup:hide()
 end
 
@@ -22,8 +22,8 @@ function ReminderPopup:maybeInit()
 end
 
 function ReminderPopup:hide()
-    if ReminderFrame ~= nil and ReminderFrame:IsShown() then
-        ReminderFrame:Hide()
+    if PKH_ReminderFrame ~= nil and PKH_ReminderFrame:IsShown() then
+        PKH_ReminderFrame:Hide()
         ReminderPopup:blankOut()
     end
 end
@@ -34,7 +34,7 @@ function ReminderPopup:showRerollKeystone()
     --TODO
 
     --Show
-    ReminderFrame:Show()
+    PKH_ReminderFrame:Show()
 end
 
 function ReminderPopup:showYourKeystone()
@@ -43,7 +43,7 @@ function ReminderPopup:showYourKeystone()
     --TODO
 
     --Show
-    ReminderFrame:Show()
+    PKH_ReminderFrame:Show()
 
     --Auto close
     C_Timer.After(10, function()
@@ -52,11 +52,11 @@ function ReminderPopup:showYourKeystone()
 end
 
 function ReminderPopup:createFrameComponents()
-    ReminderFrame.text = PsyKeystoneHelper:createString(ReminderFrame, "GameFontHighlight", 14, "")
-    ReminderFrame.text:SetPoint("TOP", ReminderFrame, "TOP", 0, -20)
+    PKH_ReminderFrame.text = PsyKeystoneHelper:createString(ReminderFrame, "GameFontHighlight", 14, "")
+    PKH_ReminderFrame.text:SetPoint("TOP", ReminderFrame, "TOP", 0, -20)
 
-    ReminderFrame.keystone = PsyKeystoneHelper:createKeystoneButton(ReminderFrame, 60, 18)
-    ReminderFrame.keystone:SetPoint("CENTER", ReminderFrame, "CENTER", 0, 5)
+    PKH_ReminderFrame.keystone = PsyKeystoneHelper:createKeystoneButton(ReminderFrame, 60, 18)
+    PKH_ReminderFrame.keystone:SetPoint("CENTER", ReminderFrame, "CENTER", 0, 5)
 end
 
 function ReminderPopup:blankOut()

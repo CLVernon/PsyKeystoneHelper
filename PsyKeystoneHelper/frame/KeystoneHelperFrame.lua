@@ -4,16 +4,16 @@ local PsyKeystoneHelper = ns.PsyKeystoneHelper
 local KeystoneHelper = {}
 local firstLoad = true
 
-function KeystoneHelperFrame_OnLoad()
-    PsyKeystoneHelper.KeystoneHelperFrame = KeystoneHelperFrame
-    KeystoneHelperFrame:Hide()
+function PKH_KeystoneHelperFrame_OnLoad()
+    PsyKeystoneHelper.KeystoneHelperFrame = PKH_KeystoneHelperFrame
+    PKH_KeystoneHelperFrame:Hide()
 
     --Assign child frames
-    KeystoneHelperFrame.title = title
-    KeystoneHelperFrame.status = status
+    PKH_KeystoneHelperFrame.title = title
+    PKH_KeystoneHelperFrame.status = status
 end
 
-function KeystoneHelperFrame_OnShow()
+function PKH_KeystoneHelperFrame_OnShow()
     --Update title text
     title:SetText("Keystone Helper |cffffff33" .. PsyKeystoneHelper.v .. "|r")
     status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
@@ -26,30 +26,30 @@ function KeystoneHelperFrame_OnShow()
     ns:renderKeystoneHelperFrame()
 end
 
-function Button_ToggleSession_OnClick()
+function PKH_Button_ToggleSession_OnClick()
     PsyKeystoneHelper:toggleSessionStatus()
 end
 
-function Button_RequestData_OnClick()
+function PKH_Button_RequestData_OnClick()
     PsyKeystoneHelper:requestInformation()
 end
 
 function KeystoneHelper:createFrameComponents()
     --Setup Player Frame lookup
-    KeystoneHelperFrame.playerFrames = {}
-    KeystoneHelperFrame.playerFrames[1] = KeystoneHelper:createPlayerFrame(1)
-    KeystoneHelperFrame.playerFrames[2] = KeystoneHelper:createPlayerFrame(2)
-    KeystoneHelperFrame.playerFrames[3] = KeystoneHelper:createPlayerFrame(3)
-    KeystoneHelperFrame.playerFrames[4] = KeystoneHelper:createPlayerFrame(4)
-    KeystoneHelperFrame.playerFrames[5] = KeystoneHelper:createPlayerFrame(5)
+    PKH_KeystoneHelperFrame.playerFrames = {}
+    PKH_KeystoneHelperFrame.playerFrames[1] = KeystoneHelper:createPlayerFrame(1)
+    PKH_KeystoneHelperFrame.playerFrames[2] = KeystoneHelper:createPlayerFrame(2)
+    PKH_KeystoneHelperFrame.playerFrames[3] = KeystoneHelper:createPlayerFrame(3)
+    PKH_KeystoneHelperFrame.playerFrames[4] = KeystoneHelper:createPlayerFrame(4)
+    PKH_KeystoneHelperFrame.playerFrames[5] = KeystoneHelper:createPlayerFrame(5)
 
     --Setup Top Keystone lookup
-    KeystoneHelperFrame.topKeystones = {}
+    PKH_KeystoneHelperFrame.topKeystones = {}
     KeystoneHelper:createTopKeysFrame()
 
     --Setup version check string
-    KeystoneHelper.versionCheckText = PsyKeystoneHelper:createString(KeystoneHelperFrame, "GameFontHighlight", 10, "")
-    KeystoneHelper.versionCheckText:SetPoint("BOTTOM", KeystoneHelperFrame, "BOTTOM", 0, 20)
+    KeystoneHelper.versionCheckText = PsyKeystoneHelper:createString(PKH_KeystoneHelperFrame, "GameFontHighlight", 10, "")
+    KeystoneHelper.versionCheckText:SetPoint("BOTTOM", PKH_KeystoneHelperFrame, "BOTTOM", 0, 20)
     KeystoneHelper.versionCheckText:SetTextColor(1, 0, 0)
 end
 
@@ -66,14 +66,14 @@ function ns:renderKeystoneHelperFrame()
     --Now populate with actual data
     if hasData then
         -- Set column titles
-        for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+        for _, columnTitle in pairs(PKH_KeystoneHelperFrame.headers) do
             columnTitle:SetText(columnTitle.txt)
         end
 
         -- Show player data
         local index = 1
         for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
-            KeystoneHelper:populatePlayerFrame(KeystoneHelperFrame.playerFrames[index], playerData)
+            KeystoneHelper:populatePlayerFrame(PKH_KeystoneHelperFrame.playerFrames[index], playerData)
             index = index + 1
         end
 
@@ -98,27 +98,27 @@ function ns:renderKeystoneHelperFrame()
 end
 
 function KeystoneHelper:createTopKeysFrame()
-    local topKeysFrame = CreateFrame("frame", "TopKeysFrame", KeystoneHelperFrame, "")
-    topKeysFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -30)
+    local topKeysFrame = CreateFrame("frame", "TopKeysFrame", PKH_KeystoneHelperFrame, "")
+    topKeysFrame:SetPoint("TOPLEFT", PKH_KeystoneHelperFrame, "TOPLEFT", 10, -30)
     topKeysFrame:SetSize(515, 70)
 
     local topKey1 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
-    KeystoneHelperFrame.topKeystones[1] = topKey1
+    PKH_KeystoneHelperFrame.topKeystones[1] = topKey1
     topKey1:SetPoint("CENTER", topKeysFrame, "CENTER", -70, 0)
 
     local topKey2 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
-    KeystoneHelperFrame.topKeystones[2] = topKey2
+    PKH_KeystoneHelperFrame.topKeystones[2] = topKey2
     topKey2:SetPoint("CENTER", topKeysFrame, "CENTER", 0, 0)
 
     local topKey3 = PsyKeystoneHelper:createKeystoneFrame(topKeysFrame, 60, 16)
-    KeystoneHelperFrame.topKeystones[3] = topKey3
+    PKH_KeystoneHelperFrame.topKeystones[3] = topKey3
     topKey3:SetPoint("CENTER", topKeysFrame, "CENTER", 70, 0)
 end
 
 function KeystoneHelper:createPlayerFrame(index)
     --Frame
-    local playerFrame = CreateFrame("frame", "player_frame" .. index, KeystoneHelperFrame, "")
-    playerFrame:SetPoint("TOPLEFT", KeystoneHelperFrame, "TOPLEFT", 10, -125 - (50 * (index - 1)))
+    local playerFrame = CreateFrame("frame", "player_frame" .. index, PKH_KeystoneHelperFrame, "")
+    playerFrame:SetPoint("TOPLEFT", PKH_KeystoneHelperFrame, "TOPLEFT", 10, -125 - (50 * (index - 1)))
     playerFrame:SetSize(515, 50)
 
     --Version Indicator
@@ -143,8 +143,8 @@ function KeystoneHelper:createPlayerFrame(index)
         keystoneColumnTitle:SetJustifyH("CENTER")
         keystoneColumnTitle:SetPoint("TOP", playerFrame.keystone, "TOP", 0, 20)
 
-        KeystoneHelperFrame.headers = {}
-        KeystoneHelperFrame.headers["KEY"] = keystoneColumnTitle
+        PKH_KeystoneHelperFrame.headers = {}
+        PKH_KeystoneHelperFrame.headers["KEY"] = keystoneColumnTitle
     end
 
     --Dungeon Bests
@@ -169,7 +169,7 @@ function KeystoneHelper:createPlayerFrame(index)
             mapColumnTitle:SetJustifyH("CENTER")
             mapColumnTitle:SetPoint("TOP", dungeonFrame, "TOP", 0, 20)
 
-            KeystoneHelperFrame.headers[abbrev] = mapColumnTitle
+            PKH_KeystoneHelperFrame.headers[abbrev] = mapColumnTitle
         end
     end
 
@@ -177,7 +177,7 @@ function KeystoneHelper:createPlayerFrame(index)
 end
 
 function KeystoneHelper:defaultTopKeystones(hasData, debugMode)
-    for _, topKeystone in pairs(KeystoneHelperFrame.topKeystones) do
+    for _, topKeystone in pairs(PKH_KeystoneHelperFrame.topKeystones) do
         if hasData or debugMode then
             topKeystone.setTopKeystone(nil)
             topKeystone.texture:Show()
@@ -194,17 +194,17 @@ function KeystoneHelper:defaultPlayerFrames(hasData, debugMode)
 
     --Display column titles
     if hasData or debugMode then
-        for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+        for _, columnTitle in pairs(PKH_KeystoneHelperFrame.headers) do
             columnTitle:SetText(columnTitle.txt)
         end
     else
-        for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
+        for _, columnTitle in pairs(PKH_KeystoneHelperFrame.headers) do
             columnTitle:SetText("")
         end
     end
 
     --Display player frames
-    for _, playerFrame in pairs(KeystoneHelperFrame.playerFrames) do
+    for _, playerFrame in pairs(PKH_KeystoneHelperFrame.playerFrames) do
         if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
             playerFrame.name:SetText("Player_____" .. index)
             playerFrame.name:SetTextColor(1, 1, 1)
@@ -370,7 +370,7 @@ function KeystoneHelper:calculateTopKeyStones()
     --Display data
     for index = 1, 3 do
         local keystone = keystones[index] or nil
-        local topKeyFrame = KeystoneHelperFrame.topKeystones[index]
+        local topKeyFrame = PKH_KeystoneHelperFrame.topKeystones[index]
 
         if keystone ~= nil and keystone.gainedScore ~= nil and keystone.gainedScore > 0 then
             topKeyFrame.setTopKeystone(keystone)
