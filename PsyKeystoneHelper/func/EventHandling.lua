@@ -1,5 +1,6 @@
 local _, ns = ...
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
+local ReminderPopup = ns.ReminderPopup
 
 function PsyKeystoneHelper:handleGroupLeft()
     PsyKeystoneHelper:DebugPrint("handleGroupLeft()")
