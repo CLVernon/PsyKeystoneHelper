@@ -7,6 +7,7 @@ function PsyKeystoneHelper:handleGroupLeft()
         PsyKeystoneHelper:toggleSessionStatus()
         ns:renderKeystoneHelperFrame()
     end
+    ReminderPopup:hide()
 end
 
 function PsyKeystoneHelper:handleGroupJoined()
@@ -36,6 +37,7 @@ function PsyKeystoneHelper:handleChallengeModeStart()
     C_Timer.After(3, function()
         PsyKeystoneHelper:sendInformation()
     end)
+    ReminderPopup:hide()
 end
 
 function PsyKeystoneHelper:handleItemCountChanged(e, itemId)
