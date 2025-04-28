@@ -32,3 +32,5 @@ frame/KeystoneHelperFrame.xml
 frame/KeystoneHelperFrame.lua
 frame/KeystoneCalloutFrame.xml
 frame/KeystoneCalloutFrame.lua
+frame/ReminderFrame.xml
+frame/ReminderFrame.lua
