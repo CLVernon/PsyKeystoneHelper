@@ -2,10 +2,9 @@
 ## Title: Psy Keystone Helper
 ## Notes: Shows the breakdown of M+ score for the party and the top keystone ugprades for the team
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
-## Version: 1.1.1
+## Version: 1.2.0
 ## IconTexture: Interface\AddOns\PsyKeystoneHelper\img\logo
 ## SavedVariables: PsyKeystoneHelper_Session
-
 ## Category-enUS: Dungeons & Raids
 ## Category-deDE: Dungeons & Schlachtzüge
 ## Category-esES: Mazmorras y bandas
@@ -17,14 +16,11 @@
 ## Category-ruRU: Подземелья и рейды
 ## Category-zhCN: 地下城和团队副本
 ## Category-zhTW: 地城與團隊
-
 ## X-Curse-Project-ID: 1243679
 ## X-Wago-ID: 96dov5NO
 
 lib/Lib.xml
-
 PsyKeystoneHelper.lua
-
 func/ChatCommands.lua
 func/EventHandling.lua
 func/Communication.lua
@@ -32,7 +28,6 @@ func/Dungeons.lua
 func/Session.lua
 func/UI.lua
 func/Util.lua
-
 frame/KeystoneHelperFrame.xml
 frame/KeystoneHelperFrame.lua
 frame/KeystoneCalloutFrame.xml
