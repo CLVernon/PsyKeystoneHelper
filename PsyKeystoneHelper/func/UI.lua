@@ -49,6 +49,87 @@ function PsyKeystoneHelper:createKeystoneFrame(parent, size, fontSize)
     keystoneFrame.bottomText = PsyKeystoneHelper:createString(keystoneFrame, "GameFontNormalMed2Outline", fontSize, "")
     keystoneFrame.bottomText:SetPoint("BOTTOM", keystoneFrame, "BOTTOM", 1, 0)
 
+    keystoneFrame.setKeystone = function(keystone)
+        if keystone == nil then
+            keystoneFrame.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+            keystoneFrame.texture:SetDesaturated(false)
+
+            keystoneFrame.topText:SetText("")
+            keystoneFrame.topText:SetTextColor(1, 1, 1)
+
+            keystoneFrame.bottomText:SetText("")
+            keystoneFrame.bottomText:SetTextColor(1, 1, 1)
+
+            PsyKeystoneHelper:clearTooltip(keystoneFrame)
+            PsyKeystoneHelper:clearClickListener(keystoneFrame)
+        else
+            keystoneFrame.texture:SetTexture(keystone.texture)
+
+            keystoneFrame.topText:SetText("+" .. keystone.level)
+            PsyKeystoneHelper:updateColourForKeyLevel(keystoneFrame.topText, keystone.level)
+
+            keystoneFrame.bottomText:SetText(keystone.mapAbbreviation)
+        end
+    end
+
+    keystoneFrame.setDungeonBest = function(dungeonScore)
+        if dungeonScore == nil then
+            keystoneFrame.texture:SetDesaturated(true)
+
+            keystoneFrame.topText:SetText("")
+            keystoneFrame.topText:SetTextColor(1, 1, 1)
+
+            keystoneFrame.bottomText:SetText("")
+            keystoneFrame.bottomText:SetTextColor(1, 1, 1)
+
+            PsyKeystoneHelper:clearTooltip(keystoneFrame)
+            PsyKeystoneHelper:clearClickListener(keystoneFrame)
+        else
+            keystoneFrame.texture:SetDesaturated(dungeonScore.dungeonScore == 0)
+
+            keystoneFrame.topText:SetText("+" .. dungeonScore.level)
+            PsyKeystoneHelper:updateColourForKeyLevel(keystoneFrame.topText, dungeonScore.level)
+
+            keystoneFrame.bottomText:SetText(dungeonScore.dungeonScore)
+            PsyKeystoneHelper:updateColourForDungeonScore(keystoneFrame.bottomText, dungeonScore.dungeonScore)
+        end
+    end
+
+    keystoneFrame.setTopKeystone = function(keystone)
+        if keystone == nil then
+            keystoneFrame.texture:SetTexture(237555)
+            keystoneFrame.texture:SetDesaturated(false)
+
+            keystoneFrame.topText:SetText("")
+            keystoneFrame.topText:SetTextColor(1, 1, 1)
+
+            keystoneFrame.bottomText:SetText("NONE")
+            keystoneFrame.bottomText:SetTextColor(1, 1, 1)
+
+            PsyKeystoneHelper:clearTooltip(keystoneFrame)
+            PsyKeystoneHelper:clearClickListener(keystoneFrame)
+        else
+            keystoneFrame.texture:SetTexture(keystone.texture)
+
+            keystoneFrame.topText:SetText("+" .. keystone.level)
+            PsyKeystoneHelper:updateColourForKeyLevel(keystoneFrame.topText, keystone.level)
+
+            keystoneFrame.bottomText:SetText(keystone.gainedScore)
+            PsyKeystoneHelper:updateColourForDungeonScore(keystoneFrame.bottomText, keystone.gainedScore)
+        end
+    end
+
+    keystoneFrame.markDead = function()
+        keystoneFrame.texture:SetDesaturated(true)
+
+        keystoneFrame.topText:SetText("DEAD")
+        keystoneFrame.topText:SetTextColor(1, 1, 1)
+    end
+
+    keystoneFrame.markReroll = function()
+        keystoneFrame.texture:SetTexture([[Interface\AddOns\PsyKeystoneHelper\img\reroll_keystone]])
+    end
+
     return keystoneFrame
 end
 
