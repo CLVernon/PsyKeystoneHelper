@@ -46,6 +46,11 @@ function KeystoneHelper:createFrameComponents()
     --Setup Top Keystone lookup
     KeystoneHelperFrame.topKeystones = {}
     KeystoneHelper:createTopKeysFrame()
+
+    --Setup version check string
+    KeystoneHelper.versionCheckText = PsyKeystoneHelper:createString(KeystoneHelperFrame, "GameFontHighlight", 10, "")
+    KeystoneHelper.versionCheckText:SetPoint("BOTTOM", KeystoneHelperFrame, "BOTTOM", 0, 20)
+    KeystoneHelper.versionCheckText:SetTextColor(1, 0, 0)
 end
 
 function ns:renderKeystoneHelperFrame()
@@ -60,17 +65,34 @@ function ns:renderKeystoneHelperFrame()
 
     --Now populate with actual data
     if hasData then
+        -- Set column titles
         for _, columnTitle in pairs(KeystoneHelperFrame.headers) do
             columnTitle:SetText(columnTitle.txt)
         end
 
+        -- Show player data
         local index = 1
         for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
             KeystoneHelper:populatePlayerFrame(KeystoneHelperFrame.playerFrames[index], playerData)
             index = index + 1
         end
 
+        -- Show top keystone data
         KeystoneHelper:calculateTopKeyStones()
+
+        -- Check received version to see if players version is out of date, if so display warning
+        local higherVersionFound = false
+        for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+            if playerData.version ~= nil and PsyKeystoneHelper:intifyVersion(playerData.version) > PsyKeystoneHelper:intifyVersion(PsyKeystoneHelper.v) then
+                highestVersionFound = true
+                break
+            end
+        end
+        if higherVersionFound then
+            KeystoneHelper.versionCheckText:SetText("Addon version out of date. Please download the latest update on Curseforge or Wago.")
+        end
+    else
+        KeystoneHelper.versionCheckText:SetText("")
     end
 
 end
