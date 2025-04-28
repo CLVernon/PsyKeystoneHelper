@@ -84,7 +84,7 @@ function ns:renderKeystoneHelperFrame()
         local higherVersionFound = false
         for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
             if playerData.version ~= nil and PsyKeystoneHelper:intifyVersion(playerData.version) > PsyKeystoneHelper:intifyVersion(PsyKeystoneHelper.v) then
-                highestVersionFound = true
+                higherVersionFound = true
                 break
             end
         end
