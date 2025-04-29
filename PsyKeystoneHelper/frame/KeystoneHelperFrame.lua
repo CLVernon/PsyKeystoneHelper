@@ -177,6 +177,9 @@ function KeystoneHelper:createPlayerFrame(index)
 end
 
 function KeystoneHelper:defaultTopKeystones(hasData, debugMode)
+    if PKH_KeystoneHelperFrame.topKeystones == nil then
+        return
+    end
     for _, topKeystone in pairs(PKH_KeystoneHelperFrame.topKeystones) do
         if hasData or debugMode then
             topKeystone.setTopKeystone(nil)

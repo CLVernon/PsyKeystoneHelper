@@ -1,6 +1,5 @@
 local _, ns = ...
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
-local ReminderPopup = ns.ReminderPopup
 
 function PsyKeystoneHelper:handleGroupLeft()
     PsyKeystoneHelper:DebugPrint("handleGroupLeft()")
@@ -8,7 +7,7 @@ function PsyKeystoneHelper:handleGroupLeft()
         PsyKeystoneHelper:toggleSessionStatus()
         ns:renderKeystoneHelperFrame()
     end
-    ReminderPopup:hide()
+    ns.ReminderPopup:hide()
 end
 
 function PsyKeystoneHelper:handleGroupJoined()
@@ -38,10 +37,10 @@ function PsyKeystoneHelper:handleChallengeModeStart()
     C_Timer.After(3, function()
         PsyKeystoneHelper:sendInformation()
     end)
-    ReminderPopup:hide()
+    ns.ReminderPopup:hide()
 end
 
-function PsyKeystoneHelper:handleItemCountChanged(e, itemId)
+function PsyKeystoneHelper:handleItemCountChanged(_, itemId)
     if itemId == 180653 or itemId == 138019 then
         PsyKeystoneHelper:DebugPrint("handleItemCountChanged()")
         PsyKeystoneHelper:sendInformation()
@@ -59,5 +58,12 @@ function PsyKeystoneHelper:handleItemChanged(e, itemFrom, itemTo)
         C_Timer.After(2, function()
             PsyKeystoneHelper:sendInformation()
         end)
+    end
+end
+
+function PsyKeystoneHelper:handleZoneChanged()
+    if C_ChallengeMode.GetActiveChallengeMapID() == nil then
+        PsyKeystoneHelper:DebugPrint("handleZoneChanged()")
+        PsyKeystoneHelper:checkIfYourKey(false)
     end
 end

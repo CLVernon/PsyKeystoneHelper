@@ -1,6 +1,44 @@
 local _, ns = ...
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
 
+function PsyKeystoneHelper:getPlayerKeystone()
+    local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
+    local keystone = nil
+    if ownedChallengeMapId then
+        local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(ownedChallengeMapId)
+        keystone = {
+            mapChallengeModeID = ownedChallengeMapId,
+            mapID = mapID,
+            level = C_MythicPlus.GetOwnedKeystoneLevel(),
+            texture = texture,
+            backgroundTexture = backgroundTexture,
+            mapName = mapName,
+            mapAbbreviation = PsyKeystoneHelper.dungeonAbbreviations[mapName] or mapName
+        }
+    end
+    return keystone
+end
+
+function PsyKeystoneHelper:checkIfYourKey(timedAttempt)
+    local ownedKeyMapId = C_MythicPlus.GetOwnedKeystoneMapID()
+    local mapId = select(8, GetInstanceInfo())
+    local yourKeystone = ownedKeyMapId and mapId and ownedKeyMapId == mapId
+    PsyKeystoneHelper:DebugPrint("OwnedKeyMapId=" .. ownedKeyMapId)
+    PsyKeystoneHelper:DebugPrint("MapId=" .. mapId)
+    PsyKeystoneHelper:DebugPrint("YourKey=" .. tostring(yourKeystone))
+
+    --Recheck in 1 second to ensure data is loaded
+    if not timedAttempt then
+        C_Timer.After(1, function()
+            PsyKeystoneHelper:checkIfYourKey(true)
+        end)
+    end
+
+    if yourKeystone then
+        ns.ReminderPopup:showYourKeystone()
+    end
+end
+
 -- Map or dungeon name to abbreviation
 PsyKeystoneHelper.dungeonAbbreviations = {
     ["Cinderbrew Meadery"] = "BREW",

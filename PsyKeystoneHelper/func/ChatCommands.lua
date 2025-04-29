@@ -56,7 +56,6 @@ function PsyKeystoneHelper:handleChatCommand(input)
                 PsyKeystoneHelper.db.profile.debugMode = true
                 PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
             end
-            ns:renderKeystoneHelperFrame()
             return
         elseif arg == "commands" or arg == "command" or arg == "help" or arg == "?" then
             PsyKeystoneHelper:printChatCommands()

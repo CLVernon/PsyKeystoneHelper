@@ -29,6 +29,7 @@ function ReminderPopup:hide()
 end
 
 function ReminderPopup:showRerollKeystone()
+    PsyKeystoneHelper:DebugPrint("Showing ReminderFrame ... showRerollKeystone")
     ReminderPopup:maybeInit()
 
     --TODO
@@ -38,27 +39,29 @@ function ReminderPopup:showRerollKeystone()
 end
 
 function ReminderPopup:showYourKeystone()
+    PsyKeystoneHelper:DebugPrint("Showing ReminderFrame ... showYourKeystone")
     ReminderPopup:maybeInit()
 
     --TODO
+    local keystone = PsyKeystoneHelper:getPlayerKeystone()
+    PKH_ReminderFrame.keystone.setKeystone(keystone)
+    PKH_ReminderFrame.text:SetText("Your keystone?")
 
     --Show
     PKH_ReminderFrame:Show()
-
-    --Auto close
-    C_Timer.After(10, function()
-        ReminderPopup:hide()
-    end)
 end
 
 function ReminderPopup:createFrameComponents()
-    PKH_ReminderFrame.text = PsyKeystoneHelper:createString(ReminderFrame, "GameFontHighlight", 14, "")
-    PKH_ReminderFrame.text:SetPoint("TOP", ReminderFrame, "TOP", 0, -20)
+    PKH_ReminderFrame.text = PsyKeystoneHelper:createString(PKH_ReminderFrame, "GameFontHighlight", 14, "")
+    PKH_ReminderFrame.text:SetPoint("TOP", PKH_ReminderFrame, "TOP", 0, -20)
 
-    PKH_ReminderFrame.keystone = PsyKeystoneHelper:createKeystoneButton(ReminderFrame, 60, 18)
-    PKH_ReminderFrame.keystone:SetPoint("CENTER", ReminderFrame, "CENTER", 0, 5)
+    PKH_ReminderFrame.keystone = PsyKeystoneHelper:createKeystoneFrame(PKH_ReminderFrame, 60, 18)
+    PKH_ReminderFrame.keystone:SetPoint("CENTER", PKH_ReminderFrame, "CENTER", 0, 5)
 end
 
 function ReminderPopup:blankOut()
-    -- TODO
+    PKH_ReminderFrame.text:SetText("")
+    PKH_ReminderFrame.text:SetTextColor(1, 1, 1)
+    PKH_ReminderFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+    PKH_ReminderFrame.keystone.texture:Hide()
 end

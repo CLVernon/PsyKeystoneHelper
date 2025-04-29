@@ -61,6 +61,8 @@ function PsyKeystoneHelper:OnInitialize()
     PsyKeystoneHelper:RegisterEvent("CHALLENGE_MODE_START", "handleChallengeModeStart")
     PsyKeystoneHelper:RegisterEvent("ITEM_COUNT_CHANGED", "handleItemCountChanged")
     PsyKeystoneHelper:RegisterEvent("ITEM_CHANGED", "handleItemChanged")
+    PsyKeystoneHelper:RegisterEvent("ZONE_CHANGED_NEW_AREA", "handleZoneChanged")
+    PsyKeystoneHelper:RegisterEvent("PLAYER_ENTERING_WORLD", "handleZoneChanged")
 
     --Show minimap icon
     LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
