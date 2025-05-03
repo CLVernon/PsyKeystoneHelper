@@ -33,8 +33,7 @@ function ReminderPopup:showRerollKeystone()
     ReminderPopup:maybeInit()
 
     --TODO
-
-    --Show
+    
     PKH_ReminderFrame:Show()
 end
 
@@ -42,12 +41,11 @@ function ReminderPopup:showYourKeystone()
     PsyKeystoneHelper:DebugPrint("Showing ReminderFrame ... showYourKeystone")
     ReminderPopup:maybeInit()
 
-    --TODO
     local keystone = PsyKeystoneHelper:getPlayerKeystone()
     PKH_ReminderFrame.keystone.setKeystone(keystone)
+    PKH_ReminderFrame.keystone.texture:Show()
     PKH_ReminderFrame.text:SetText("Your keystone?")
 
-    --Show
     PKH_ReminderFrame:Show()
 end
 
