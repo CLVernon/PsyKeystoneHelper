@@ -361,6 +361,7 @@ function KeystoneHelper:calculateTopKeyStones()
             else
                 keystone.keystoneFrame.markDead()
             end
+            keystone.rerollingGood = rerollingGood
         end
 
     end

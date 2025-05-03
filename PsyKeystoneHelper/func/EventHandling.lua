@@ -27,6 +27,9 @@ function PsyKeystoneHelper:handleChallengeModeCompleted()
     C_Timer.After(3, function()
         PsyKeystoneHelper:sendInformation()
     end)
+    C_Timer.After(5, function()
+        ns.ReminderPopup:maybeShowRerollKeystone()
+    end)
     if PsyKeystoneHelper:getSessionStatus() then
         PsyKeystoneHelper.KeystoneHelperFrame:Show()
     end

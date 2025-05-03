@@ -39,6 +39,8 @@ function PsyKeystoneHelper:handleChatCommand(input)
             PsyKeystoneHelper:Print("Cache cleared")
             ns:renderKeystoneHelperFrame()
             return
+        elseif arg == "showRerollKeystone" then
+            ns.ReminderPopup:maybeShowRerollKeystone()
         elseif arg == "version" then
             PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
             if PsyKeystoneHelper:getSessionStatus() then

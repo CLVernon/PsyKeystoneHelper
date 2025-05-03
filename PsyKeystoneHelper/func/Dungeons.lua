@@ -19,6 +19,23 @@ function PsyKeystoneHelper:getPlayerKeystone()
     return keystone
 end
 
+function PsyKeystoneHelper:getPlayerKeystoneFromCache()
+    local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
+    if ownedChallengeMapId == nil then
+        return nil
+    end
+
+    local playerKeystone = nil
+    for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+        if playerData.fullName == (GetUnitName("player") .. "-" .. GetRealmName("player")) then
+            playerKeystone = playerData.keystone
+            break
+        end
+    end
+
+    return playerKeystone
+end
+
 function PsyKeystoneHelper:checkIfYourKey(timedAttempt)
     local ownedKeyMapId = C_MythicPlus.GetOwnedKeystoneMapID()
     local mapId = select(8, GetInstanceInfo())

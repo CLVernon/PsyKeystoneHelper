@@ -28,13 +28,30 @@ function ReminderPopup:hide()
     end
 end
 
-function ReminderPopup:showRerollKeystone()
-    PsyKeystoneHelper:DebugPrint("Showing ReminderFrame ... showRerollKeystone")
-    ReminderPopup:maybeInit()
+function ReminderPopup:maybeShowRerollKeystone()
+    PsyKeystoneHelper:DebugPrint("maybeShowRerollKeystone()")
+    local keystone = PsyKeystoneHelper:getPlayerKeystoneFromCache()
+    if keystone == nil then
+        PsyKeystoneHelper:DebugPrint("No keystone found")
+        return
+    end
+    if keystone.rerollingGood == nil then
+        PsyKeystoneHelper:DebugPrint("No rerollingGood found")
+        return
+    end
+    PsyKeystoneHelper:DebugPrint("rerollingGood=" .. tostring(keystone.rerollingGood))
 
-    --TODO
-    
-    PKH_ReminderFrame:Show()
+    if keystone.rerollingGood then
+        PsyKeystoneHelper:DebugPrint("Showing ReminderFrame ... showRerollKeystone")
+        ReminderPopup:maybeInit()
+
+        PKH_ReminderFrame.keystone.setKeystone(keystone)
+        PKH_ReminderFrame.keystone.markReroll()
+        PKH_ReminderFrame.keystone.texture:Show()
+        PKH_ReminderFrame.text:SetText("Reroll keystone?")
+
+        PKH_ReminderFrame:Show()
+    end
 end
 
 function ReminderPopup:showYourKeystone()
