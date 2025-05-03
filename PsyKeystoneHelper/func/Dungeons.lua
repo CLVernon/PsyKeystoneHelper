@@ -23,9 +23,15 @@ function PsyKeystoneHelper:checkIfYourKey(timedAttempt)
     local ownedKeyMapId = C_MythicPlus.GetOwnedKeystoneMapID()
     local mapId = select(8, GetInstanceInfo())
     local yourKeystone = ownedKeyMapId and mapId and ownedKeyMapId == mapId
-    PsyKeystoneHelper:DebugPrint("OwnedKeyMapId=" .. ownedKeyMapId)
-    PsyKeystoneHelper:DebugPrint("MapId=" .. mapId)
-    PsyKeystoneHelper:DebugPrint("YourKey=" .. tostring(yourKeystone))
+    local mPlusActive = C_ChallengeMode.GetActiveChallengeMapID() ~= nil
+    if ownedKeyMapId == nil then
+        PsyKeystoneHelper:DebugPrint("ownedKeyMapId=" .. ownedKeyMapId)
+    else
+        PsyKeystoneHelper:DebugPrint("ownedKeyMapId=none")
+    end
+    PsyKeystoneHelper:DebugPrint("mapId=" .. mapId)
+    PsyKeystoneHelper:DebugPrint("yourKeystone=" .. tostring(yourKeystone))
+    PsyKeystoneHelper:DebugPrint("mPlusActive=" .. tostring(mPlusActive))
 
     --Recheck in 1 second to ensure data is loaded
     if not timedAttempt then
@@ -34,7 +40,7 @@ function PsyKeystoneHelper:checkIfYourKey(timedAttempt)
         end)
     end
 
-    if yourKeystone then
+    if yourKeystone and not mPlusActive then
         ns.ReminderPopup:showYourKeystone()
     end
 end

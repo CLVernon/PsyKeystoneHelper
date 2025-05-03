@@ -62,8 +62,11 @@ function PsyKeystoneHelper:handleItemChanged(e, itemFrom, itemTo)
 end
 
 function PsyKeystoneHelper:handleZoneChanged()
-    if C_ChallengeMode.GetActiveChallengeMapID() == nil then
-        PsyKeystoneHelper:DebugPrint("handleZoneChanged()")
-        PsyKeystoneHelper:checkIfYourKey(false)
-    end
+    PsyKeystoneHelper:DebugPrint("handleZoneChanged()")
+    PsyKeystoneHelper:checkIfYourKey(false)
+end
+
+function PsyKeystoneHelper:handleReadyCheck()
+    PsyKeystoneHelper:DebugPrint("handleReadyCheck()")
+    PsyKeystoneHelper:checkIfYourKey(false)
 end

@@ -63,6 +63,7 @@ function PsyKeystoneHelper:OnInitialize()
     PsyKeystoneHelper:RegisterEvent("ITEM_CHANGED", "handleItemChanged")
     PsyKeystoneHelper:RegisterEvent("ZONE_CHANGED_NEW_AREA", "handleZoneChanged")
     PsyKeystoneHelper:RegisterEvent("PLAYER_ENTERING_WORLD", "handleZoneChanged")
+    PsyKeystoneHelper:RegisterEvent("READY_CHECK", "handleReadyCheck")
 
     --Show minimap icon
     LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
