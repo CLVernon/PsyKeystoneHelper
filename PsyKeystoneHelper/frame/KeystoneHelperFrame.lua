@@ -356,10 +356,12 @@ function KeystoneHelper:calculateTopKeyStones()
             end
 
             --Mark keystone for reroll in no gained score and rolling to another key of same level would result in score
-            if rerollingGood then
-                keystone.keystoneFrame.markReroll()
-            else
-                keystone.keystoneFrame.markDead()
+            if keystone.keystoneFrame ~= nil then
+                if rerollingGood then
+                    keystone.keystoneFrame.markReroll()
+                else
+                    keystone.keystoneFrame.markDead()
+                end
             end
             keystone.rerollingGood = rerollingGood
         end
