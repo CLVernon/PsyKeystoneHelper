@@ -1,6 +1,67 @@
 local _, ns = ...
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
 
+function PsyKeystoneHelper:getPlayerKeystone()
+    local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
+    local keystone = nil
+    if ownedChallengeMapId then
+        local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(ownedChallengeMapId)
+        keystone = {
+            mapChallengeModeID = ownedChallengeMapId,
+            mapID = mapID,
+            level = C_MythicPlus.GetOwnedKeystoneLevel(),
+            texture = texture,
+            backgroundTexture = backgroundTexture,
+            mapName = mapName,
+            mapAbbreviation = PsyKeystoneHelper.dungeonAbbreviations[mapName] or mapName
+        }
+    end
+    return keystone
+end
+
+function PsyKeystoneHelper:getPlayerKeystoneFromCache()
+    local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
+    if ownedChallengeMapId == nil then
+        return nil
+    end
+
+    local playerKeystone = nil
+    for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+        if playerData.fullName == (GetUnitName("player") .. "-" .. GetRealmName("player")) then
+            playerKeystone = playerData.keystone
+            break
+        end
+    end
+
+    return playerKeystone
+end
+
+function PsyKeystoneHelper:checkIfYourKey(timedAttempt)
+    local ownedKeyMapId = C_MythicPlus.GetOwnedKeystoneMapID()
+    local mapId = select(8, GetInstanceInfo())
+    local yourKeystone = ownedKeyMapId and mapId and ownedKeyMapId == mapId
+    local mPlusActive = C_ChallengeMode.GetActiveChallengeMapID() ~= nil
+    if ownedKeyMapId == nil then
+        PsyKeystoneHelper:DebugPrint("ownedKeyMapId=" .. ownedKeyMapId)
+    else
+        PsyKeystoneHelper:DebugPrint("ownedKeyMapId=none")
+    end
+    PsyKeystoneHelper:DebugPrint("mapId=" .. mapId)
+    PsyKeystoneHelper:DebugPrint("yourKeystone=" .. tostring(yourKeystone))
+    PsyKeystoneHelper:DebugPrint("mPlusActive=" .. tostring(mPlusActive))
+
+    --Recheck in 1 second to ensure data is loaded
+    if not timedAttempt then
+        C_Timer.After(1, function()
+            PsyKeystoneHelper:checkIfYourKey(true)
+        end)
+    end
+
+    if yourKeystone and not mPlusActive then
+        ns.ReminderPopup:showYourKeystone()
+    end
+end
+
 -- Map or dungeon name to abbreviation
 PsyKeystoneHelper.dungeonAbbreviations = {
     ["Cinderbrew Meadery"] = "BREW",

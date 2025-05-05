@@ -39,6 +39,8 @@ function PsyKeystoneHelper:handleChatCommand(input)
             PsyKeystoneHelper:Print("Cache cleared")
             ns:renderKeystoneHelperFrame()
             return
+        elseif arg == "showRerollKeystone" then
+            ns.ReminderPopup:maybeShowRerollKeystone()
         elseif arg == "version" then
             PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
             if PsyKeystoneHelper:getSessionStatus() then
@@ -56,7 +58,6 @@ function PsyKeystoneHelper:handleChatCommand(input)
                 PsyKeystoneHelper.db.profile.debugMode = true
                 PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
             end
-            ns:renderKeystoneHelperFrame()
             return
         elseif arg == "commands" or arg == "command" or arg == "help" or arg == "?" then
             PsyKeystoneHelper:printChatCommands()

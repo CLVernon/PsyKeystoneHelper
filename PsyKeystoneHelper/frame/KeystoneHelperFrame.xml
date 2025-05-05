@@ -1,80 +1,84 @@
-<Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="KeystoneHelperFrame.lua" />
-	<Frame name="KeystoneHelperFrame" inherits="BasicFrameTemplateWithInset" parent="UIParent" toplevel="true" movable="true" enableMouse="true" enableMouseClicks="true" enableMouseMotion="true" clampedToScreen="true">
-		<Size x="548" y="418" />
-		<Anchors>
-			<Anchor point="CENTER" relativePoint="CENTER">
-				<Offset x="63" y="64" />
-			</Anchor>
-		</Anchors>
-		<KeyValues>
-			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
-		</KeyValues>
-		<Layers>
-			<Layer>
-				<Texture file="Interface\AddOns\PsyKeystoneHelper\img\logo.tga">
-					<Size x="21" y="21" />
-					<Anchors>
-						<Anchor x="3" point="TOPLEFT" />
-					</Anchors>
-				</Texture>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString name="title" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Keystone Helper" justifyH="LEFT">
-					<Size x="245" y="20" />
-					<Anchors>
-						<Anchor x="30" y="-1" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="12" />
-				</FontString>
-				<FontString name="status" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Status: Stopped" justifyH="RIGHT">
-					<Size x="237" y="20" />
-					<Anchors>
-						<Anchor x="281" y="-1" point="TOPLEFT" />
-					</Anchors>
-					<FontHeight val="12" />
-				</FontString>
-			</Layer>
-		</Layers>
-		<Frames>
-			<Button name="Button_ToggleSession" inherits="UIPanelButtonTemplate" text="Toggle Session">
-				<Size x="120" y="30" />
-				<Anchors>
-					<Anchor x="-65" y="8" point="BOTTOM" />
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						Button_ToggleSession_OnClick()
-					</OnClick>
-				</Scripts>
-			</Button>
-			<Button name="Button_RequestData" inherits="UIPanelButtonTemplate" text="Request Data">
-				<Size x="120" y="30" />
-				<Anchors>
-					<Anchor x="65" y="8" point="BOTTOM" />
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						Button_RequestData_OnClick()
-					</OnClick>
-				</Scripts>
-			</Button>
-		</Frames>
-		<Scripts>
-			<OnLoad inherit="prepend">
-				KeystoneHelperFrame_OnLoad()
+<Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="KeystoneHelperFrame.lua"/>
+    <Frame name="PKH_KeystoneHelperFrame" inherits="BasicFrameTemplateWithInset" parent="UIParent" toplevel="true"
+           movable="true" enableMouse="true" enableMouseClicks="true" enableMouseMotion="true" clampedToScreen="true">
+        <Size x="548" y="418"/>
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+                <Offset x="63" y="64"/>
+            </Anchor>
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global"/>
+        </KeyValues>
+        <Layers>
+            <Layer>
+                <Texture file="Interface\AddOns\PsyKeystoneHelper\img\logo.tga">
+                    <Size x="21" y="21"/>
+                    <Anchors>
+                        <Anchor x="3" point="TOPLEFT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString name="title" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Keystone Helper"
+                            justifyH="LEFT">
+                    <Size x="245" y="20"/>
+                    <Anchors>
+                        <Anchor x="30" y="-1" point="TOPLEFT"/>
+                    </Anchors>
+                    <FontHeight val="12"/>
+                </FontString>
+                <FontString name="status" inherits="GameFontHighlight" font="Fonts\2002B.ttf" text="Status: Stopped"
+                            justifyH="RIGHT">
+                    <Size x="237" y="20"/>
+                    <Anchors>
+                        <Anchor x="281" y="-1" point="TOPLEFT"/>
+                    </Anchors>
+                    <FontHeight val="12"/>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="PKH_Button_ToggleSession" inherits="UIPanelButtonTemplate" text="Toggle Session">
+                <Size x="120" y="30"/>
+                <Anchors>
+                    <Anchor x="-65" y="8" point="BOTTOM"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        PKH_Button_ToggleSession_OnClick()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="PKH_Button_RequestData" inherits="UIPanelButtonTemplate" text="Request Data">
+                <Size x="120" y="30"/>
+                <Anchors>
+                    <Anchor x="65" y="8" point="BOTTOM"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        PKH_Button_RequestData_OnClick()
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad inherit="prepend">
+                PKH_KeystoneHelperFrame_OnLoad()
 
-				self:RegisterForDrag("LeftButton")
-			</OnLoad>
-			<OnDragStart>
-				self:StartMoving()
-			</OnDragStart>
-			<OnDragStop>
-				self:StopMovingOrSizing()
-			</OnDragStop>
-			<OnShow>
-				KeystoneHelperFrame_OnShow()
-			</OnShow>
-		</Scripts>
-	</Frame>
+                self:RegisterForDrag("LeftButton")
+            </OnLoad>
+            <OnDragStart>
+                self:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                self:StopMovingOrSizing()
+            </OnDragStop>
+            <OnShow>
+                PKH_KeystoneHelperFrame_OnShow()
+            </OnShow>
+        </Scripts>
+    </Frame>
 </Ui>

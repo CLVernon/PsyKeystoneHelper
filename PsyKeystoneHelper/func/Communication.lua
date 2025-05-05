@@ -68,20 +68,7 @@ function PsyKeystoneHelper:sendInformation()
     end
 
     -- Get keystone information
-    local ownedChallengeMapId = C_MythicPlus.GetOwnedKeystoneChallengeMapID() or nil
-    local keystone = nil
-    if ownedChallengeMapId then
-        local mapName, mapID, _, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(ownedChallengeMapId)
-        keystone = {
-            mapChallengeModeID = ownedChallengeMapId,
-            mapID = mapID,
-            level = C_MythicPlus.GetOwnedKeystoneLevel(),
-            texture = texture,
-            backgroundTexture = backgroundTexture,
-            mapName = mapName,
-            mapAbbreviation = PsyKeystoneHelper.dungeonAbbreviations[mapName] or mapName
-        }
-    end
+    local keystone = PsyKeystoneHelper:getPlayerKeystone()
 
     -- Get class properties
     local className, classFilename, classId = UnitClass("player")

@@ -6,12 +6,12 @@ ns.KeystoneCallout = KeystoneCallout
 local timestamp = 0
 local firstLoad = true
 
-function KeystoneCalloutFrame_OnLoad()
-    KeystoneCalloutFrame:Hide()
+function PKH_KeystoneCalloutFrame_OnLoad()
+    PKH_KeystoneCalloutFrame:Hide()
 end
 
-function CloseButton_OnClick()
-    KeystoneCalloutFrame:Hide()
+function PKH_CloseButton_OnClick()
+    PKH_KeystoneCalloutFrame:Hide()
 end
 
 -- keystoneCallout={
@@ -40,40 +40,40 @@ function KeystoneCallout:show(keystoneCallout)
 
     -- Show the frame and auto hide after X seconds
     -- Only if the timestamp has not changed
-    KeystoneCalloutFrame:Show()
+    PKH_KeystoneCalloutFrame:Show()
     local timestampToClose = timestamp
     C_Timer.After(10, function()
         if timestampToClose == timestamp then
-            KeystoneCalloutFrame:Hide()
+            PKH_KeystoneCalloutFrame:Hide()
             KeystoneCallout:populateCalloutFrames(nil)
         end
     end)
 end
 
 function KeystoneCallout:createFrameComponents()
-    KeystoneCalloutFrame.text = PsyKeystoneHelper:createString(KeystoneCalloutFrame, "GameFontHighlight", 14, "")
-    KeystoneCalloutFrame.text:SetPoint("TOP", KeystoneCalloutFrame, "TOP", 0, -20)
+    PKH_KeystoneCalloutFrame.text = PsyKeystoneHelper:createString(PKH_KeystoneCalloutFrame, "GameFontHighlight", 14, "")
+    PKH_KeystoneCalloutFrame.text:SetPoint("TOP", PKH_KeystoneCalloutFrame, "TOP", 0, -20)
 
-    KeystoneCalloutFrame.keystone = PsyKeystoneHelper:createKeystoneButton(KeystoneCalloutFrame, 60, 18)
-    KeystoneCalloutFrame.keystone:SetPoint("CENTER", KeystoneCalloutFrame, "CENTER", 0, 5)
+    PKH_KeystoneCalloutFrame.keystone = PsyKeystoneHelper:createKeystoneButton(PKH_KeystoneCalloutFrame, 60, 18)
+    PKH_KeystoneCalloutFrame.keystone:SetPoint("CENTER", PKH_KeystoneCalloutFrame, "CENTER", 0, 5)
 end
 
 function KeystoneCallout:populateCalloutFrames(keystoneCallout)
     if keystoneCallout == nil then
-        KeystoneCalloutFrame.text:SetText("")
-        KeystoneCalloutFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
-        KeystoneCalloutFrame.keystone.topText:SetText("")
-        PsyKeystoneHelper:updateColourForKeyLevel(KeystoneCalloutFrame.keystone.topText, 0)
-        KeystoneCalloutFrame.keystone.bottomText:SetText("")
-        KeystoneCalloutFrame.keystone:SetAttribute("spell", 0)
+        PKH_KeystoneCalloutFrame.text:SetText("")
+        PKH_KeystoneCalloutFrame.keystone.texture:SetTexture([[Interface\ICONS\INV_Misc_QuestionMark]])
+        PKH_KeystoneCalloutFrame.keystone.topText:SetText("")
+        PsyKeystoneHelper:updateColourForKeyLevel(PKH_KeystoneCalloutFrame.keystone.topText, 0)
+        PKH_KeystoneCalloutFrame.keystone.bottomText:SetText("")
+        PKH_KeystoneCalloutFrame.keystone:SetAttribute("spell", 0)
     else
         local callerClassColour = C_ClassColor.GetClassColor(keystoneCallout.callerClassFilename):GenerateHexColor()
-        KeystoneCalloutFrame.text:SetText("|c" .. callerClassColour .. keystoneCallout.caller .. "|r has called a dungeon:")
-        KeystoneCalloutFrame.keystone.texture:SetTexture(keystoneCallout.keystone.texture)
-        KeystoneCalloutFrame.keystone.topText:SetText("+" .. keystoneCallout.keystone.level)
-        PsyKeystoneHelper:updateColourForKeyLevel(KeystoneCalloutFrame.keystone.topText, keystoneCallout.keystone.level)
-        KeystoneCalloutFrame.keystone.bottomText:SetText(keystoneCallout.keystone.mapAbbreviation)
-        KeystoneCalloutFrame.keystone:SetAttribute("spell", PsyKeystoneHelper.dungeonSpellIds[keystoneCallout.keystone.mapName] or 0)
+        PKH_KeystoneCalloutFrame.text:SetText("|c" .. callerClassColour .. keystoneCallout.caller .. "|r has called a dungeon:")
+        PKH_KeystoneCalloutFrame.keystone.texture:SetTexture(keystoneCallout.keystone.texture)
+        PKH_KeystoneCalloutFrame.keystone.topText:SetText("+" .. keystoneCallout.keystone.level)
+        PsyKeystoneHelper:updateColourForKeyLevel(PKH_KeystoneCalloutFrame.keystone.topText, keystoneCallout.keystone.level)
+        PKH_KeystoneCalloutFrame.keystone.bottomText:SetText(keystoneCallout.keystone.mapAbbreviation)
+        PKH_KeystoneCalloutFrame.keystone:SetAttribute("spell", PsyKeystoneHelper.dungeonSpellIds[keystoneCallout.keystone.mapName] or 0)
     end
 end
 

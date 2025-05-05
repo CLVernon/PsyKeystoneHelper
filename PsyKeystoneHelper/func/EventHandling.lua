@@ -7,6 +7,7 @@ function PsyKeystoneHelper:handleGroupLeft()
         PsyKeystoneHelper:toggleSessionStatus()
         ns:renderKeystoneHelperFrame()
     end
+    ns.ReminderPopup:hide()
 end
 
 function PsyKeystoneHelper:handleGroupJoined()
@@ -26,6 +27,9 @@ function PsyKeystoneHelper:handleChallengeModeCompleted()
     C_Timer.After(3, function()
         PsyKeystoneHelper:sendInformation()
     end)
+    C_Timer.After(5, function()
+        ns.ReminderPopup:maybeShowRerollKeystone()
+    end)
     if PsyKeystoneHelper:getSessionStatus() then
         PsyKeystoneHelper.KeystoneHelperFrame:Show()
     end
@@ -36,9 +40,10 @@ function PsyKeystoneHelper:handleChallengeModeStart()
     C_Timer.After(3, function()
         PsyKeystoneHelper:sendInformation()
     end)
+    ns.ReminderPopup:hide()
 end
 
-function PsyKeystoneHelper:handleItemCountChanged(e, itemId)
+function PsyKeystoneHelper:handleItemCountChanged(_, itemId)
     if itemId == 180653 or itemId == 138019 then
         PsyKeystoneHelper:DebugPrint("handleItemCountChanged()")
         PsyKeystoneHelper:sendInformation()
@@ -57,4 +62,14 @@ function PsyKeystoneHelper:handleItemChanged(e, itemFrom, itemTo)
             PsyKeystoneHelper:sendInformation()
         end)
     end
+end
+
+function PsyKeystoneHelper:handleZoneChanged()
+    PsyKeystoneHelper:DebugPrint("handleZoneChanged()")
+    PsyKeystoneHelper:checkIfYourKey(false)
+end
+
+function PsyKeystoneHelper:handleReadyCheck()
+    PsyKeystoneHelper:DebugPrint("handleReadyCheck()")
+    PsyKeystoneHelper:checkIfYourKey(false)
 end
