@@ -274,6 +274,7 @@ function KeystoneHelper:populatePlayerFrame(playerFrame, playerData)
     playerFrame.keystone.texture:Show()
     KeystoneHelper:addKeystoneTooltip(playerFrame.keystone, playerData.keystone)
     KeystoneHelper:addCalloutActionToKeystoneFrame(playerFrame.keystone, playerData.keystone)
+    playerData.keystone.keystoneFrame = playerFrame.keystone
 
     -- Player Dungeon Score
     for _, dungeonFrame in pairs(playerFrame.dungeonScores) do
