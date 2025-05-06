@@ -7,11 +7,23 @@ assignees: CLVernon
 
 ---
 
-**Classification**
-Is this a new feature or an enhancement to existing functionality?
+## Description
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+<!--
+Please provide a clear and concise description of the feature request.
+-->
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## Classification
+
+<!--
+Please classify the feature request, remove the options that don't apply
+-->
+
+- New Feature
+- Enhancement to existing functionality
+
+## Screenshots / Examples
+
+<!--
+If applicable, add screenshots or examples to help explain your feature requests.
+-->

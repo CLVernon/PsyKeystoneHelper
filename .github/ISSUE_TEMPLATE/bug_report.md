@@ -7,27 +7,45 @@ assignees: CLVernon
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Description
 
-**To Reproduce**
-Steps to reproduce the behaviour:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+<!--
+Please provide a clear and concise description of what the bug is.
+-->
 
-**Expected behaviour**
+## Version Information
+
+**Game Version:** `X.X.X`
+
+**Addon Version:** `X.X.X`
+
+## Steps to reproduce
+
+<!--
+Please provide a clear and concise description of the steps to reproduce the bug.
+-->
+
+1.
+2.
+3.
+
+## Expected behaviour
+
+<!--
 A clear and concise description of what you expected to happen.
+-->
 
-**Lua Stack Trace**
+## Lua Stack Trace
+
+<!--
+If any Lua errors have been observed, please include them in the code block.
+-->
+
 ```
-If any Lua errors have been observed, please include them here.
 ```
 
-**Screenshots**
+## Screenshots
+
+<!--
 If applicable, add screenshots to help explain your problem.
-
-**Version Information**
- - Game Version: 
- - Addon Version:
+--->
