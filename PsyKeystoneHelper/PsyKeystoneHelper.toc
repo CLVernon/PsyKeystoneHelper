@@ -1,8 +1,8 @@
-﻿## Interface: 110100, 110105
+﻿## Interface: 110105, 110107
 ## Title: Psy Keystone Helper
 ## Notes: Shows the breakdown of M+ score for the party and the top keystone ugprades for the team
 ## Author: Psyala (BNet:Psyala#2192, Discord:Psyala)
-## Version: 1.2.1
+## Version: 1.2.2
 ## IconTexture: Interface\AddOns\PsyKeystoneHelper\img\logo
 ## SavedVariables: PsyKeystoneHelper_Session
 ## Category-enUS: Dungeons & Raids
