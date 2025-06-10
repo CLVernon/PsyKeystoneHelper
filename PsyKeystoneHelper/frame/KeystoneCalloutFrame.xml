@@ -2,7 +2,7 @@
     xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="KeystoneCalloutFrame.lua"/>
     <Frame name="PKH_KeystoneCalloutFrame" inherits="BackdropTemplate" parent="UIParent" toplevel="true" movable="true"
-           clampedToScreen="true">
+           clampedToScreen="true" frameStrata="DIALOG">
         <Size x="350" y="150"/>
         <Anchors>
             <Anchor point="CENTER" relativePoint="CENTER">
