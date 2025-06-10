@@ -42,9 +42,9 @@ function PsyKeystoneHelper:checkIfYourKey(timedAttempt)
     local yourKeystone = ownedKeyMapId and mapId and ownedKeyMapId == mapId
     local mPlusActive = C_ChallengeMode.GetActiveChallengeMapID() ~= nil
     if ownedKeyMapId == nil then
-        PsyKeystoneHelper:DebugPrint("ownedKeyMapId=" .. ownedKeyMapId)
-    else
         PsyKeystoneHelper:DebugPrint("ownedKeyMapId=none")
+    else
+        PsyKeystoneHelper:DebugPrint("ownedKeyMapId=" .. ownedKeyMapId)
     end
     PsyKeystoneHelper:DebugPrint("mapId=" .. mapId)
     PsyKeystoneHelper:DebugPrint("yourKeystone=" .. tostring(yourKeystone))
