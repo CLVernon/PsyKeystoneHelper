@@ -46,7 +46,7 @@ function KeystoneCallout:show(keystoneCallout)
     -- Only if the timestamp has not changed
     PKH_KeystoneCalloutFrame:Show()
     local timestampToClose = timestamp
-    C_Timer.After(10, function()
+    C_Timer.After(PsyKeystoneHelper:getKeystoneCalloutTime(), function()
         if timestampToClose == timestamp then
             PKH_KeystoneCalloutFrame:Hide()
             KeystoneCallout:populateCalloutFrames(nil)

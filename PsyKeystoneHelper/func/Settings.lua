@@ -58,7 +58,37 @@ function PsyKeystoneHelper:buildSettingsPanel()
 
         do
             local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
-            b:SetPoint("TOPLEFT", sectionTitle, 0, -30)
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -42)
+
+            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
+            b.text:SetText("Show Keystone Callouts")
+            b:SetChecked(PsyKeystoneHelper.db.global.showKeystoneCallout)
+            b:SetScript("OnClick", function()
+                PsyKeystoneHelper.db.global.showKeystoneCallout = b:GetChecked()
+            end)
+        end
+
+        do
+            local s = CreateFrame("Slider", nil, settingsFrame, "UISliderTemplateWithLabels")
+            s:SetPoint("TOPLEFT", sectionTitle, 250, -50)
+            s:SetSize(200, 15)
+            s:SetMinMaxValues(5, 60)
+            s:SetValueStep(5)
+            s:SetObeyStepOnDrag(true)
+            s:SetValue(PsyKeystoneHelper:getKeystoneCalloutTime())
+            s.Text:SetText("Frame Display Time (" .. PsyKeystoneHelper:getKeystoneCalloutTime() .. ")")
+            s.Low:SetText(5)
+            s.High:SetText(60)
+            s:SetScript("OnValueChanged", function(self, value)
+                PsyKeystoneHelper.db.global.keystoneCalloutTime = value
+                s.Text:SetText("Frame Display Time (" .. value .. ")")
+            end)
+        end
+
+        do
+            local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -82)
 
             b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
@@ -69,9 +99,26 @@ function PsyKeystoneHelper:buildSettingsPanel()
             end)
         end
 
+        --do
+        --    local s = CreateFrame("Slider", nil, settingsFrame, "UISliderTemplateWithLabels")
+        --    s:SetPoint("TOPLEFT", sectionTitle, 250, -90)
+        --    s:SetSize(200, 15)
+        --    s:SetMinMaxValues(5, 60)
+        --    s:SetValueStep(5)
+        --    s:SetObeyStepOnDrag(true)
+        --    s:SetValue(PsyKeystoneHelper:getKeystoneReminderTime())
+        --    s.Text:SetText("Frame Display Time (" .. PsyKeystoneHelper:getKeystoneReminderTime() .. ")")
+        --    s.Low:SetText(5)
+        --    s.High:SetText(60)
+        --    s:SetScript("OnValueChanged", function(self, value)
+        --        PsyKeystoneHelper.db.global.keystoneReminderTime = value
+        --        s.Text:SetText("Frame Display Time (" .. value .. ")")
+        --    end)
+        --end
+
         do
             local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
-            b:SetPoint("TOPLEFT", sectionTitle, 0, -60)
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -122)
 
             b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
@@ -82,18 +129,23 @@ function PsyKeystoneHelper:buildSettingsPanel()
             end)
         end
 
-        do
-            local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
-            b:SetPoint("TOPLEFT", sectionTitle, 0, -90)
+        --do
+        --    local s = CreateFrame("Slider", nil, settingsFrame, "UISliderTemplateWithLabels")
+        --    s:SetPoint("TOPLEFT", sectionTitle, 250, -130)
+        --    s:SetSize(200, 15)
+        --    s:SetMinMaxValues(5, 60)
+        --    s:SetValueStep(5)
+        --    s:SetObeyStepOnDrag(true)
+        --    s:SetValue(PsyKeystoneHelper:getKeystoneRerollTime())
+        --    s.Text:SetText("Frame Display Time (" .. PsyKeystoneHelper:getKeystoneRerollTime() .. ")")
+        --    s.Low:SetText(5)
+        --    s.High:SetText(60)
+        --    s:SetScript("OnValueChanged", function(self, value)
+        --        PsyKeystoneHelper.db.global.keystoneRerollTime = value
+        --        s.Text:SetText("Frame Display Time (" .. value .. ")")
+        --    end)
+        --end
 
-            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
-            b.text:SetText("Show Keystone Callouts")
-            b:SetChecked(PsyKeystoneHelper.db.global.showKeystoneCallout)
-            b:SetScript("OnClick", function()
-                PsyKeystoneHelper.db.global.showKeystoneCallout = b:GetChecked()
-            end)
-        end
 
     end
 
@@ -121,8 +173,32 @@ function PsyKeystoneHelper:createDefaultSettings()
             showKeystoneReminder = true,
             showKeystoneReroll = true,
             showKeystoneCallout = true,
+            keystoneReminderTime = 10,
+            keystoneRerollTime = 10,
+            keystoneCalloutTime = 30,
         }
     }
+end
+
+function PsyKeystoneHelper:getKeystoneReminderTime()
+    if PsyKeystoneHelper.db == nil then
+        return 10
+    end
+    return PsyKeystoneHelper.db.global.keystoneRerollTime
+end
+
+function PsyKeystoneHelper:getKeystoneCalloutTime()
+    if PsyKeystoneHelper.db == nil then
+        return 30
+    end
+    return PsyKeystoneHelper.db.global.keystoneCalloutTime
+end
+
+function PsyKeystoneHelper:getKeystoneRerollTime()
+    if PsyKeystoneHelper.db == nil then
+        return 10
+    end
+    return PsyKeystoneHelper.db.global.keystoneRerollTime
 end
 
 function PsyKeystoneHelper:showKeystoneReminder()
