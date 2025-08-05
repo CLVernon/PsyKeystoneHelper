@@ -44,7 +44,7 @@
             <Button name="PKH_Button_ToggleSession" inherits="UIPanelButtonTemplate" text="Toggle Session">
                 <Size x="120" y="30"/>
                 <Anchors>
-                    <Anchor x="-65" y="8" point="BOTTOM"/>
+                    <Anchor x="-125" y="8" point="BOTTOM"/>
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -55,11 +55,22 @@
             <Button name="PKH_Button_RequestData" inherits="UIPanelButtonTemplate" text="Request Data">
                 <Size x="120" y="30"/>
                 <Anchors>
-                    <Anchor x="65" y="8" point="BOTTOM"/>
+                    <Anchor x="0" y="8" point="BOTTOM"/>
                 </Anchors>
                 <Scripts>
                     <OnClick>
                         PKH_Button_RequestData_OnClick()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="PKH_Button_Settings" inherits="UIPanelButtonTemplate" text="Settings">
+                <Size x="120" y="30"/>
+                <Anchors>
+                    <Anchor x="125" y="8" point="BOTTOM"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        PKH_Button_Settings_OnClick()
                     </OnClick>
                 </Scripts>
             </Button>

@@ -21,6 +21,7 @@
 
 lib/Lib.xml
 PsyKeystoneHelper.lua
+func/Settings.lua
 func/ChatCommands.lua
 func/EventHandling.lua
 func/Communication.lua

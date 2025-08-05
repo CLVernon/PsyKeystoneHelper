@@ -29,6 +29,10 @@ function ReminderPopup:hide()
 end
 
 function ReminderPopup:maybeShowRerollKeystone()
+    if not PsyKeystoneHelper:showKeystoneReroll() then
+        return
+    end
+
     PsyKeystoneHelper:DebugPrint("maybeShowRerollKeystone()")
     local keystone = PsyKeystoneHelper:getPlayerKeystoneFromCache()
     if keystone == nil then
@@ -55,6 +59,10 @@ function ReminderPopup:maybeShowRerollKeystone()
 end
 
 function ReminderPopup:showYourKeystone()
+    if not PsyKeystoneHelper:showKeystoneReminder() then
+        return
+    end
+
     PsyKeystoneHelper:DebugPrint("Showing ReminderFrame ... showYourKeystone")
     ReminderPopup:maybeInit()
 

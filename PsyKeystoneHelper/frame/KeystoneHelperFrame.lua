@@ -34,6 +34,10 @@ function PKH_Button_RequestData_OnClick()
     PsyKeystoneHelper:requestInformation()
 end
 
+function PKH_Button_Settings_OnClick()
+    Settings.OpenToCategory(PsyKeystoneHelper.settingsCategory.ID)
+end
+
 function KeystoneHelper:createFrameComponents()
     --Setup Player Frame lookup
     PKH_KeystoneHelperFrame.playerFrames = {}
@@ -54,9 +58,9 @@ function KeystoneHelper:createFrameComponents()
 end
 
 function ns:renderKeystoneHelperFrame()
-    local profileAvailable = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile ~= nil
-    local debugMode = profileAvailable and PsyKeystoneHelper.db.profile.debugMode
-    local hasData = profileAvailable and PsyKeystoneHelper.db.profile.keystoneCache ~= nil and #PsyKeystoneHelper.db.profile.keystoneCache > 0
+    local profileAvailable = PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.global ~= nil
+    local debugMode = profileAvailable and PsyKeystoneHelper:isDebugMode()
+    local hasData = profileAvailable and PsyKeystoneHelper:keystoneCache() ~= nil and #PsyKeystoneHelper:keystoneCache() > 0
     PsyKeystoneHelper:DebugPrint("Displaying party data...")
 
     --Default frames
@@ -72,7 +76,7 @@ function ns:renderKeystoneHelperFrame()
 
         -- Show player data
         local index = 1
-        for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+        for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
             KeystoneHelper:populatePlayerFrame(PKH_KeystoneHelperFrame.playerFrames[index], playerData)
             index = index + 1
         end
@@ -82,7 +86,7 @@ function ns:renderKeystoneHelperFrame()
 
         -- Check received version to see if players version is out of date, if so display warning
         local higherVersionFound = false
-        for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+        for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
             if playerData.version ~= nil and PsyKeystoneHelper:intifyVersion(playerData.version) > PsyKeystoneHelper:intifyVersion(PsyKeystoneHelper.v) then
                 higherVersionFound = true
                 break
@@ -208,7 +212,7 @@ function KeystoneHelper:defaultPlayerFrames(hasData, debugMode)
 
     --Display player frames
     for _, playerFrame in pairs(PKH_KeystoneHelperFrame.playerFrames) do
-        if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper.db.profile.debugMode then
+        if PsyKeystoneHelper.db ~= nil and PsyKeystoneHelper:isDebugMode() then
             playerFrame.name:SetText("Player_____" .. index)
             playerFrame.name:SetTextColor(1, 1, 1)
             playerFrame.score:SetText("Score: 0000")
@@ -299,7 +303,7 @@ end
 function KeystoneHelper:calculateTopKeyStones()
     --Update data of keystone and add to a simple table
     local keystones = {}
-    for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+    for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
         if playerData.keystone ~= nil then
             playerData.keystone.scoreForLevel = PsyKeystoneHelper.minTimeScorePerLevels[playerData.keystone.level]
             playerData.keystone.owner = playerData.name
@@ -313,7 +317,7 @@ function KeystoneHelper:calculateTopKeyStones()
         local gainedScore = 0
         keystone.playerUpgrades = {}
 
-        for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+        for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
             --Get dungeon score for player
             local dungeonScore = 0
             for _, dungeonInfo in pairs(playerData.scoreInfo) do
@@ -346,7 +350,7 @@ function KeystoneHelper:calculateTopKeyStones()
         --If key has no score gain...
         if gainedScore == 0 then
             local rerollingGood = false
-            for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+            for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
                 for _, dungeonInfo in pairs(playerData.scoreInfo) do
                     if dungeonInfo.dungeonScore < keystone.scoreForLevel then
                         rerollingGood = true

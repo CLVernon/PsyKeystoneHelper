@@ -32,7 +32,7 @@ function PsyKeystoneHelper:handleChatCommand(input)
             PsyKeystoneHelper:sendInformation()
             return
         elseif arg == "cache" then
-            DevTools_Dump(PsyKeystoneHelper.db.profile.keystoneCache)
+            DevTools_Dump(PsyKeystoneHelper:keystoneCache())
             return
         elseif arg == "clear" then
             PsyKeystoneHelper.db.profile.keystoneCache = {}
@@ -45,17 +45,17 @@ function PsyKeystoneHelper:handleChatCommand(input)
             PsyKeystoneHelper:Print("Current Version: " .. PsyKeystoneHelper.v)
             if PsyKeystoneHelper:getSessionStatus() then
                 PsyKeystoneHelper:Print("Received Player Versions: ")
-                for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+                for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
                     PsyKeystoneHelper:Print(playerData.name .. " - " .. (playerData.version or "Unknown"))
                 end
             end
             return
         elseif arg == "debug" then
-            if PsyKeystoneHelper.db.profile.debugMode then
-                PsyKeystoneHelper.db.profile.debugMode = false
+            if PsyKeystoneHelper.db.global.debugMode then
+                PsyKeystoneHelper.db.global.debugMode = false
                 PsyKeystoneHelper:Print("Debug mode is: |cffffff33Disabled|r")
             else
-                PsyKeystoneHelper.db.profile.debugMode = true
+                PsyKeystoneHelper.db.global.debugMode = true
                 PsyKeystoneHelper:Print("Debug mode is: |cffffff33Enabled|r")
             end
             return
