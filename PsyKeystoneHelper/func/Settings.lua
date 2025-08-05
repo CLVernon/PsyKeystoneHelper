@@ -99,23 +99,6 @@ function PsyKeystoneHelper:buildSettingsPanel()
             end)
         end
 
-        --do
-        --    local s = CreateFrame("Slider", nil, settingsFrame, "UISliderTemplateWithLabels")
-        --    s:SetPoint("TOPLEFT", sectionTitle, 250, -90)
-        --    s:SetSize(200, 15)
-        --    s:SetMinMaxValues(5, 60)
-        --    s:SetValueStep(5)
-        --    s:SetObeyStepOnDrag(true)
-        --    s:SetValue(PsyKeystoneHelper:getKeystoneReminderTime())
-        --    s.Text:SetText("Frame Display Time (" .. PsyKeystoneHelper:getKeystoneReminderTime() .. ")")
-        --    s.Low:SetText(5)
-        --    s.High:SetText(60)
-        --    s:SetScript("OnValueChanged", function(self, value)
-        --        PsyKeystoneHelper.db.global.keystoneReminderTime = value
-        --        s.Text:SetText("Frame Display Time (" .. value .. ")")
-        --    end)
-        --end
-
         do
             local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
             b:SetPoint("TOPLEFT", sectionTitle, 0, -122)
@@ -129,24 +112,6 @@ function PsyKeystoneHelper:buildSettingsPanel()
             end)
         end
 
-        --do
-        --    local s = CreateFrame("Slider", nil, settingsFrame, "UISliderTemplateWithLabels")
-        --    s:SetPoint("TOPLEFT", sectionTitle, 250, -130)
-        --    s:SetSize(200, 15)
-        --    s:SetMinMaxValues(5, 60)
-        --    s:SetValueStep(5)
-        --    s:SetObeyStepOnDrag(true)
-        --    s:SetValue(PsyKeystoneHelper:getKeystoneRerollTime())
-        --    s.Text:SetText("Frame Display Time (" .. PsyKeystoneHelper:getKeystoneRerollTime() .. ")")
-        --    s.Low:SetText(5)
-        --    s.High:SetText(60)
-        --    s:SetScript("OnValueChanged", function(self, value)
-        --        PsyKeystoneHelper.db.global.keystoneRerollTime = value
-        --        s.Text:SetText("Frame Display Time (" .. value .. ")")
-        --    end)
-        --end
-
-
     end
 
     do
@@ -156,7 +121,7 @@ function PsyKeystoneHelper:buildSettingsPanel()
 
         local sectionDesc = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
         sectionDesc:SetText("Extra functionality settings that are toggleable.")
-        sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -15)
+        sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -18)
 
         do
             local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
