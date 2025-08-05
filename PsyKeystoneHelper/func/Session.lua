@@ -3,8 +3,8 @@ local PsyKeystoneHelper = ns.PsyKeystoneHelper
 
 function PsyKeystoneHelper:toggleSessionStatus()
     if PsyKeystoneHelper:getSessionStatus() then
-        PsyKeystoneHelper.db.profile.session = false
-        PsyKeystoneHelper.db.profile.keystoneCache = {}
+        PsyKeystoneHelper.db.global.session = false
+        PsyKeystoneHelper.db.global.keystoneCache = {}
         ns:renderKeystoneHelperFrame()
     else
         if not UnitInParty("player") then
@@ -15,7 +15,7 @@ function PsyKeystoneHelper:toggleSessionStatus()
             PsyKeystoneHelper:Print("Cannot start a session when in a raid group")
             return
         end
-        PsyKeystoneHelper.db.profile.session = true
+        PsyKeystoneHelper.db.global.session = true
         PsyKeystoneHelper:requestInformation()
     end
 
@@ -23,13 +23,6 @@ function PsyKeystoneHelper:toggleSessionStatus()
     PsyKeystoneHelper.KeystoneHelperFrame.status:SetText("Status: " .. PsyKeystoneHelper:getSessionStatusString())
     LibDBIcon:Hide("PsyKeystoneHelperDBI")
     LibDBIcon:Show("PsyKeystoneHelperDBI")
-end
-
-function PsyKeystoneHelper:getSessionStatus()
-    if PsyKeystoneHelper.db == nil then
-        return false
-    end
-    return PsyKeystoneHelper.db.profile.session or false
 end
 
 function PsyKeystoneHelper:getSessionStatusString()

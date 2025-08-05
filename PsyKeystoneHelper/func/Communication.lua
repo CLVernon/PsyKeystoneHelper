@@ -39,7 +39,7 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 
     --Check to see if the player already exists in data
     local existingIndex = 0
-    for index, cachedPlayer in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+    for index, cachedPlayer in pairs(PsyKeystoneHelper:keystoneCache()) do
         if cachedPlayer.fullName == playerData.fullName then
             existingIndex = index
             break
@@ -48,9 +48,9 @@ function PsyKeystoneHelper:receiveInformation(playerData)
 
     --Update the cache
     if existingIndex == 0 then
-        PsyKeystoneHelper.db.profile.keystoneCache[#PsyKeystoneHelper.db.profile.keystoneCache + 1] = playerData
+        PsyKeystoneHelper:keystoneCache()[#PsyKeystoneHelper:keystoneCache() + 1] = playerData
     else
-        PsyKeystoneHelper.db.profile.keystoneCache[existingIndex] = playerData
+        PsyKeystoneHelper:keystoneCache()[existingIndex] = playerData
     end
     PsyKeystoneHelper:sortInformation()
     ns:renderKeystoneHelperFrame()
@@ -96,7 +96,7 @@ function PsyKeystoneHelper:sendInformation()
 end
 
 function PsyKeystoneHelper:sortInformation()
-    table.sort(PsyKeystoneHelper.db.profile.keystoneCache, function(t1, t2)
+    table.sort(PsyKeystoneHelper:keystoneCache(), function(t1, t2)
         if t1.overallScore ~= t2.overallScore then
             return t1.overallScore > t2.overallScore
         end
@@ -104,7 +104,7 @@ function PsyKeystoneHelper:sortInformation()
     end)
 
     local fullNamesToRemove = {}
-    for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+    for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
         local keepPlayer = false
         if GetUnitName("Party1") == playerData.name and UnitIsConnected("Party1") then
             keepPlayer = true
@@ -129,7 +129,7 @@ function PsyKeystoneHelper:sortInformation()
 
     for _, fullName in pairs(fullNamesToRemove) do
         local indexToRemove = 0
-        for index, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+        for index, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
             if playerData.fullName == fullName then
                 indexToRemove = index
                 break
@@ -137,7 +137,7 @@ function PsyKeystoneHelper:sortInformation()
         end
 
         if indexToRemove > 0 then
-            table.remove(PsyKeystoneHelper.db.profile.keystoneCache, indexToRemove)
+            table.remove(PsyKeystoneHelper:keystoneCache(), indexToRemove)
         end
     end
 end

@@ -39,16 +39,7 @@ AceEvent = LibStub("AceEvent-3.0")
 
 function PsyKeystoneHelper:OnInitialize()
     --Init db
-    PsyKeystoneHelper.db = AceDB:New("PsyKeystoneHelper_Session", {
-        profile = {
-            session = false,
-            debugMode = false,
-            keystoneCache = {},
-            minimap = {
-                hide = false,
-            }
-        }
-    })
+    PsyKeystoneHelper.db = AceDB:New("PsyKeystoneHelper_Session", PsyKeystoneHelper:createDefaultSettings())
 
     --Register slash command
     PsyKeystoneHelper:RegisterChatCommand("pkh", "handleChatCommand")
@@ -66,7 +57,7 @@ function PsyKeystoneHelper:OnInitialize()
     PsyKeystoneHelper:RegisterEvent("READY_CHECK", "handleReadyCheck")
 
     --Show minimap icon
-    LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper.db.profile.minimap)
+    LibDBIcon:Register("PsyKeystoneHelperDBI", PsyKeystoneHelperDBI, PsyKeystoneHelper:minimap())
     LibDBIcon:Show("PsyKeystoneHelperDBI")
     LibDBIcon:AddButtonToCompartment("PsyKeystoneHelperDBI")
 
@@ -82,6 +73,8 @@ function PsyKeystoneHelper:OnInitialize()
     if PsyKeystoneHelper:getSessionStatus() then
         PsyKeystoneHelper.KeystoneHelperFrame:Show()
     end
+
+    PsyKeystoneHelper:buildSettingsPanel()
 end
 
 function PsyKeystoneHelper:OnEnable()

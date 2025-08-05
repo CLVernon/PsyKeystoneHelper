@@ -26,7 +26,7 @@ function PsyKeystoneHelper:getPlayerKeystoneFromCache()
     end
 
     local playerKeystone = nil
-    for _, playerData in pairs(PsyKeystoneHelper.db.profile.keystoneCache) do
+    for _, playerData in pairs(PsyKeystoneHelper:keystoneCache()) do
         if playerData.fullName == (GetUnitName("player") .. "-" .. GetRealmName("player")) then
             playerKeystone = playerData.keystone
             break

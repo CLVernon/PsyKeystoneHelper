@@ -2,10 +2,10 @@ local _, ns = ...
 local PsyKeystoneHelper = ns.PsyKeystoneHelper
 
 function PsyKeystoneHelper:DebugPrint(msg)
-    if PsyKeystoneHelper.db == nil or PsyKeystoneHelper.db.profile == nil then
+    if PsyKeystoneHelper.db == nil or PsyKeystoneHelper.db.global == nil then
         return
     end
-    if PsyKeystoneHelper.db.profile.debugMode then
+    if PsyKeystoneHelper.db.global.debugMode then
         PsyKeystoneHelper:Print(msg)
     end
 end
