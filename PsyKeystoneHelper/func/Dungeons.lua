@@ -72,6 +72,13 @@ PsyKeystoneHelper.dungeonAbbreviations = {
     ["The Rookery"] = "ROOK",
     ["Theater of Pain"] = "TOP",
     ["Operation: Mechagon - Workshop"] = "WORK",
+
+    ["Ara-Kara, City of Echoes"] = "ARAK",
+    ["Eco-Dome Al'dani"] = "EDA",
+    ["Halls of Atonement"] = "HOA",
+    ["Tazavesh: Streets of Wonder"] = "STRT",
+    ["Tazavesh: So'leah's Gambit"] = "GMBT",
+    ["The Dawnbreaker"] = "DAWN",
 }
 
 -- Just in-time score of each level
