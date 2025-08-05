@@ -17,6 +17,8 @@ function PsyKeystoneHelper:handleGroupJoined()
             PsyKeystoneHelper:toggleSessionStatus()
         end
         return
+    else
+        PsyKeystoneHelper:maybeAutoStartSession()
     end
     PsyKeystoneHelper:sendInformation()
 end
@@ -67,9 +69,17 @@ end
 function PsyKeystoneHelper:handleZoneChanged()
     PsyKeystoneHelper:DebugPrint("handleZoneChanged()")
     PsyKeystoneHelper:checkIfYourKey(false)
+    PsyKeystoneHelper:maybeAutoStartSession()
 end
 
 function PsyKeystoneHelper:handleReadyCheck()
     PsyKeystoneHelper:DebugPrint("handleReadyCheck()")
     PsyKeystoneHelper:checkIfYourKey(false)
+    PsyKeystoneHelper:maybeAutoStartSession()
+end
+
+function PsyKeystoneHelper:maybeAutoStartSession()
+    if PsyKeystoneHelper:isAutoSession() and not PsyKeystoneHelper:getSessionStatus() and UnitInParty("player") then
+        PsyKeystoneHelper:toggleSessionStatus()
+    end
 end

@@ -149,15 +149,28 @@ function PsyKeystoneHelper:buildSettingsPanel()
 
     end
 
-    --do
-    --    local sectionTitle = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-    --    sectionTitle:SetText("Session Checks")
-    --    sectionTitle:SetPoint("TOPLEFT", settingsFrame, 10, -500)
-    --
-    --    local sectionDesc = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
-    --    sectionDesc:SetText("tbc")
-    --    sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -15)
-    --end
+    do
+        local sectionTitle = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+        sectionTitle:SetText("Functionality")
+        sectionTitle:SetPoint("TOPLEFT", settingsFrame, 10, -300)
+
+        local sectionDesc = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+        sectionDesc:SetText("Extra functionality settings that are toggleable.")
+        sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -15)
+
+        do
+            local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -42)
+
+            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
+            b.text:SetText("Auto Start Session")
+            b:SetChecked(PsyKeystoneHelper.db.global.autoSession)
+            b:SetScript("OnClick", function()
+                PsyKeystoneHelper.db.global.autoSession = b:GetChecked()
+            end)
+        end
+    end
 
 end
 
@@ -176,6 +189,7 @@ function PsyKeystoneHelper:createDefaultSettings()
             keystoneReminderTime = 10,
             keystoneRerollTime = 10,
             keystoneCalloutTime = 30,
+            autoSession = true
         }
     }
 end
@@ -199,6 +213,13 @@ function PsyKeystoneHelper:getKeystoneRerollTime()
         return 10
     end
     return PsyKeystoneHelper.db.global.keystoneRerollTime
+end
+
+function PsyKeystoneHelper:isAutoSession()
+    if PsyKeystoneHelper.db == nil then
+        return true
+    end
+    return PsyKeystoneHelper.db.global.autoSession or true
 end
 
 function PsyKeystoneHelper:showKeystoneReminder()
