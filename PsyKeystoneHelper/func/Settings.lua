@@ -49,12 +49,12 @@ function PsyKeystoneHelper:buildSettingsPanel()
 
     do
         local sectionTitle = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        sectionTitle:SetText("Functionality")
+        sectionTitle:SetText("Pop-ups")
         sectionTitle:SetPoint("TOPLEFT", settingsFrame, 10, -90)
 
         local sectionDesc = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
-        sectionDesc:SetText("Toggle core functionality of the addon")
-        sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -15)
+        sectionDesc:SetText("Configure if various pop-ups are enabled, and any settings relating to them.")
+        sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -18)
 
         do
             local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
@@ -62,7 +62,7 @@ function PsyKeystoneHelper:buildSettingsPanel()
 
             b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
-            b.text:SetText("Show Keystone Reminder Frame")
+            b.text:SetText("Show Your Keystone Reminder")
             b:SetChecked(PsyKeystoneHelper.db.global.showKeystoneReminder)
             b:SetScript("OnClick", function()
                 PsyKeystoneHelper.db.global.showKeystoneReminder = b:GetChecked()
