@@ -26,6 +26,10 @@ end
 --  }
 -- }
 function KeystoneCallout:show(keystoneCallout)
+    if not PsyKeystoneHelper:showKeystoneCallout() then
+        return
+    end
+
     -- Assign timestamp of frame opening
     timestamp = GetTime()
 

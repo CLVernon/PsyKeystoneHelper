@@ -46,6 +46,67 @@ function PsyKeystoneHelper:buildSettingsPanel()
             end
         end)
     end
+
+    do
+        local sectionTitle = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+        sectionTitle:SetText("Functionality")
+        sectionTitle:SetPoint("TOPLEFT", settingsFrame, 10, -90)
+
+        local sectionDesc = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+        sectionDesc:SetText("Toggle core functionality of the addon")
+        sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -15)
+
+        do
+            local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -30)
+
+            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
+            b.text:SetText("Show Keystone Reminder Frame")
+            b:SetChecked(PsyKeystoneHelper.db.global.showKeystoneReminder)
+            b:SetScript("OnClick", function()
+                PsyKeystoneHelper.db.global.showKeystoneReminder = b:GetChecked()
+            end)
+        end
+
+        do
+            local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -60)
+
+            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
+            b.text:SetText("Show Keystone Reroll Reminder")
+            b:SetChecked(PsyKeystoneHelper.db.global.showKeystoneReroll)
+            b:SetScript("OnClick", function()
+                PsyKeystoneHelper.db.global.showKeystoneReroll = b:GetChecked()
+            end)
+        end
+
+        do
+            local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
+            b:SetPoint("TOPLEFT", sectionTitle, 0, -90)
+
+            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
+            b.text:SetText("Show Keystone Callouts")
+            b:SetChecked(PsyKeystoneHelper.db.global.showKeystoneCallout)
+            b:SetScript("OnClick", function()
+                PsyKeystoneHelper.db.global.showKeystoneCallout = b:GetChecked()
+            end)
+        end
+
+    end
+
+    --do
+    --    local sectionTitle = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    --    sectionTitle:SetText("Session Checks")
+    --    sectionTitle:SetPoint("TOPLEFT", settingsFrame, 10, -500)
+    --
+    --    local sectionDesc = settingsFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+    --    sectionDesc:SetText("tbc")
+    --    sectionDesc:SetPoint("TOPLEFT", sectionTitle, 0, -15)
+    --end
+
 end
 
 function PsyKeystoneHelper:createDefaultSettings()
@@ -56,9 +117,33 @@ function PsyKeystoneHelper:createDefaultSettings()
             keystoneCache = {},
             minimap = {
                 hide = false,
-            }
+            },
+            showKeystoneReminder = true,
+            showKeystoneReroll = true,
+            showKeystoneCallout = true,
         }
     }
+end
+
+function PsyKeystoneHelper:showKeystoneReminder()
+    if PsyKeystoneHelper.db == nil then
+        return true
+    end
+    return PsyKeystoneHelper.db.global.showKeystoneReminder or true
+end
+
+function PsyKeystoneHelper:showKeystoneCallout()
+    if PsyKeystoneHelper.db == nil then
+        return true
+    end
+    return PsyKeystoneHelper.db.global.showKeystoneCallout or true
+end
+
+function PsyKeystoneHelper:showKeystoneReroll()
+    if PsyKeystoneHelper.db == nil then
+        return true
+    end
+    return PsyKeystoneHelper.db.global.showKeystoneReroll or true
 end
 
 function PsyKeystoneHelper:minimap()
